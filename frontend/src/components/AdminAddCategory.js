@@ -48,9 +48,9 @@ const AdminAddCategory = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(categoryData),
       });
-
+      // console.log("Category added:", data);
       const data = await response.json();
-      console.log("Category added:", data);
+      console.log("Category added");
 
       // Reset form after successful submission
       setCategoryName("");
@@ -112,38 +112,6 @@ const AdminAddCategory = () => {
         </div>
       </div>
     </div>
-
-    // <div>
-    //   <h2>Add New Category</h2>
-    //   <form onSubmit={handleSubmit}>
-    //     <input
-    //       type="text"
-    //       placeholder="Category Name"
-    //       value={categoryName}
-    //       onChange={(e) => setCategoryName(e.target.value)}
-    //       required
-    //     />
-    //     <button type="submit">Add Category</button>
-    //   </form>
-
-    //   <h3 className="mt-4">Existing Categories</h3>
-    //   <ul className="list-group">
-    //     {categories.map((category) => (
-    //       <li
-    //         key={category.id}
-    //         className="list-group-item d-flex align-items-center"
-    //       >
-    //         <span className="fw-bold">{category.name}</span>
-    //         <button
-    //           className="btn btn-danger btn-sm ms-2"
-    //           onClick={() => deleteCategory(category.id)}
-    //         >
-    //           Delete
-    //         </button>
-    //       </li>
-    //     ))}
-    //   </ul>
-    // </div>
   );
 };
 

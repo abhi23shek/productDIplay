@@ -3,16 +3,37 @@ import React, { useEffect, useState } from "react";
 const AdminProductList = () => {
   const [products, setProducts] = useState([]);
 
+  // useEffect(() => {
+  //   const fetchProducts = async () => {
+  //     try {
+  //       const response = await fetch("http://localhost:3001/api/products");
+  //       const data = await response.json();
+  //       setProducts(data);
+  //     } catch (error) {
+  //       console.error("Error fetching product:", error);
+  //     }
+  //   };
+  //   fetchProducts();
+  // }, []);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await fetch("http://localhost:3001/api/products");
-        const data = await response.json();
-        setProducts(data);
+
+        // Check if the response is ok (status 200)
+        if (response.ok) {
+          const data = await response.json(); // Parse JSON response
+          console.log("Fetched Products:", data);
+          setProducts(data); // Assuming you're setting products in state
+        } else {
+          console.error("Error fetching products:", response.status);
+        }
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
+
     fetchProducts();
   }, []);
 
@@ -79,73 +100,7 @@ const AdminProductList = () => {
         )}
       </div>
     </div>
-
-    // <div>
-    //   <h2>Product List</h2>
-    //   <ul>
-    //     {products.map((product) => (
-    //       <li key={product.id}>
-    //         <p>{product.name}</p>
-    //         <p>{product.price}</p>
-    //         <p>{product.details}</p>
-    //         <img src={product.image_url} alt={product.name} width="100" />
-    //         <button onClick={() => handleDelete(product.id)}>Delete</button>
-    //         <a href={`/admin/update/${product.id}`}>Edit</a>{" "}
-    //         {/* Link to edit the product */}
-    //       </li>
-    //     ))}
-    //   </ul>
-    // </div>
   );
 };
 
 export default AdminProductList;
-
-// import React, { useEffect, useState } from 'react';
-
-// const AdminProductList = () => {
-//     const [products, setProducts] = useState([]);
-
-//     useEffect(() => {
-//         const fetchProducts = async () => {
-//             try {
-//                 const response = await fetch('http://localhost:3001/api/products');
-//                 const data = await response.json();
-//                 setProducts(data);
-//             } catch (error) {
-//                 console.error('Error fetching products:', error);
-//             }
-//         };
-//         fetchProducts();
-//     }, []);
-
-//     const handleDelete = async (id) => {
-//         try {
-//             await fetch(`http://localhost:3001/api/products/${id}`, {
-//                 method: 'DELETE',
-//             });
-//             setProducts(products.filter((product) => product.id !== id)); // Remove the product from the list
-//         } catch (error) {
-//             console.error('Error deleting product:', error);
-//         }
-//     };
-
-//     return (
-//         <div>
-//             <h2>Product List</h2>
-//             <ul>
-//                 {products.map((product) => (
-//                     <li key={product.id}>
-//                         <p>{product.name}</p>
-//                         <p>{product.price}</p>
-//                         <p>{product.details}</p>
-//                         <img src={product.image_url} alt={product.name} width="100" />
-//                         <button onClick={() => handleDelete(product.id)}>Delete</button>
-//                     </li>
-//                 ))}
-//             </ul>
-//         </div>
-//     );
-// };
-
-// export default AdminProductList;

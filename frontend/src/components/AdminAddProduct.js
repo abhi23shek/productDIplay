@@ -3,17 +3,18 @@ import React, { useState, useEffect } from "react";
 const AdminAddProduct = ({ categories }) => {
   const [categoryId, setCategoryId] = useState("");
   const [subcategoryId, setSubcategoryId] = useState("");
-  const [subcategories, setSubcategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]); // Ensure this is always an array
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [details, setDetails] = useState("");
   const [image_url, setImageUrl] = useState("");
-  // const [successMessage, setSuccessMessage] = useState('');
 
   // Fetch subcategories when categoryId changes
   useEffect(() => {
     if (categoryId) {
       fetchSubcategories(categoryId);
+    } else {
+      setSubcategories([]); // Clear subcategories when no category is selected
     }
   }, [categoryId]);
 
@@ -23,19 +24,24 @@ const AdminAddProduct = ({ categories }) => {
         `http://localhost:3001/api/subcategories/${categoryId}`
       );
       const data = await response.json();
-      setSubcategories(data); // Set subcategories based on the selected category
+      if (Array.isArray(data)) {
+        setSubcategories(data); // Set subcategories based on the selected category
+      } else {
+        setSubcategories([]); // Ensure subcategories is an array if none are returned
+      }
     } catch (error) {
       console.error("Error fetching subcategories:", error);
+      setSubcategories([]); // Handle errors by setting an empty array
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const productData = {
-      name,
-      price,
-      details,
-      image_url,
+      name: name,
+      price: price,
+      details: details,
+      image_url: image_url,
       category_id: categoryId,
       subcategory_id: subcategoryId,
     };
@@ -94,7 +100,7 @@ const AdminAddProduct = ({ categories }) => {
                   value={subcategoryId}
                   onChange={(e) => setSubcategoryId(e.target.value)}
                   required
-                  disabled={!categoryId}
+                  disabled={subcategories.length === 0} // Disable if no subcategories
                 >
                   <option value="">Select Subcategory</option>
                   {subcategories.map((subcategory) => (
