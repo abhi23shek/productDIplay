@@ -3,19 +3,6 @@ import React, { useEffect, useState } from "react";
 const AdminProductList = () => {
   const [products, setProducts] = useState([]);
 
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     try {
-  //       const response = await fetch("http://localhost:3001/api/products");
-  //       const data = await response.json();
-  //       setProducts(data);
-  //     } catch (error) {
-  //       console.error("Error fetching product:", error);
-  //     }
-  //   };
-  //   fetchProducts();
-  // }, []);
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
