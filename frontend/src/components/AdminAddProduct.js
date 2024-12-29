@@ -9,6 +9,8 @@ const AdminAddProduct = ({ categories }) => {
   const [details, setDetails] = useState("");
   const [imageFile, setImageFile] = useState(null); // Store image file
   const [imageUrl, setImageUrl] = useState(""); // Store image URL
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
 
   // Fetch subcategories when categoryId changes
   useEffect(() => {
@@ -108,8 +110,7 @@ const AdminAddProduct = ({ categories }) => {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        alert(data.message || "Product added successfully");
+        setMessage(`Product added successfully`);
       }
 
       // Reset form
@@ -130,6 +131,8 @@ const AdminAddProduct = ({ categories }) => {
       <div className="card shadow-sm">
         <div className="card-body">
           <h2 className="card-title text-center mb-4">Add New Product</h2>
+          {error && <p className="alert alert-danger">{error}</p>}
+          {message && <p className="alert alert-success">{message}</p>}
           <form onSubmit={handleSubmit}>
             <div className="row mb-4">
               <div className="col-md-6">

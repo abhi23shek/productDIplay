@@ -55,6 +55,33 @@ const uploadToImgbb = async (imageFile) => {
   }
 };
 
+// Route to fetch a single product
+
+app.get("/api/products/:id", async (req, res) => {
+  const { id } = req.params;
+
+  // Validate the ID
+  if (!id) {
+    return res.status(400).json({ error: "Product ID is required" });
+  }
+
+  try {
+    // Fetch the product from the database
+    const result = await pool`SELECT * FROM products WHERE id = ${id}`;
+
+    // Check if the product exists
+    if (result.length === 0) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // Return the product
+    res.status(200).json({ product: result[0] });
+  } catch (err) {
+    console.error("Error fetching product:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 // Route to fetch all products
 app.get("/api/products", async (req, res) => {
   try {
@@ -112,30 +139,92 @@ app.delete("/api/products/:id", async (req, res) => {
   }
 });
 
-// Route to update a product by ID
 app.put("/api/products/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, price, details, image_url } = req.body;
+  const { name, price, details, image_url, category_id, subcategory_id } =
+    req.body;
+
+  // Check if the ID is provided and valid
+  if (!id) {
+    return res.status(400).json({ error: "Product ID is required" });
+  }
+
+  // Validate at least one field to update is provided
+  if (
+    !name &&
+    !price &&
+    !details &&
+    !image_url &&
+    !category_id &&
+    !subcategory_id
+  ) {
+    return res
+      .status(400)
+      .json({ error: "At least one field must be provided to update" });
+  }
 
   try {
-    const result = await pool`
-      UPDATE products 
-      SET name = ${name}, 
-          price = ${price}, 
-          details = ${details}, 
-          image_url = ${image_url} 
-      WHERE id = ${id} 
+    // Initialize an array for the updates and a list of values
+    const updates = [];
+    let counter = 1;
+    const values = [];
+
+    // Dynamically add fields to be updated
+    if (name) {
+      updates.push(`name = $${counter++}`);
+      values.push(name);
+    }
+    if (price) {
+      updates.push(`price = $${counter++}`);
+      values.push(price);
+    }
+    if (details) {
+      updates.push(`details = $${counter++}`);
+      values.push(details);
+    }
+    if (image_url) {
+      updates.push(`image_url = $${counter++}`);
+      values.push(image_url);
+    }
+    if (category_id) {
+      updates.push(`category_id = $${counter++}`);
+      values.push(category_id);
+    }
+    if (subcategory_id) {
+      updates.push(`subcategory_id = $${counter++}`);
+      values.push(subcategory_id);
+    }
+
+    // Join the update clauses into a comma-separated string
+    const updateClause = updates.join(", ");
+
+    // Construct the query with placeholders
+    const query = `
+      UPDATE products
+      SET ${updateClause}
+      WHERE id = $${counter}
       RETURNING *
     `;
 
+    // Add the product ID to the values array at the end
+    values.push(id);
+
+    // Use tagged template literal to execute the query
+    const result = await pool(query, values); // This is where we use Neon properly
+
+    // Check if the product exists
     if (result.length === 0) {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    res.status(200).json(result[0]); // Return the updated product
+    // Send the successful response
+    res.status(200).json({
+      message: "Product updated successfully",
+      product: result[0],
+    });
   } catch (err) {
     console.error("Error updating product:", err);
-    res.status(500).json({ error: "Error updating product" });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
