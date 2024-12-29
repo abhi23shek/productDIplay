@@ -1,5 +1,6 @@
 /* General Reset for Full-Screen Coverage */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -7,7 +8,7 @@ html, body {
   overflow-x: hidden; /* Prevent horizontal scrolling */
   overscroll-behavior: none;
   scroll-behavior: smooth; /* Smooth scrolling */
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   background-color: #f8f9fa; /* Light background for better contrast */
 }
 
@@ -25,17 +26,12 @@ html, body {
 /* Navbar */
 .navbar {
   width: 100%;
-  background-color: #343a40; /* Dark background */
   color: white;
   padding: 10px 20px;
-  position: sticky;
   top: 0;
-  z-index: 1000;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.frontnavbar{
-  z-index: 2;
+  position: sticky;
+  z-index: 10;
+  background-color: transparent; /* Transparent background */
 }
 
 /* Category Section */
@@ -58,7 +54,6 @@ html, body {
   justify-content: space-around;
 }
 
-
 /* Subcategory Section */
 .subcategory-section {
   margin: 20px 10px;
@@ -69,7 +64,7 @@ html, body {
   gap: 7%;
 }
 
-.subcategory-text{
+.subcategory-text {
   font-family: "Chelsea Market", serif;
   font-weight: 400;
   font-size: 2rem;
@@ -88,13 +83,12 @@ html, body {
   border-bottom: 2px solid #ddd;
   padding-bottom: 5px;
 }
-.subcategory-group{
+.subcategory-group {
   border-radius: 15px;
   box-shadow: 0 6px 12px rgba(75, 151, 202, 0.1);
   border: 1px solid #dee2e6;
   transition: all 0.3s ease-in-out;
   margin: 5vh;
-
 }
 .subcategory-group h4 {
   display: flex;
@@ -175,12 +169,11 @@ html, body {
 }
 .product-grid {
   display: flex;
-  flex-wrap:wrap; /* Prevent wrapping */
+  flex-wrap: wrap; /* Prevent wrapping */
   gap: 20px;
   overflow-x: auto; /* Add horizontal scrolling */
   padding: 20px;
   flex-direction: column;
- 
 }
 
 .product-grid::-webkit-scrollbar {
@@ -196,7 +189,6 @@ html, body {
   background-color: #f8f9fa;
 }
 
-  
 .product-cards {
   display: flex;
   flex-wrap: wrap;
@@ -206,147 +198,143 @@ html, body {
   padding: 20px;
 }
 
-
 .filter-tab {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Adjust columns as needed */
-    margin: 20px 0;
-    gap: 15px;
-    padding: 25px;
-    background: linear-gradient(135deg, #ffffff, #f1f3f5, #e9ecef);
-    border-radius: 15px;
-    box-shadow: 0 6px 12px rgba(75, 151, 202, 0.1);
-    border: 1px solid #dee2e6;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  
-  .filter-tab:hover {
-    background: linear-gradient(135deg, #f8f9fa, #e6ebef);
-    box-shadow: 4px -4px 15px 1px rgb(67 128 187 / 15%);
-  }
-  .search-bar {
-    grid-column: span 1; /* Use all columns in the grid */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .search-bar input {
-    width: 100%;
-    max-width: 500px;
-    padding: 12px;
-    font-size: 16px;
-    border: 1px solid #ced4da;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: border-color 0.3s, box-shadow 0.3s;
-    
-  }
-  
-  .search-bar input:focus {
-    border-color: #0d6efd;
-    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
-    outline: none;
-  }
-  
-  .price-filter {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
-  }
-  
-  .price-filter label {
-    display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Adjust columns as needed */
+  margin: 20px 0;
+  gap: 15px;
+  padding: 25px;
+  background: linear-gradient(135deg, #ffffff, #f1f3f5, #e9ecef);
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(75, 151, 202, 0.1);
+  border: 1px solid #dee2e6;
+  transition: all 0.3s ease-in-out;
+}
+
+.filter-tab:hover {
+  background: linear-gradient(135deg, #f8f9fa, #e6ebef);
+  box-shadow: 4px -4px 15px 1px rgb(67 128 187 / 15%);
+}
+.search-bar {
+  grid-column: span 1; /* Use all columns in the grid */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-bar input {
+  width: 100%;
+  max-width: 500px;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-bar input:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+  outline: none;
+}
+
+.price-filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.price-filter label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.price-filter input {
+  width: 120px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.price-filter input:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+  outline: none;
+}
+
+.price-filter .btn-primary {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: #0d6efd;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.price-filter .btn-primary:hover {
+  background-color: #0b5ed7;
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(13, 110, 253, 0.2);
+}
+
+.price-filter .btn-secondary.reset-btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: #6c757d;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.price-filter .btn-secondary.reset-btn:hover {
+  background-color: #cd3434;
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(108, 117, 125, 0.2);
+}
+
+.price-filter .btn-primary:active,
+.price-filter .btn-secondary.reset-btn:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .filter-tab {
     flex-direction: column;
-    font-size: 14px;
-    font-weight: 500;
-    color: #495057;
+    align-items: flex-start;
+    padding: 20px;
   }
-  
+
+  .search-bar input,
   .price-filter input {
-    width: 120px;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ced4da;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%;
   }
-  
-  .price-filter input:focus {
-    border-color: #0d6efd;
-    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
-    outline: none;
+
+  .price-filter {
+    justify-content: flex-start;
+    gap: 10px;
   }
-  
-  .price-filter .btn-primary {
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    background-color: #0d6efd;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    color: white;
-    transition: transform 0.2s, box-shadow 0.3s;
+
+  .price-filter label {
+    width: 100%;
   }
-  
-  .price-filter .btn-primary:hover {
-    background-color: #0b5ed7;
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(13, 110, 253, 0.2);
-  }
-  
+
+  .price-filter .btn-primary,
   .price-filter .btn-secondary.reset-btn {
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    background-color: #6c757d;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    color: white;
-    transition: transform 0.2s, box-shadow 0.3s;
+    width: 100%;
+    text-align: center;
   }
-  
-  .price-filter .btn-secondary.reset-btn:hover {
-    background-color: #cd3434;
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(108, 117, 125, 0.2);
-  }
-  
-  .price-filter .btn-primary:active,
-  .price-filter .btn-secondary.reset-btn:active {
-    transform: scale(0.95);
-  }
-  
-  @media (max-width: 768px) {
-    .filter-tab {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 20px;
-    }
-  
-    .search-bar input,
-    .price-filter input {
-      width: 100%;
-    }
-  
-    .price-filter {
-      justify-content: flex-start;
-      gap: 10px;
-    }
-  
-    .price-filter label {
-      width: 100%;
-    }
-  
-    .price-filter .btn-primary,
-    .price-filter .btn-secondary.reset-btn {
-      width: 100%;
-      text-align: center;
-    }
-  }
-  
+}
