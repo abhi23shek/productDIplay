@@ -164,8 +164,13 @@ function FrontPage() {
 
   return (
     <div className="app-container">
-      <Navbar />
-      <HeroSection />
+      <div className="frontnavbar">
+        <Navbar />
+      </div>
+      <div className="fronthero">
+        <HeroSection />
+      </div>
+
       <div className="category-section my-4 category-text">
         <h2>Categories</h2>
         <div className="row row-cols-auto">
