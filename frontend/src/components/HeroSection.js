@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./HeroSection.css";
+import "bootstrap/dist/js/bootstrap.bundle.min"; // Import Bootstrap JS
 
 const HeroSection = () => {
+  useEffect(() => {
+    const carouselElement = document.getElementById("carouselExampleDark");
+
+    if (carouselElement) {
+      // Initialize the carousel with a delay
+      setTimeout(() => {
+        new window.bootstrap.Carousel(carouselElement, {
+          interval: 5000, // Slide interval in milliseconds
+          ride: "carousel", // Automatically start sliding
+        });
+      }, 2000); // Initial delay of 2 seconds
+    }
+  }, []);
+
   return (
     <>
-      <div
-        id="carouselExampleDark"
-        className="carousel carousel-dark slide"
-        data-bs-ride="carousel"
-      >
+      <div id="carouselExampleDark" className="carousel carousel-dark slide">
         {/* Static Text Overlay */}
         <div className="static-text">
           <h1 className="static-title">Welcome to My Carousel</h1>
@@ -41,21 +52,21 @@ const HeroSection = () => {
           ></button>
         </div>
         <div className="carousel-inner">
-          <div className="carousel-item active" data-bs-interval="5000">
+          <div className="carousel-item active">
             <img
               src={require("./image/image1.jpg")}
               className="d-block w-100"
               alt="First slide"
             />
           </div>
-          <div className="carousel-item" data-bs-interval="5000">
+          <div className="carousel-item">
             <img
               src={require("./image/image1.jpg")}
               className="d-block w-100"
               alt="Second slide"
             />
           </div>
-          <div className="carousel-item" data-bs-interval="5000">
+          <div className="carousel-item">
             <img
               src={require("./image/image1.jpg")}
               className="d-block w-100"
