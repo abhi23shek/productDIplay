@@ -93,7 +93,7 @@ html, body {
   font-size: 2rem;
   font-style: normal;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: space-between;
 }
 /* Subcategory Name Header */
@@ -105,6 +105,18 @@ html, body {
   text-align: left;
   border-bottom: 2px solid #ddd;
   padding-bottom: 5px;
+}
+.subcategory-group{
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(75, 151, 202, 0.1);
+  border: 1px solid #dee2e6;
+  transition: all 0.3s ease-in-out;
+  margin: 5vh;
+
+}
+.subcategory-group h4 {
+  display: flex;
+  justify-content: center;
 }
 
 /* Product Container */
@@ -129,7 +141,7 @@ html, body {
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   flex: 0 1 250px; /* Fixed card width */
   box-sizing: border-box;
-  padding: 16px;
+  padding: 8px;
   text-align: center;
 }
 

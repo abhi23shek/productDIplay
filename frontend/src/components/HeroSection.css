@@ -1,66 +1,84 @@
-.hero-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 2%;
-    background-color: #f4f4f4;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-  }
-  
-  .hero-content {
-    max-width: 50%;
-  }
-  
-  .hero-title {
-    font-family: "DM Serif Text", serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 3rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  .hero-subtitle {
-    font-family: "Roboto Mono", serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
-    font-size: 1.5rem;
-    margin-bottom: 30px;
-    color: #555;
-  }
-  
-  .hero-button {
-    padding: 15px 30px;
-    font-size: 1.2rem;
-    color: white;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .hero-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .hero-image-container {
-    max-width: 50%;
-  }
-  
-  .hero-image {
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  .hero-image:hover{
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    transition-duration: 1s;
-    
-  }
-  
+/* Ensure the carousel and its images look good on all screen sizes */
+.carousel {
+  width: 100%;
+  height: 60vh; /* Adjust height based on your design needs */
+  overflow: hidden;
+  border-radius: 10px; /* Smooth border for a better appearance */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Add subtle shadow for depth */
+}
+
+.carousel-item img {
+  object-fit: cover;
+  height: 60vh; /* Ensures the image fills the carousel's height */
+  width: 100%; /* Ensures the image stretches to the carousel's width */
+}
+
+/* Caption styling */
+.carousel-caption h5 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #fff; /* White text for contrast */
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); /* Add depth to text */
+}
+
+.carousel-caption p {
+  font-size: 1rem;
+  color: #ddd; /* Subtle text color */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* Arrow controls */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-image: none;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent dark background */
+  border-radius: 5px; /* Subtle rounding */
+  padding: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.8); /* Light border for contrast */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Ensures content is centered */
+}
+
+.carousel-control-prev-icon::before,
+.carousel-control-next-icon::before {
+  font-family: "Font Awesome 5 Free"; /* Use Font Awesome for custom arrows */
+  font-weight: 900;
+  color: white;
+  font-size: 20px;
+  line-height: 1; /* Ensure proper vertical alignment */
+}
+
+.carousel-control-prev-icon::before {
+  content: "\f104"; /* Font Awesome left arrow */
+}
+
+.carousel-control-next-icon::before {
+  content: "\f105"; /* Font Awesome right arrow */
+}
+
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+  background-color: rgba(0, 0, 0, 0.8); /* Darker background on hover */
+  border-color: rgba(255, 255, 255, 1); /* Brighter border on hover */
+}
+
+/* Slide bar (indicators) */
+.carousel-indicators [data-bs-target] {
+  width: 30px; /* Default bar width */
+  height: 5px; /* Default bar height */
+  background-color: rgba(255, 255, 255, 0.7)!important; 
+  border: none;
+  margin: 0 4px; /* Space between bars */
+  cursor: pointer;
+}
+
+.carousel-indicators [data-bs-target].active {
+  background-color: #007bff; /* Highlight active slide */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+/* Hover effects for indicators */
+.carousel-indicators [data-bs-target]:hover {
+  background-color: rgba(255, 255, 255, 1); /* Fully opaque on hover */
+}

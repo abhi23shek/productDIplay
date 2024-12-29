@@ -168,29 +168,27 @@ function FrontPage() {
       <HeroSection />
       <div className="category-section my-4 category-text">
         <h2>Categories</h2>
-        <div className="row">
-          <div className="col-12">
-            <div className="btn-group flex-wrap" role="group">
+        <div className="row row-cols-auto">
+          <div className="btn-group flex-wrap" role="group">
+            <button
+              className={`btn btn-outline-primary ${
+                selectedCategory === "All" ? "active" : ""
+              }`}
+              onClick={() => handleCategoryChange("All")}
+            >
+              All
+            </button>
+            {categories.map((category) => (
               <button
+                key={category.id}
                 className={`btn btn-outline-primary ${
-                  selectedCategory === "All" ? "active" : ""
+                  category.id === selectedCategory ? "active" : ""
                 }`}
-                onClick={() => handleCategoryChange("All")}
+                onClick={() => handleCategoryChange(category.id)}
               >
-                All
+                {category.name}
               </button>
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  className={`btn btn-outline-primary ${
-                    category.id === selectedCategory ? "active" : ""
-                  }`}
-                  onClick={() => handleCategoryChange(category.id)}
-                >
-                  {category.name}
-                </button>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
       </div>
@@ -198,29 +196,27 @@ function FrontPage() {
         subcategories[selectedCategory]?.length > 0 && (
           <div className="subcategory-section my-4 subcategory-text">
             <h3>Subcategories</h3>
-            <div className="row">
-              <div className="col-12">
-                <div className="btn-group flex-wrap" role="group">
+            <div className="row row-cols-auto">
+              <div className="btn-group flex-wrap" role="group">
+                <button
+                  className={`btn btn-outline-secondary ${
+                    selectedSubcategory === "All" ? "active" : ""
+                  }`}
+                  onClick={() => handleSubcategoryChange("All")}
+                >
+                  All
+                </button>
+                {subcategories[selectedCategory].map((sub) => (
                   <button
+                    key={sub.id}
                     className={`btn btn-outline-secondary ${
-                      selectedSubcategory === "All" ? "active" : ""
+                      sub.id === selectedSubcategory ? "active" : ""
                     }`}
-                    onClick={() => handleSubcategoryChange("All")}
+                    onClick={() => handleSubcategoryChange(sub.id)}
                   >
-                    All
+                    {sub.name}
                   </button>
-                  {subcategories[selectedCategory].map((sub) => (
-                    <button
-                      key={sub.id}
-                      className={`btn btn-outline-secondary ${
-                        sub.id === selectedSubcategory ? "active" : ""
-                      }`}
-                      onClick={() => handleSubcategoryChange(sub.id)}
-                    >
-                      {sub.name}
-                    </button>
-                  ))}
-                </div>
+                ))}
               </div>
             </div>
           </div>
