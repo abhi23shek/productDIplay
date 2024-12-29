@@ -12,11 +12,13 @@ const productRoutes = require("./routes/products");
 const categoryRoutes = require("./routes/categories");
 const subcategoryRoutes = require("./routes/subcategories");
 const uploadRoutes = require("./routes/upload");
+const loginRoutes = require("./routes/login");
 
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/subcategories", subcategoryRoutes);
 app.use("/api/upload-image", uploadRoutes);
+app.use("/api/auth", loginRoutes);
 
 // Server setup
 const port = 3001;

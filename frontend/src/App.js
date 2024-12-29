@@ -1,42 +1,49 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+  useNavigate,
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
+import { AuthProvider, useAuth } from "./components/AuthContext";
+import Login from "./components/Login";
 import FrontPage from "./components/FrontPage";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminUpdateProduct from "./components/AdminUpdateProduct";
 
+const ProtectedRoute = ({ children }) => {
+  const { auth } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!auth) {
+      navigate("/login"); // Redirect to login page if not authenticated
+    }
+  }, [auth, navigate]);
+
+  return children;
+};
+
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<FrontPage />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/update/:id" element={<AdminUpdateProduct />} />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<FrontPage />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/admin/update/:id" element={<AdminUpdateProduct />} />
+        </Routes>
+      </AuthProvider>
     </Router>
   );
 }
 
 export default App;
-
-// import React from 'react';
-// import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-// import ProductCatalog from './components/ProductCatalog';
-// import AdminProductList from './components/AdminProductList';
-// import AdminAddProduct from './components/AdminAddProduct';
-// import AdminUpdateProduct from './components/AdminUpdateProduct';
-// import './App.css';
-
-// function App() {
-//     return (
-//         <Router>
-//             <Routes>
-//                 <Route path="/" element={<ProductCatalog />} />
-//                 <Route path="/admin" element={<AdminProductList />} />
-//                 <Route path="/admin/add" element={<AdminAddProduct />} />
-//                 <Route path="/admin/update/:id" element={<AdminUpdateProduct />} />
-//             </Routes>
-//         </Router>
-//     );
-// }
-
-// export default App;
