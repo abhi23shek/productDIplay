@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import AdminAddCategory from "./AdminAddCategory";
 import AdminAddProduct from "./AdminAddProduct";
 import AdminAddSubcategories from "./AdminAddSubcategories";
-import AdminProductList from "./AdminProductList";
 import AdminNavbar from "./AdminNavbar";
+import AdminDisplay from "./AdminDisplay";
 const AdminDashboard = () => {
   const [categories, setCategories] = useState([]);
 
@@ -48,10 +48,10 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
-
+        <hr className="border-3 border-top border-secondary my-4" />
         {/* Product List Section */}
         <div className="mt-4">
-          <AdminProductList />
+          <AdminDisplay />
         </div>
       </div>
     </div>
