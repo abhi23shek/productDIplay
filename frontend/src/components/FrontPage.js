@@ -171,38 +171,56 @@ function FrontPage() {
         <HeroSection />
       </div>
 
-      <div className="category-section my-4 category-text text-dark rounded-pill  px-4 border border-dark">
+      <div className="category-section my-4 category-text text-dark rounded-pill px-4 border border-dark">
         <h2>Categories</h2>
         <div className="row row-cols-auto">
           <div className="btn-group flex-wrap" role="group">
-            <button
-              className={`btn btn-outline-primary ${
-                selectedCategory === "All" ? "active" : ""
-              }`}
-              onClick={() => handleCategoryChange("All")}
-            >
-              All
-            </button>
-            {categories.map((category) => (
+            <div className="d-flex align-items-center mb-2">
               <button
-                key={category.id}
                 className={`btn btn-outline-primary ${
-                  category.id === selectedCategory ? "active" : ""
+                  selectedCategory === "All" ? "active" : ""
                 }`}
-                onClick={() => handleCategoryChange(category.id)}
+                onClick={() => handleCategoryChange("All")}
               >
-                {category.name}
+                All
               </button>
-            ))}
+              {selectedCategory === "All" && (
+                <span className="badge">{products.length}</span>
+              )}
+            </div>
+            {categories.map((category) => {
+              const categoryCount = products.filter(
+                (product) => product.category_id === category.id
+              ).length;
+              return (
+                <div
+                  key={category.id}
+                  className="d-flex align-items-center mb-2"
+                >
+                  <button
+                    className={`btn btn-outline-primary ${
+                      category.id === selectedCategory ? "active" : ""
+                    }`}
+                    onClick={() => handleCategoryChange(category.id)}
+                  >
+                    {category.name}
+                  </button>
+                  {category.id === selectedCategory && (
+                    <span className="badge">{categoryCount}</span>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
-      {selectedCategory !== "All" &&
-        subcategories[selectedCategory]?.length > 0 && (
-          <div className="subcategory-section my-4 subcategory-text text-dark rounded-pill  px-4 border border-dark">
-            <h3>Subcategories</h3>
-            <div className="row row-cols-auto">
-              <div className="btn-group flex-wrap" role="group">
+
+      {subcategories[selectedCategory]?.length > 0 && (
+        <div className="subcategory-section my-4 subcategory-text text-dark rounded-pill px-4 border border-dark">
+          <h3>Subcategories</h3>
+          <div className="row row-cols-auto">
+            <div className="btn-group flex-wrap" role="group">
+              <div className="d-flex align-items-center mb-2">
                 <button
                   className={`btn btn-outline-secondary ${
                     selectedSubcategory === "All" ? "active" : ""
@@ -211,21 +229,43 @@ function FrontPage() {
                 >
                   All
                 </button>
-                {subcategories[selectedCategory].map((sub) => (
-                  <button
-                    key={sub.id}
-                    className={`btn btn-outline-secondary ${
-                      sub.id === selectedSubcategory ? "active" : ""
-                    }`}
-                    onClick={() => handleSubcategoryChange(sub.id)}
-                  >
-                    {sub.name}
-                  </button>
-                ))}
+                {selectedSubcategory === "All" && (
+                  <span className="badge">
+                    {
+                      products.filter(
+                        (product) => product.category_id === selectedCategory
+                      ).length
+                    }
+                  </span>
+                )}
               </div>
+              {subcategories[selectedCategory].map((sub) => {
+                const subcategoryCount = products.filter(
+                  (product) =>
+                    product.category_id === selectedCategory &&
+                    product.subcategory_id === sub.id
+                ).length;
+                return (
+                  <div key={sub.id} className="d-flex align-items-center mb-2">
+                    <button
+                      className={`btn btn-outline-secondary ${
+                        sub.id === selectedSubcategory ? "active" : ""
+                      }`}
+                      onClick={() => handleSubcategoryChange(sub.id)}
+                    >
+                      {sub.name}
+                    </button>
+                    {sub.id === selectedSubcategory && (
+                      <span className="badge">{subcategoryCount}</span>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
-        )}
+        </div>
+      )}
+
       <div className="filter-tab text-dark rounded-pill  px-4 border border-dark">
         <div className="search-bar">
           <input
@@ -274,11 +314,16 @@ function FrontPage() {
         {Object.entries(groupedProducts).map(
           ([categoryName, subcategoryGroups]) => (
             <div key={categoryName} className="category-group">
-              <h3>{categoryName}</h3>
+              <h3>
+                {categoryName} ({Object.values(subcategoryGroups).flat().length}
+                )
+              </h3>
               {Object.entries(subcategoryGroups).map(
                 ([subcategoryName, products]) => (
                   <div key={subcategoryName} className="subcategory-group">
-                    <h3>{subcategoryName}</h3>
+                    <h3>
+                      {subcategoryName} ({products.length})
+                    </h3>
                     <div className="product-cards">
                       {products.map((product) => (
                         <ProductCards

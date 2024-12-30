@@ -5,7 +5,7 @@
 .home-btn:hover {
   background-color: #f0f0f0; /* Lighter background on hover */
   background: linear-gradient(135deg, #f8f9fa, #e6ebef);
-  box-shadow: 0px 0px 15px rgb(68, 116, 194); /* Glow effect */
+  box-shadow: 0px 0px 20px rgb(13, 86, 205); /* Glow effect */
   transform: scale(1.05); /* Slightly enlarges the button */
 }
 .about-btn {
@@ -14,7 +14,7 @@
 .about-btn:hover {
   background-color: #f0f0f0; /* Lighter background on hover */
   background: linear-gradient(135deg, #f8f9fa, #e6ebef);
-  box-shadow: 0px 0px 15px rgb(68, 116, 194); /* Glow effect */
+  box-shadow: 0px 0px 20px rgb(13, 86, 205); /* Glow effect */
   transform: scale(1.05); /* Slightly enlarges the button */
 }
 
@@ -65,6 +65,6 @@
 .login-btn:hover {
   background-color: #f0f0f0; /* Lighter background on hover */
   background: linear-gradient(135deg, #f8f9fa, #e6ebef);
-  box-shadow: 0px 0px 15px rgb(68, 116, 194); /* Glow effect */
+  box-shadow: 0px 0px 20px rgb(13, 86, 205); /* Glow effect */
   transform: scale(1.05); /* Slightly enlarges the button */
 }
