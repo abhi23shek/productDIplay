@@ -17,6 +17,7 @@ function AdminDisplay() {
   const [maxPrice, setMaxPrice] = useState("");
 
   useEffect(() => {
+    //Addition of Subcategory
     const fetchData = async () => {
       try {
         const productResponse = await fetch(
