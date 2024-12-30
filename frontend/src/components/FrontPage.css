@@ -43,6 +43,10 @@ body {
   border-radius: 10px;
   gap: 7%;
 }
+.category-section:hover{
+  background: linear-gradient(135deg, #f8f9fa, #e6ebef);
+  box-shadow: 0px 0px 15px rgb(68, 116, 194); /* Glow effect */
+}
 
 .category-text {
   font-family: "Chelsea Market", serif;
@@ -62,6 +66,10 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   gap: 7%;
+}
+.subcategory-section:hover{
+  background: linear-gradient(135deg, #f8f9fa, #e6ebef);
+  box-shadow: 0px 0px 15px rgb(68, 116, 194); /* Glow effect */
 }
 
 .subcategory-text {
@@ -89,8 +97,11 @@ body {
   border: 1px solid #dee2e6;
   transition: all 0.3s ease-in-out;
   margin: 5vh;
+  background: linear-gradient(135deg, #f8f9fa, #e6ebef);
+  box-shadow: 0px 0px 15px rgb(68, 116, 194); /* Glow effect */
+  padding-top: 1vh;
 }
-.subcategory-group h4 {
+.subcategory-group h3 {
   display: flex;
   justify-content: center;
 }
@@ -196,6 +207,8 @@ body {
   justify-content: flex-start;
   flex-direction: row;
   padding: 20px;
+  padding-left: 10vh;
+  padding-right: 10vh;
 }
 
 .filter-tab {
@@ -213,7 +226,8 @@ body {
 
 .filter-tab:hover {
   background: linear-gradient(135deg, #f8f9fa, #e6ebef);
-  box-shadow: 4px -4px 15px 1px rgb(67 128 187 / 15%);
+  box-shadow: 0px 0px 15px rgb(68, 116, 194); /* Glow effect */
+ 
 }
 .search-bar {
   grid-column: span 1; /* Use all columns in the grid */
@@ -228,7 +242,7 @@ body {
   padding: 12px;
   font-size: 16px;
   border: 1px solid #ced4da;
-  border-radius: 8px;
+  border-radius: 40px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: border-color 0.3s, box-shadow 0.3s;
 }
@@ -338,3 +352,45 @@ body {
     text-align: center;
   }
 }
+
+.category-section .btn-group .btn:hover,
+.subcategory-section .btn-group .btn:hover {
+  background-color: #0d6efd;
+  box-shadow: 0px 0px 15px rgb(68, 116, 194); /* Glow effect */
+  transform: scale(1.05); /* Slightly enlarges the button */
+
+}
+/* Dynamic background for FrontPage */
+.app-container {
+  background: radial-gradient(circle, #ffffff, #f7f9fc, #e9eff5);
+  min-height: 100vh;
+  padding: 20px;
+  animation: gradient-animation 10s infinite alternate;
+}
+
+/* Enhanced animation for the background */
+@keyframes gradient-animation {
+  0% {
+    background: radial-gradient(circle, #ffffff, #f7f9fc, #e9eff5);
+  }
+  25% {
+    background: radial-gradient(circle, #ffffff, #eef4fa, #d6e3f1);
+  }
+  50% {
+    background: radial-gradient(circle, #ffffff, #f1f5fb, #dbe7f3);
+  }
+  75% {
+    background: radial-gradient(circle, #ffffff, #f8fbfe, #e3edf7);
+  }
+  100% {
+    background: radial-gradient(circle, #ffffff, #f7f9fc, #e9eff5);
+  }
+}
+/* Typography */
+h2, h3, h4{
+  font-family: 'Poppins', sans-serif;
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+

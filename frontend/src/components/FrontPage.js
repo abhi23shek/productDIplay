@@ -171,7 +171,7 @@ function FrontPage() {
         <HeroSection />
       </div>
 
-      <div className="category-section my-4 category-text">
+      <div className="category-section my-4 category-text text-dark rounded-pill  px-4 border border-dark">
         <h2>Categories</h2>
         <div className="row row-cols-auto">
           <div className="btn-group flex-wrap" role="group">
@@ -199,7 +199,7 @@ function FrontPage() {
       </div>
       {selectedCategory !== "All" &&
         subcategories[selectedCategory]?.length > 0 && (
-          <div className="subcategory-section my-4 subcategory-text">
+          <div className="subcategory-section my-4 subcategory-text text-dark rounded-pill  px-4 border border-dark">
             <h3>Subcategories</h3>
             <div className="row row-cols-auto">
               <div className="btn-group flex-wrap" role="group">
@@ -226,7 +226,7 @@ function FrontPage() {
             </div>
           </div>
         )}
-      <div className="filter-tab">
+      <div className="filter-tab text-dark rounded-pill  px-4 border border-dark">
         <div className="search-bar">
           <input
             type="text"
@@ -278,7 +278,7 @@ function FrontPage() {
               {Object.entries(subcategoryGroups).map(
                 ([subcategoryName, products]) => (
                   <div key={subcategoryName} className="subcategory-group">
-                    <h4>{subcategoryName}</h4>
+                    <h3>{subcategoryName}</h3>
                     <div className="product-cards">
                       {products.map((product) => (
                         <ProductCards
