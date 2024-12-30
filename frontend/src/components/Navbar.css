@@ -23,8 +23,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #0d0d0d;
-  border-bottom: 1px solid #ddd;
+ 
 }
 
 .navbar-left {
@@ -60,14 +59,12 @@
 }
 
 .login-btn {
-  padding: 5px 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
 
 .login-btn:hover {
-  background-color: #0056b3;
+  background-color: #f0f0f0; /* Lighter background on hover */
+  background: linear-gradient(135deg, #f8f9fa, #e6ebef);
+  box-shadow: 0px 0px 15px rgb(68, 116, 194); /* Glow effect */
+  transform: scale(1.05); /* Slightly enlarges the button */
 }

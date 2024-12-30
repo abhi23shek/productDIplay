@@ -48,7 +48,7 @@ const Navbar = () => {
               </button>
             ) : (
               <button
-                className="btn btn-primary"
+                className="nav-link text-dark navbar-brand text-dark rounded-pill px-4 border border-dark login-btn"
                 onClick={() => navigate("/admin")}
               >
                 Login

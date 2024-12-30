@@ -352,6 +352,14 @@ body {
     text-align: center;
   }
 }
+.btn-group button {
+  font-size: 20px;
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 20px;
+  border: none;
+  transition: background-color 0.3s, transform 0.3s;
+}
 
 .category-section .btn-group .btn:hover,
 .subcategory-section .btn-group .btn:hover {
@@ -365,6 +373,7 @@ body {
   background: radial-gradient(circle, #ffffff, #f7f9fc, #e9eff5);
   min-height: 100vh;
   padding: 20px;
+  padding-top: 0.5vh;
   animation: gradient-animation 10s infinite alternate;
 }
 
