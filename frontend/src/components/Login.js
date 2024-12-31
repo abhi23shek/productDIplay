@@ -18,7 +18,7 @@ const Login = () => {
     <div className="parentcontainer">
       <nav className="navbar navbar-expand-lg navbar-light bg-transparent">
         <a
-          className="navbar-brand text-dark rounded-pill  px-4 border border-dark home-btn"
+          className="navbar-brand text-dark rounded-pill  px-4 border border-dark home-btn-login"
           href="/"
         >
           Home

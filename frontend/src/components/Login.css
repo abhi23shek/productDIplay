@@ -1,8 +1,8 @@
-.home-btn {
+.home-btn-login {
     transition: all 0.3s ease-in-out;
   }
   
-  .home-btn:hover {
+  .home-btn-login:hover {
     background-color: #f0f0f0; /* Lighter background on hover */
     background: linear-gradient(135deg, #f8f9fa, #e6ebef);
     box-shadow: 0px 0px 20px rgb(72, 149, 90) !important; /* Glow effect */
