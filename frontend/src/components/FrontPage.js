@@ -38,11 +38,16 @@ function FrontPage() {
           );
           subcategoriesData[category.id] = await response.json();
         }
+        const sortedProducts = Array.isArray(productsData)
+          ? productsData.sort(
+              (a, b) => parseFloat(a.price) - parseFloat(b.price)
+            )
+          : [];
 
-        setProducts(Array.isArray(productsData) ? productsData : []);
+        setProducts(sortedProducts);
         setCategories(Array.isArray(categoriesData) ? categoriesData : []);
         setSubcategories(subcategoriesData);
-        setFilteredProducts(Array.isArray(productsData) ? productsData : []);
+        setFilteredProducts(sortedProducts);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -126,6 +131,10 @@ function FrontPage() {
         );
       });
     }
+    // Sort filtered products by price
+    filtered = filtered.sort(
+      (a, b) => parseFloat(a.price) - parseFloat(b.price)
+    );
 
     setFilteredProducts(filtered);
   };
