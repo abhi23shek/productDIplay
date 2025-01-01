@@ -1,0 +1,19 @@
+.about-page .hero-section {
+    background: linear-gradient(to right, #007bff, #0056b3);
+    color: white;
+  }
+  
+  .about-page .mission-section p,
+  .about-page .values-section p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+  }
+  
+  .about-page .team-section .card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .about-page .call-to-action {
+    background: #f8f9fa;
+  }
+  
