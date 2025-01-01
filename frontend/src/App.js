@@ -11,6 +11,7 @@ import FrontPage from "./components/FrontPage";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminUpdateProduct from "./components/AdminUpdateProduct";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import PrintCatalog from "./components/PrintCatalog";
 
 const ProtectedRoute = ({ children }) => {
   const { auth } = useAuth();
@@ -41,6 +42,7 @@ function App() {
             }
           />
           <Route path="/admin/update/:id" element={<AdminUpdateProduct />} />
+          <Route path="/printcatalog" element={<PrintCatalog />} />
         </Routes>
       </AuthProvider>
     </Router>
