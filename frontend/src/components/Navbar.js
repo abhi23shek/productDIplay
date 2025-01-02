@@ -14,6 +14,14 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-transparent">
       <div className="container-fluid">
+        {/* Company Logo */}
+        <div className="navbar-logo mx-auto" onClick={() => navigate("/")}>
+          <img
+            src={require("./image/ShivCollection logo.png")} // Update with your actual logo path
+            alt="Company Logo"
+            className="logo-img"
+          />
+        </div>
         <button
           className={`navbar-brand text-dark rounded-pill px-4 ${
             isActive("/") ? "border border-dark" : ""
@@ -46,6 +54,7 @@ const Navbar = () => {
               </button>
             </li>
           </ul>
+
           <div className="d-flex">
             {auth ? (
               <button
