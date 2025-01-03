@@ -22,10 +22,10 @@ const HeroSection = () => {
       <div id="carouselExampleDark" className="carousel carousel-dark slide">
         {/* Static Text Overlay */}
         <div className="static-text">
-          <h1 className="static-title">Welcome to My Carousel</h1>
-          <p className="static-description">
-            This is a static description text displayed over all slides.
-          </p>
+          {/* <img
+            src={require("./image/ShivCollection logo.png")}
+            className="herologo"
+          /> */}
         </div>
 
         {/* Carousel Content */}

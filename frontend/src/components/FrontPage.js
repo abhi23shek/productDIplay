@@ -17,6 +17,7 @@ function FrontPage() {
   const [loading, setLoading] = useState(true);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [modalProduct, setModalProduct] = useState(null); // State for the selected product modal
 
   useEffect(() => {
     const fetchData = async () => {
@@ -170,6 +171,14 @@ function FrontPage() {
   }
 
   const groupedProducts = groupProducts();
+
+  const openModal = (product) => {
+    setModalProduct(product);
+  };
+
+  const closeModal = () => {
+    setModalProduct(null);
+  };
 
   return (
     <div className="Frontpageparent">
@@ -339,13 +348,18 @@ function FrontPage() {
                       </h3>
                       <div className="product-cards">
                         {products.map((product) => (
-                          <ProductCards
+                          <div
                             key={product.id}
-                            image={product.image_url}
-                            name={product.name}
-                            price={product.price}
-                            description={product.details}
-                          />
+                            onClick={() => openModal(product)}
+                          >
+                            <ProductCards
+                              key={product.id}
+                              image={product.image_url}
+                              name={product.name}
+                              price={product.price}
+                              description={product.details}
+                            />
+                          </div>
                         ))}
                       </div>
                     </div>
@@ -357,6 +371,46 @@ function FrontPage() {
         </div>
       </div>
       <Footer />
+      {modalProduct && (
+        <div
+          className="modal show"
+          style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
+        >
+          <div className="modal-dialog modal-lg">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h3 className="modal-title">{modalProduct.name}</h3>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={closeModal}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <div className="row">
+                  <div className=" Model-image col-md-auto">
+                    <img
+                      src={modalProduct.image_url}
+                      alt={modalProduct.name}
+                      className="img-fluid"
+                    />
+                  </div>
+                  <div className="col-md-auto">
+                    <div className="Model-price">
+                      <h5>Price:</h5>
+                      <div className="Model-price-value">
+                        ₹{modalProduct.price}
+                      </div>
+                    </div>
+
+                    <h5>{modalProduct.details}</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

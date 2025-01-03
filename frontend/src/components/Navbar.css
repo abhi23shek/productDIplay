@@ -5,18 +5,18 @@
 
 .home-btn:hover {
   background-color: #f0f0f0; /* Lighter background on hover */
-  background: linear-gradient(135deg, #f8f9fa, #e6ebef);
-  box-shadow: 0px 0px 20px rgb(13, 86, 205); /* Glow effect */
+  background: rgb(69, 68, 68) !important;
   transform: scale(1.05); /* Slightly enlarges the button */
-}
+  color: white !important;
+ }
 .about-btn {
   transition: all 0.3s ease-in-out;
 }
 .about-btn:hover {
   background-color: #f0f0f0; /* Lighter background on hover */
-  background: linear-gradient(135deg, #f8f9fa, #e6ebef);
-  box-shadow: 0px 0px 20px rgb(13, 86, 205); /* Glow effect */
+  background: rgb(69, 68, 68);
   transform: scale(1.05); /* Slightly enlarges the button */
+  color: white !important;
 }
 
 .navbar {
@@ -66,8 +66,8 @@
 
 .login-btn:hover {
   background-color: #f0f0f0; /* Lighter background on hover */
-  background: linear-gradient(135deg, #f8f9fa, #e6ebef);
-  box-shadow: 0px 0px 20px rgb(13, 86, 205); /* Glow effect */
+  background: rgb(69, 68, 68);
+  color: white !important;
   transform: scale(1.05); /* Slightly enlarges the button */
 }
 .navbar .navbar-brand,
