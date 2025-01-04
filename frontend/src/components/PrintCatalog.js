@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { PDFDocument } from "pdf-lib";
 import axios from "axios";
 
 const PrintCatalog = () => {
@@ -30,21 +31,63 @@ const PrintCatalog = () => {
         { categoryId: categoryName },
         { responseType: "blob" }
       )
-      .then((res) => {
-        const url = URL.createObjectURL(
-          new Blob([res.data], { type: "application/pdf" })
-        );
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", `catalog-${categoryName}.pdf`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+      .then(async (res) => {
+        try {
+          // Convert Blob to ArrayBuffer
+          const arrayBuffer = await res.data.arrayBuffer();
+
+          // Load the PDF using PDF-lib
+          const pdfDoc = await PDFDocument.load(arrayBuffer);
+
+          // Remove the first page
+          pdfDoc.removePage(0);
+
+          // Save the updated PDF
+          const modifiedPdfBytes = await pdfDoc.save();
+
+          // Create a Blob URL for the modified PDF
+          const url = URL.createObjectURL(
+            new Blob([modifiedPdfBytes], { type: "application/pdf" })
+          );
+
+          // Trigger download
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", `catalog-${categoryName}.pdf`);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } catch (error) {
+          console.error("Error processing PDF:", error);
+          alert("Failed to modify the catalog PDF.");
+        }
       })
       .catch((err) => {
         console.error("Error generating catalog:", err);
         alert("Failed to generate catalog.");
       });
+
+    // axios
+    //   .post(
+    //     "http://localhost:3001/api/print-catalog",
+    //     { categoryId: categoryName },
+    //     { responseType: "blob" }
+    //   )
+    //   .then((res) => {
+    //     const url = URL.createObjectURL(
+    //       new Blob([res.data], { type: "application/pdf" })
+    //     );
+    //     const link = document.createElement("a");
+    //     link.href = url;
+    //     link.setAttribute("download", `catalog-${categoryName}.pdf`);
+    //     document.body.appendChild(link);
+    //     link.click();
+    //     document.body.removeChild(link);
+    //   })
+    //   .catch((err) => {
+    //     console.error("Error generating catalog:", err);
+    //     alert("Failed to generate catalog.");
+    //   });
   };
 
   return (
