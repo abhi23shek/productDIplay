@@ -12,6 +12,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import AdminUpdateProduct from "./components/AdminUpdateProduct";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import PrintCatalog from "./components/PrintCatalog";
+import ContactUsPage from "./components/ContactUsPage";
 
 const ProtectedRoute = ({ children }) => {
   const { auth } = useAuth();
@@ -33,6 +34,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<FrontPage />} />
+          <Route path="/Contact-us" element={<ContactUsPage />} />
           <Route
             path="/admin"
             element={

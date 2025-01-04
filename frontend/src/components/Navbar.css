@@ -1,28 +1,30 @@
 .home-btn {
   transition: all 0.3s ease-in-out;
+  background: transparent !important;
 }
 
 .home-btn:hover {
   background-color: #f0f0f0; /* Lighter background on hover */
-  background: linear-gradient(135deg, #f8f9fa, #e6ebef);
-  box-shadow: 0px 0px 20px rgb(13, 86, 205); /* Glow effect */
+  background: rgb(69, 68, 68) !important;
   transform: scale(1.05); /* Slightly enlarges the button */
-}
+  color: white !important;
+ }
 .about-btn {
   transition: all 0.3s ease-in-out;
 }
 .about-btn:hover {
   background-color: #f0f0f0; /* Lighter background on hover */
-  background: linear-gradient(135deg, #f8f9fa, #e6ebef);
-  box-shadow: 0px 0px 20px rgb(13, 86, 205); /* Glow effect */
+  background: rgb(69, 68, 68);
   transform: scale(1.05); /* Slightly enlarges the button */
+  color: white !important;
 }
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 0px 0px !important;
+  padding-bottom: 20px !important;
  
 }
 
@@ -64,7 +66,40 @@
 
 .login-btn:hover {
   background-color: #f0f0f0; /* Lighter background on hover */
-  background: linear-gradient(135deg, #f8f9fa, #e6ebef);
-  box-shadow: 0px 0px 20px rgb(13, 86, 205); /* Glow effect */
+  background: rgb(69, 68, 68);
+  color: white !important;
   transform: scale(1.05); /* Slightly enlarges the button */
+}
+.navbar .navbar-brand,
+.navbar .nav-link {
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.navbar .navbar-brand.border,
+.navbar .nav-link.border {
+  border: 2px solid black; /* Highlight the active tab */
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link {
+  border: none; /* Default for inactive buttons */
+}
+.navbar-logo {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-img {
+  width: 15vh; /* Adjust as needed */
+  height: auto;
+  object-fit: contain; /* Ensures the logo scales nicely */
+  margin-right: 10px;
+}
+.logo-img:hover{
+  transform: scale(1.05);
+}
+.container-fluid{
+  padding: 0px 0px !important;
 }
