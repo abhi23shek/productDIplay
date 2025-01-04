@@ -40,7 +40,7 @@ const Login = () => {
           className="card shadow-lg"
           style={{ width: "100%", maxWidth: "400px" }}
         >
-          <div className="card-body">
+          <div className="card-body-login">
             <h2 className="text-center mb-4">Login</h2>
             <form onSubmit={handleLogin}>
               <div className="mb-3">

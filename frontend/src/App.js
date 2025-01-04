@@ -43,8 +43,22 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/admin/update/:id" element={<AdminUpdateProduct />} />
-          <Route path="/printcatalog" element={<PrintCatalog />} />
+          <Route
+            path="/admin/update/:id"
+            element={
+              <ProtectedRoute>
+                <AdminUpdateProduct />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/printcatalog"
+            element={
+              <ProtectedRoute>
+                <PrintCatalog />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </AuthProvider>
     </Router>

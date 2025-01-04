@@ -4,6 +4,7 @@ import AdminAddProduct from "./AdminAddProduct";
 import AdminAddSubcategories from "./AdminAddSubcategories";
 import AdminNavbar from "./AdminNavbar";
 import AdminDisplay from "./AdminDisplay";
+import AdminProductList from "./AdminProductList";
 
 const AdminDashboard = () => {
   const [categories, setCategories] = useState([]);

@@ -3,12 +3,21 @@ import { useAuth } from "./AuthContext";
 
 const AdminNavbar = () => {
   const { logout } = useAuth();
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
       <div className="container-fluid">
+        {/* Home Button on the Leftmost */}
         <a href="/" className="navbar-brand">
           Home
         </a>
+
+        {/* Print Catalog Button next to Home */}
+        <a href="/admin/printcatalog" className="navbar-brand">
+          Print Catalog
+        </a>
+
+        {/* Navbar Toggle for mobile view */}
         <button
           className="navbar-toggler"
           type="button"
@@ -20,8 +29,10 @@ const AdminNavbar = () => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
+
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
+            {/* Logout Button on the Rightmost */}
             <li className="nav-item">
               <button onClick={logout} className="btn btn-danger">
                 Logout

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./ProductCards.css";
+// import "./ProductCards.css";
 
 const AdminProductCards = ({ image, name, price, description, id }) => {
   const [products, setProducts] = useState([]);

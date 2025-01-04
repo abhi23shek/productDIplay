@@ -5,7 +5,14 @@ const pool = require("../config/db");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { categoryId, companyName, mobileNumber, dateApplicaple } = req.body;
+  const {
+    categoryId,
+    companyName,
+    mobileNumber,
+    dateApplicaple,
+    priceFlag,
+    priceAdjustment,
+  } = req.body;
 
   if (!categoryId) {
     return res.status(400).json({ error: "Category ID is required" });
@@ -182,14 +189,22 @@ router.post("/", async (req, res) => {
           .lineTo(x - 35 + eachcellWidth / 2, y + 36) // Ending point for the vertical line
           .stroke();
 
-        // Center and print price in the left section
-        doc
-          .fillColor("#2cd40a")
-          .fontSize(12)
-          .text(`Rs.${product.price}/-`, x + 5, y + 21, {
-            width: eachcellWidth / 2 - 40,
-            align: "center",
-          });
+        if (priceFlag) {
+          // Convert product.price to a number and calculate the adjusted price
+          const basePrice = parseFloat(product.price);
+          const adjustedPrice = basePrice + (basePrice * priceAdjustment) / 100;
+
+          // Round the adjusted price to an integer
+          const roundedPrice = Math.round(adjustedPrice);
+
+          doc
+            .fillColor("#2cd40a")
+            .fontSize(12)
+            .text(`Rs.${roundedPrice}/-`, x + 5, y + 21, {
+              width: eachcellWidth / 2 - 40,
+              align: "center",
+            });
+        }
 
         // Center and print details in the right section
         doc
@@ -208,6 +223,7 @@ router.post("/", async (req, res) => {
           .stroke();
 
         // Draw product image
+
         if (product.image_url) {
           try {
             const imageBuffer = await axios.get(product.image_url, {

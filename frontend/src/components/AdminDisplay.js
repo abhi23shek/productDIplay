@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from "react";
-import "./FrontPage.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AdminProductCards from "./AdminProductCards";
-import Footer from "./Footer";
+// import Footer from "./Footer";
 
 function AdminDisplay() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState({});
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedSubcategory, setSelectedSubcategory] = useState("All");
   const [loading, setLoading] = useState(true);
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
 
   useEffect(() => {
-    //Addition of Subcategory
     const fetchData = async () => {
       try {
         const productResponse = await fetch(
@@ -38,10 +33,10 @@ function AdminDisplay() {
           subcategoriesData[category.id] = await response.json();
         }
 
-        setProducts(Array.isArray(productsData) ? productsData : []);
-        setCategories(Array.isArray(categoriesData) ? categoriesData : []);
+        setProducts(productsData);
+        setCategories(categoriesData);
         setSubcategories(subcategoriesData);
-        setFilteredProducts(Array.isArray(productsData) ? productsData : []);
+        setFilteredProducts(productsData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -52,89 +47,22 @@ function AdminDisplay() {
     fetchData();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     try {
-  //       const response = await fetch("http://localhost:3001/api/products");
-
-  //       // Check if the response is ok (status 200)
-  //       if (response.ok) {
-  //         const data = await response.json(); // Parse JSON response
-  //         console.log("Fetched Products:", data);
-  //         setProducts(data); // Assuming you're setting products in state
-  //       } else {
-  //         console.error("Error fetching products:", response.status);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching products:", error);
-  //     }
-  //   };
-
-  //   fetchProducts();
-  // }, []);
-
-  // const handleDelete = async (id) => {
-  //   try {
-  //     // Send a DELETE request to the backend
-  //     const response = await fetch(`http://localhost:3001/api/products/${id}`, {
-  //       method: "DELETE",
-  //     });
-
-  //     if (response.ok) {
-  //       // Update the local state to remove the product from the list
-  //       setProducts(products.filter((product) => product.id !== id));
-  //     } else {
-  //       console.error("Error deleting product:", response.statusText);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error deleting product:", error);
-  //   }
-  // };
-
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);
     setSelectedSubcategory("All");
     if (categoryId === "All") {
       setFilteredProducts(products);
     } else {
-      filterProducts(searchTerm, categoryId, "All", minPrice, maxPrice);
+      filterProducts(categoryId, "All");
     }
   };
 
   const handleSubcategoryChange = (subcategoryId) => {
     setSelectedSubcategory(subcategoryId);
-    filterProducts(
-      searchTerm,
-      selectedCategory,
-      subcategoryId,
-      minPrice,
-      maxPrice
-    );
+    filterProducts(selectedCategory, subcategoryId);
   };
 
-  const handleSearch = (event) => {
-    const term = event.target.value.toLowerCase();
-    setSearchTerm(term);
-    filterProducts(
-      term,
-      selectedCategory,
-      selectedSubcategory,
-      minPrice,
-      maxPrice
-    );
-  };
-
-  const handlePriceFilter = () => {
-    filterProducts(
-      searchTerm,
-      selectedCategory,
-      selectedSubcategory,
-      minPrice,
-      maxPrice
-    );
-  };
-
-  const filterProducts = (term, categoryId, subcategoryId, min, max) => {
+  const filterProducts = (categoryId, subcategoryId) => {
     let filtered = products;
 
     if (categoryId !== "All") {
@@ -149,28 +77,11 @@ function AdminDisplay() {
       );
     }
 
-    if (term) {
-      filtered = filtered.filter((product) =>
-        product.name.toLowerCase().includes(term)
-      );
-    }
-
-    if (min !== "" || max !== "") {
-      filtered = filtered.filter((product) => {
-        const price = parseFloat(product.price);
-        return (
-          (!min || price >= parseFloat(min)) &&
-          (!max || price <= parseFloat(max))
-        );
-      });
-    }
-
     setFilteredProducts(filtered);
   };
 
-  const groupProducts = () => {
+  const groupedProducts = () => {
     const grouped = {};
-
     filteredProducts.forEach((product) => {
       const categoryName =
         categories.find((cat) => cat.id === product.category_id)?.name ||
@@ -180,13 +91,9 @@ function AdminDisplay() {
           (sub) => sub.id === product.subcategory_id
         )?.name || "Uncategorized";
 
-      if (!grouped[categoryName]) {
-        grouped[categoryName] = {};
-      }
-
-      if (!grouped[categoryName][subcategoryName]) {
+      if (!grouped[categoryName]) grouped[categoryName] = {};
+      if (!grouped[categoryName][subcategoryName])
         grouped[categoryName][subcategoryName] = [];
-      }
 
       grouped[categoryName][subcategoryName].push(product);
     });
@@ -198,146 +105,72 @@ function AdminDisplay() {
     return <p>Loading products...</p>;
   }
 
-  const groupedProducts = groupProducts();
+  const grouped = groupedProducts();
 
   return (
-    <div className="app-container">
-      <div className="container d-flex flex-column justify-content-center align-items-center">
-        <h1>Product Display</h1>
+    <div className="admin-display-container">
+      <div className="filter-section d-flex justify-content-between my-3">
+        <div>
+          <select
+            className="form-select"
+            value={selectedCategory}
+            onChange={(e) => handleCategoryChange(e.target.value)}
+          >
+            <option value="All">All Categories</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        {selectedCategory !== "All" &&
+          subcategories[selectedCategory]?.length > 0 && (
+            <div>
+              <select
+                className="form-select"
+                value={selectedSubcategory}
+                onChange={(e) => handleSubcategoryChange(e.target.value)}
+              >
+                <option value="All">All Subcategories</option>
+                {subcategories[selectedCategory].map((subcategory) => (
+                  <option key={subcategory.id} value={subcategory.id}>
+                    {subcategory.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
       </div>
 
-      <div className="category-section my-4 category-text">
-        <h2>Categories</h2>
-        <div className="row">
-          <div className="col-12">
-            <div className="btn-group flex-wrap" role="group">
-              <button
-                className={`btn btn-outline-primary ${
-                  selectedCategory === "All" ? "active" : ""
-                }`}
-                onClick={() => handleCategoryChange("All")}
-              >
-                All
-              </button>
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  className={`btn btn-outline-primary ${
-                    category.id === selectedCategory ? "active" : ""
-                  }`}
-                  onClick={() => handleCategoryChange(category.id)}
-                >
-                  {category.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-      {selectedCategory !== "All" &&
-        subcategories[selectedCategory]?.length > 0 && (
-          <div className="subcategory-section my-4 subcategory-text">
-            <h3>Subcategories</h3>
-            <div className="row">
-              <div className="col-12">
-                <div className="btn-group flex-wrap" role="group">
-                  <button
-                    className={`btn btn-outline-secondary ${
-                      selectedSubcategory === "All" ? "active" : ""
-                    }`}
-                    onClick={() => handleSubcategoryChange("All")}
-                  >
-                    All
-                  </button>
-                  {subcategories[selectedCategory].map((sub) => (
-                    <button
-                      key={sub.id}
-                      className={`btn btn-outline-secondary ${
-                        sub.id === selectedSubcategory ? "active" : ""
-                      }`}
-                      onClick={() => handleSubcategoryChange(sub.id)}
-                    >
-                      {sub.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      <div className="filter-tab">
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search for products..."
-            value={searchTerm}
-            onChange={handleSearch}
-          />
-        </div>
-        <div className="price-filter">
-          <label>
-            <input
-              type="number"
-              value={minPrice}
-              placeholder="Min price:"
-              onChange={(e) => setMinPrice(e.target.value)}
-            />
-          </label>
-          <label>
-            <input
-              type="number"
-              value={maxPrice}
-              placeholder="Max price:"
-              onChange={(e) => setMaxPrice(e.target.value)}
-            />
-          </label>
-          <button className="btn btn-primary" onClick={handlePriceFilter}>
-            Apply
-          </button>
-          <button
-            className="btn btn-secondary reset-btn"
-            onClick={() => {
-              setMinPrice("");
-              setMaxPrice("");
-              setSearchTerm("");
-              setSelectedCategory("All");
-              setSelectedSubcategory("All");
-              setFilteredProducts(products);
-            }}
-          >
-            Reset
-          </button>
-        </div>
-      </div>
-      <div className="product-grid">
-        {Object.entries(groupedProducts).map(
-          ([categoryName, subcategoryGroups]) => (
-            <div key={categoryName} className="category-group">
-              <h3>{categoryName}</h3>
-              {Object.entries(subcategoryGroups).map(
-                ([subcategoryName, products]) => (
-                  <div key={subcategoryName} className="subcategory-group">
-                    <h4>{subcategoryName}</h4>
-                    <div className="product-cards">
-                      {products.map((product) => (
+      <div className="product-grid container">
+        {Object.entries(grouped).map(([categoryName, subcategories]) => (
+          <div key={categoryName} className="category-group mb-4">
+            <h3 className="text-primary">{categoryName}</h3>
+            {Object.entries(subcategories).map(
+              ([subcategoryName, subcategoryProducts]) => (
+                <div key={subcategoryName} className="subcategory-group">
+                  <h4 className="text-secondary">{subcategoryName}</h4>
+                  <div className="row g-3">
+                    {subcategoryProducts.map((product) => (
+                      <div key={product.id} className="col-md-4 col-lg-3">
                         <AdminProductCards
-                          key={product.id}
-                          image={product.image_url}
+                          id={product.id}
                           name={product.name}
                           price={product.price}
+                          image={product.image_url}
                           description={product.details}
-                          id={product.id}
                         />
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </div>
-                )
-              )}
-            </div>
-          )
-        )}
+                </div>
+              )
+            )}
+          </div>
+        ))}
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
