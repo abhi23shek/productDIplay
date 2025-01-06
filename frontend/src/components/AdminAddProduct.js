@@ -64,7 +64,7 @@ const AdminAddProduct = ({ categories }) => {
     let uploadedImageUrl = imageUrl;
 
     if (noImage) {
-      uploadedImageUrl = "https://ibb.co/HXs7bPC"; // Set default URL if "No Image" is checked
+      uploadedImageUrl = "https://i.ibb.co/p0nQhDT/image.png"; // Set default URL if "No Image" is checked
     } else if (imageFile) {
       try {
         const formData = new FormData();
@@ -107,7 +107,7 @@ const AdminAddProduct = ({ categories }) => {
       if (response.ok) {
         setMessage("Product added successfully");
       }
-
+      console.log(productData.image_url);
       setName("");
       setPrice("");
       setDetails("");
