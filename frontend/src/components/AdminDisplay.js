@@ -56,6 +56,7 @@ function AdminDisplay() {
   }, []);
 
   const handleCategoryChange = (categoryId) => {
+    console.log(categoryId);
     setSelectedCategory(categoryId);
     setSelectedSubcategory("All");
     if (categoryId === "All") {
@@ -165,6 +166,23 @@ function AdminDisplay() {
   if (loading) {
     return <p>Loading products...</p>;
   }
+  const handleDelete = async (id) => {
+    try {
+      // Send a DELETE request to the backend
+      const response = await fetch(`http://localhost:3001/api/products/${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        // Update the local state to remove the product from the list
+        setProducts(products.filter((product) => product.id !== id));
+      } else {
+        console.error("Error deleting product:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
 
   const groupedProducts = groupProducts();
 
@@ -221,7 +239,7 @@ function AdminDisplay() {
             <select
               className="form-select"
               value={selectedCategory}
-              onChange={(e) => handleCategoryChange(e.target.value)}
+              onChange={(e) => handleCategoryChange(e.target.value.id)}
             >
               <option value="All">All Categories</option>
               {categories.map((category) => (
@@ -265,13 +283,29 @@ function AdminDisplay() {
                       <div className=" Admin-product-cards">
                         {products.map((product) => (
                           <div key={product.id}>
-                            <AdminProductCards
-                              id={product.id}
-                              image={product.image_url}
-                              name={product.name}
-                              price={product.price}
-                              description={product.details}
-                            />
+                            <div className="Admin-product-card">
+                              <AdminProductCards
+                                id={product.id}
+                                image={product.image_url}
+                                name={product.name}
+                                price={product.price}
+                                description={product.details}
+                              />
+                              <div className="d-flex justify-content-between">
+                                <button
+                                  className="btn btn-danger btn-sm"
+                                  onClick={() => handleDelete(product.id)}
+                                >
+                                  Delete
+                                </button>
+                                <a
+                                  href={`/admin/update/${product.id}`}
+                                  className="btn btn-primary btn-sm"
+                                >
+                                  Edit
+                                </a>
+                              </div>
+                            </div>
                           </div>
                         ))}
                       </div>
