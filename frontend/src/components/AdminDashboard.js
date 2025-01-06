@@ -5,6 +5,7 @@ import AdminAddSubcategories from "./AdminAddSubcategories";
 import AdminNavbar from "./AdminNavbar";
 import AdminDisplay from "./AdminDisplay";
 import AdminProductList from "./AdminProductList";
+import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
   const [categories, setCategories] = useState([]);
@@ -24,8 +25,11 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div>
-      <AdminNavbar></AdminNavbar>
+    <div className="Admin-parent">
+      <div className=" Admin-Navbar">
+        <AdminNavbar />
+      </div>
+
       <div className="container">
         {/* Admin Dashboard Title */}
         <div className="d-flex justify-content-center my-4">
@@ -52,9 +56,9 @@ const AdminDashboard = () => {
         </div>
         <hr className="border-3 border-top border-secondary my-4" />
         {/* Product List Section */}
-        <div className="mt-4">
-          <AdminDisplay />
-        </div>
+      </div>
+      <div className="Admin-display">
+        <AdminDisplay />
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import "./ProductCards.css";
+import "./AdminProductCards.css";
 
 const AdminProductCards = ({ image, name, price, description, id }) => {
   const [products, setProducts] = useState([]);
@@ -42,7 +42,7 @@ const AdminProductCards = ({ image, name, price, description, id }) => {
     }
   };
   return (
-    <div className="product-card">
+    <div className="Admin-product-card">
       <img src={image} alt={name} className="product-image" />
       <div className="product-details">
         <h5 className="product-name">{name}</h5>
