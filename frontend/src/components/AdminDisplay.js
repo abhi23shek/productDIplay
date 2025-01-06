@@ -56,7 +56,6 @@ function AdminDisplay() {
   }, []);
 
   const handleCategoryChange = (categoryId) => {
-    console.log(categoryId);
     setSelectedCategory(categoryId);
     setSelectedSubcategory("All");
     if (categoryId === "All") {
@@ -234,39 +233,102 @@ function AdminDisplay() {
         </div>
       </div>
       <div className="admin-display-container">
-        <div className="filter-section d-flex justify-content-between my-3">
-          <div>
-            <select
-              className="form-select"
-              value={selectedCategory}
-              onChange={(e) => handleCategoryChange(e.target.value.id)}
-            >
-              <option value="All">All Categories</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          {selectedCategory !== "All" &&
-            subcategories[selectedCategory]?.length > 0 && (
-              <div>
-                <select
-                  className="form-select"
-                  value={selectedSubcategory}
-                  onChange={(e) => handleSubcategoryChange(e.target.value)}
+        <div className="category-section my-4 category-text text-dark rounded-pill px-4 border border-dark">
+          <h2>Categories</h2>
+          <div className="row row-cols-auto">
+            <div className="btn-group flex-wrap" role="group">
+              <div className="d-flex align-items-center mb-2">
+                <button
+                  className={`btn btn-outline-primary ${
+                    selectedCategory === "All" ? "active" : ""
+                  }`}
+                  onClick={() => handleCategoryChange("All")}
                 >
-                  <option value="All">All Subcategories</option>
-                  {subcategories[selectedCategory].map((subcategory) => (
-                    <option key={subcategory.id} value={subcategory.id}>
-                      {subcategory.name}
-                    </option>
-                  ))}
-                </select>
+                  All
+                </button>
+                {selectedCategory === "All" && (
+                  <span className="badge">{products.length}</span>
+                )}
               </div>
-            )}
+              {categories.map((category) => {
+                const categoryCount = products.filter(
+                  (product) => product.category_id === category.id
+                ).length;
+                return (
+                  <div
+                    key={category.id}
+                    className="d-flex align-items-center mb-2"
+                  >
+                    <button
+                      className={`btn btn-outline-primary ${
+                        category.id === selectedCategory ? "active" : ""
+                      }`}
+                      onClick={() => handleCategoryChange(category.id)}
+                    >
+                      {category.name}
+                    </button>
+                    {category.id === selectedCategory && (
+                      <span className="badge">{categoryCount}</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
+        {subcategories[selectedCategory]?.length > 0 && (
+          <div className="subcategory-section my-4 subcategory-text text-dark rounded-pill px-4 border border-dark">
+            <h3>Subcategories</h3>
+            <div className="row row-cols-auto">
+              <div className="btn-group flex-wrap" role="group">
+                <div className="d-flex align-items-center mb-2">
+                  <button
+                    className={`btn btn-outline-secondary ${
+                      selectedSubcategory === "All" ? "active" : ""
+                    }`}
+                    onClick={() => handleSubcategoryChange("All")}
+                  >
+                    All
+                  </button>
+                  {selectedSubcategory === "All" && (
+                    <span className="badge">
+                      {
+                        products.filter(
+                          (product) => product.category_id === selectedCategory
+                        ).length
+                      }
+                    </span>
+                  )}
+                </div>
+                {subcategories[selectedCategory].map((sub) => {
+                  const subcategoryCount = products.filter(
+                    (product) =>
+                      product.category_id === selectedCategory &&
+                      product.subcategory_id === sub.id
+                  ).length;
+                  return (
+                    <div
+                      key={sub.id}
+                      className="d-flex align-items-center mb-2"
+                    >
+                      <button
+                        className={`btn btn-outline-secondary ${
+                          sub.id === selectedSubcategory ? "active" : ""
+                        }`}
+                        onClick={() => handleSubcategoryChange(sub.id)}
+                      >
+                        {sub.name}
+                      </button>
+                      {sub.id === selectedSubcategory && (
+                        <span className="badge">{subcategoryCount}</span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="Admin-product-grid">
           {Object.entries(groupedProducts).map(

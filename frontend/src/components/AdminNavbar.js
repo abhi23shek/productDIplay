@@ -1,5 +1,6 @@
 import React from "react";
 import { useAuth } from "./AuthContext";
+import "./AdminNavbar.css";
 
 const AdminNavbar = () => {
   const { logout } = useAuth();
@@ -8,12 +9,12 @@ const AdminNavbar = () => {
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
       <div className="container-fluid">
         {/* Home Button on the Leftmost */}
-        <a href="/" className="navbar-brand">
+        <a href="/" className="navbar-brand Admin-btn btn1">
           Home
         </a>
 
         {/* Print Catalog Button next to Home */}
-        <a href="/admin/printcatalog" className="navbar-brand">
+        <a href="/admin/printcatalog" className="navbar-brand Admin-btn btn1">
           Print Catalog
         </a>
 
