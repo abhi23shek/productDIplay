@@ -174,7 +174,7 @@ function AdminDisplay() {
 
       if (response.ok) {
         // Update the local state to remove the product from the list
-        setProducts(products.filter((product) => product.id !== id));
+        setFilteredProducts(products.filter((product) => product.id !== id));
       } else {
         console.error("Error deleting product:", response.statusText);
       }
