@@ -112,7 +112,7 @@ const AdminAddProduct = ({ categories }) => {
       }
       console.log(productData.image_url);
       setName("");
-      // setPrice("");
+      setPrice("");
       // setDetails("");
       // setImageFile(null);
       // setImageUrl("");
