@@ -23,7 +23,7 @@ const Navbar = () => {
           />
         </div>
         <button
-          className={`navbar-brand text-dark rounded-pill px-4 ${
+          className={`navbar-brand text-dark rounded-pill px-4 shiny-text ${
             isActive("/") ? "border border-dark" : ""
           } home-btn`}
           onClick={() => navigate("/")}
@@ -45,7 +45,7 @@ const Navbar = () => {
           <ul className="navbar-nav me-auto">
             <li className="nav-item">
               <button
-                className={`nav-link navbar-brand text-dark rounded-pill px-4 ${
+                className={`nav-link navbar-brand text-dark rounded-pill px-4 shiny-text ${
                   isActive("/Contact-us") ? "border border-dark" : ""
                 } about-btn`}
                 onClick={() => navigate("/Contact-us")}
@@ -58,7 +58,7 @@ const Navbar = () => {
           <div className="d-flex">
             {auth ? (
               <button
-                className={`btn btn-success ${
+                className={`btn btn-success shiny-text text-dark rounded-pill px-4${
                   isActive("/admin") ? "border border-dark" : ""
                 }`}
                 onClick={() => navigate("/admin")}
@@ -67,7 +67,7 @@ const Navbar = () => {
               </button>
             ) : (
               <button
-                className={`nav-link navbar-brand text-dark rounded-pill px-4 ${
+                className={`nav-link navbar-brand text-dark rounded-pill px-4 shiny-text ${
                   isActive("/admin") ? "border border-dark" : ""
                 } login-btn`}
                 onClick={() => navigate("/admin")}

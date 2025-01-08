@@ -233,7 +233,7 @@ function AdminDisplay() {
         </div>
       </div>
       <div className="admin-display-container">
-        <div className="category-section my-4 category-text text-dark rounded-pill px-4 border border-dark">
+        <div className="category-section my-4 category-text">
           <h2>Categories</h2>
           <div className="row row-cols-auto">
             <div className="btn-group flex-wrap" role="group">
