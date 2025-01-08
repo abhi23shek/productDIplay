@@ -10,7 +10,8 @@
 //     "9958660231, 7838146412, 9717437131"
 //   );
 //   const [dateApplicaple, setDateApplicaple] = useState("1st April 2024");
-//   const [priceFlag, setPriceFlag] = useState(true); // New state for price visibility
+//   const [priceFlag, setPriceFlag] = useState(true); // Whether to show prices
+//   const [priceAdjustment, setPriceAdjustment] = useState(0); // Percentage adjustment
 
 //   useEffect(() => {
 //     fetchCategories();
@@ -39,19 +40,25 @@
 //           companyName,
 //           mobileNumber,
 //           dateApplicaple,
-//           priceFlag, // Send the priceFlag to the backend
+//           priceFlag,
+//           priceAdjustment, // Send price adjustment value to backend
 //         },
 //         { responseType: "blob" }
 //       )
 //       .then(async (res) => {
 //         try {
 //           const arrayBuffer = await res.data.arrayBuffer();
+
 //           const pdfDoc = await PDFDocument.load(arrayBuffer);
+
 //           pdfDoc.removePage(0);
+
 //           const modifiedPdfBytes = await pdfDoc.save();
+
 //           const url = URL.createObjectURL(
 //             new Blob([modifiedPdfBytes], { type: "application/pdf" })
 //           );
+
 //           const link = document.createElement("a");
 //           link.href = url;
 //           link.setAttribute("download", `catalog-${categoryName}.pdf`);
@@ -125,6 +132,17 @@
 //           />
 //         </label>
 //       </div>
+//       <div>
+//         <label>
+//           Price Adjustment (%):
+//           <input
+//             type="number"
+//             value={priceAdjustment}
+//             onChange={(e) => setPriceAdjustment(e.target.value)}
+//             placeholder="Enter percentage (e.g., 10 or -10)"
+//           />
+//         </label>
+//       </div>
 //       <button onClick={handlePrint}>Print Catalog</button>
 //     </div>
 //   );
@@ -146,6 +164,8 @@ const PrintCatalog = () => {
   const [dateApplicaple, setDateApplicaple] = useState("1st April 2024");
   const [priceFlag, setPriceFlag] = useState(true); // Whether to show prices
   const [priceAdjustment, setPriceAdjustment] = useState(0); // Percentage adjustment
+  const [minPrice, setMinPrice] = useState(0); // Minimum price
+  const [maxPrice, setMaxPrice] = useState(1000); // Maximum price
 
   useEffect(() => {
     fetchCategories();
@@ -176,6 +196,8 @@ const PrintCatalog = () => {
           dateApplicaple,
           priceFlag,
           priceAdjustment, // Send price adjustment value to backend
+          minPrice, // Include min price
+          maxPrice, // Include max price
         },
         { responseType: "blob" }
       )
@@ -274,6 +296,28 @@ const PrintCatalog = () => {
             value={priceAdjustment}
             onChange={(e) => setPriceAdjustment(e.target.value)}
             placeholder="Enter percentage (e.g., 10 or -10)"
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Minimum Price:
+          <input
+            type="number"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+            placeholder="Enter minimum price"
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Maximum Price:
+          <input
+            type="number"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+            placeholder="Enter maximum price"
           />
         </label>
       </div>

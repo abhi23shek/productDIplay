@@ -12,6 +12,8 @@ router.post("/", async (req, res) => {
     dateApplicaple,
     priceFlag,
     priceAdjustment,
+    minPrice,
+    maxPrice,
   } = req.body;
 
   if (!categoryId) {
@@ -120,6 +122,16 @@ router.post("/", async (req, res) => {
 
       for (let i = 0; i < products.length; i++) {
         const product = products[i];
+        // Convert product.price to a number and calculate the adjusted price
+        const basePrice = parseFloat(product.price);
+        const adjustedPrice = basePrice + (basePrice * priceAdjustment) / 100;
+
+        // Round the adjusted price to an integer
+        const roundedPrice = Math.round(adjustedPrice);
+
+        if (roundedPrice > maxPrice || roundedPrice < minPrice) {
+          continue;
+        }
 
         if (y + cellHeight > doc.page.height - doc.page.margins.bottom) {
           doc.moveDown();
@@ -190,12 +202,12 @@ router.post("/", async (req, res) => {
           .stroke();
 
         if (priceFlag) {
-          // Convert product.price to a number and calculate the adjusted price
-          const basePrice = parseFloat(product.price);
-          const adjustedPrice = basePrice + (basePrice * priceAdjustment) / 100;
+          // // Convert product.price to a number and calculate the adjusted price
+          // const basePrice = parseFloat(product.price);
+          // const adjustedPrice = basePrice + (basePrice * priceAdjustment) / 100;
 
-          // Round the adjusted price to an integer
-          const roundedPrice = Math.round(adjustedPrice);
+          // // Round the adjusted price to an integer
+          // const roundedPrice = Math.round(adjustedPrice);
 
           doc
             .fillColor("#2cd40a")
@@ -260,9 +272,9 @@ router.post("/", async (req, res) => {
     for (const subcat of subcategories) {
       const products = await pool`
         SELECT name, price, details, image_url
-    FROM products
-    WHERE subcategory_id = ${subcat.id}
-    ORDER BY price ASC
+        FROM products
+        WHERE subcategory_id = ${subcat.id}
+        ORDER BY price ASC, name ASC
       `;
 
       if (products.length === 0) {

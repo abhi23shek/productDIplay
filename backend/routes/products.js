@@ -6,7 +6,8 @@ const router = express.Router();
 // Fetch all products
 router.get("/", async (req, res) => {
   try {
-    const result = await pool`SELECT * FROM products`;
+    const result =
+      await pool`SELECT * FROM products ORDER BY price ASC, name ASC`;
     res.json(result);
   } catch (err) {
     console.error("Error fetching products:", err);
