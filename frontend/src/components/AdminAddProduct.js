@@ -5,7 +5,7 @@ const AdminAddProduct = ({ categories }) => {
   const [subcategories, setSubcategories] = useState([]);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [details, setDetails] = useState("");
+  const [details, setDetails] = useState("Size-");
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [noImage, setNoImage] = useState(false); // New state for "No Image" checkbox
@@ -106,16 +106,19 @@ const AdminAddProduct = ({ categories }) => {
 
       if (response.ok) {
         setMessage("Product added successfully");
+        setTimeout(() => {
+          setMessage("");
+        }, 3000);
       }
       console.log(productData.image_url);
-      setName("");
-      setPrice("");
-      setDetails("");
-      setImageFile(null);
-      setImageUrl("");
-      setCategoryId("");
-      setSubcategoryId("");
-      setNoImage(false); // Reset "No Image" checkbox
+      // setName("");
+      // setPrice("");
+      // setDetails("");
+      // setImageFile(null);
+      // setImageUrl("");
+      // setCategoryId("");
+      // setSubcategoryId("");
+      // setNoImage(false); // Reset "No Image" checkbox
     } catch (error) {
       console.error("Error adding product:", error);
     }

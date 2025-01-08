@@ -3,6 +3,27 @@ import React, { useEffect, useState } from "react";
 const AdminProductList = () => {
   const [products, setProducts] = useState([]);
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/products");
+
+        // Check if the response is ok (status 200)
+        if (response.ok) {
+          const data = await response.json(); // Parse JSON response
+          console.log("Fetched Products:", data);
+          setProducts(data); // Assuming you're setting products in state
+        } else {
+          console.error("Error fetching products:", response.status);
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to the backend
