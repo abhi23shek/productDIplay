@@ -14,6 +14,7 @@ router.post("/", async (req, res) => {
     priceAdjustment,
     minPrice,
     maxPrice,
+    hintText,
   } = req.body;
 
   if (!categoryId) {
@@ -38,7 +39,8 @@ router.post("/", async (req, res) => {
       },
       size: [595.45, 841.68],
     });
-    const filename = `catalog-${categoryId}.pdf`;
+
+    const filename = `catalog.pdf`;
 
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `attachment; filename=${filename}`);
@@ -47,7 +49,8 @@ router.post("/", async (req, res) => {
     const cellWidth = 180;
     const cellHeight = 220;
     const margin = 5;
-
+    let totalProducts = 0;
+    let processedProducts = 0;
     const calcTotalPage = async () => {
       let totalPages = 0;
 
@@ -55,7 +58,8 @@ router.post("/", async (req, res) => {
         const productCountResult = await pool`
               SELECT COUNT(*) AS product_count 
               FROM products 
-              WHERE subcategory_id = ${subcat.id}`;
+              WHERE subcategory_id = ${subcat.id}
+              AND price BETWEEN ${minPrice} AND ${maxPrice}`;
 
         const productCount = productCountResult[0].product_count;
 
@@ -63,11 +67,13 @@ router.post("/", async (req, res) => {
 
         // Add the calculated pages to the total
         totalPages += pagesForSubcategory;
+        // totalProducts += productCountResult[0].product_count;
       }
 
       return totalPages;
     };
     let totalPages;
+    // sendProgress({ stage: "initializing", progress: 0 });
 
     const renderHeader = () => {
       doc.addPage();
@@ -92,7 +98,7 @@ router.post("/", async (req, res) => {
       doc
         .fontSize(10)
         .fillColor("red")
-        .text("(Trademark:-Vidhata)", { align: "center", highlight: true });
+        .text(`(${hintText})`, { align: "center", highlight: true });
 
       // doc.moveDown();
     };
@@ -122,17 +128,12 @@ router.post("/", async (req, res) => {
 
       for (let i = 0; i < products.length; i++) {
         const product = products[i];
-        // Convert product.price to a number and calculate the adjusted price
-        const basePrice = parseFloat(product.price);
-        const adjustedPrice = basePrice + (basePrice * priceAdjustment) / 100;
-
-        // Round the adjusted price to an integer
-        const roundedPrice = Math.round(adjustedPrice);
-
-        if (roundedPrice > maxPrice || roundedPrice < minPrice) {
-          continue;
-        }
-
+        // processedProducts++;
+        // const progress = Math.round((processedProducts / totalProducts) * 100);
+        // sendProgress({
+        // stage: "processing",
+        // progress,
+        // });
         if (y + cellHeight > doc.page.height - doc.page.margins.bottom) {
           doc.moveDown();
           doc
@@ -202,12 +203,12 @@ router.post("/", async (req, res) => {
           .stroke();
 
         if (priceFlag) {
-          // // Convert product.price to a number and calculate the adjusted price
-          // const basePrice = parseFloat(product.price);
-          // const adjustedPrice = basePrice + (basePrice * priceAdjustment) / 100;
+          // Convert product.price to a number and calculate the adjusted price
+          const basePrice = parseFloat(product.price);
+          const adjustedPrice = basePrice + (basePrice * priceAdjustment) / 100;
 
-          // // Round the adjusted price to an integer
-          // const roundedPrice = Math.round(adjustedPrice);
+          // Round the adjusted price to an integer
+          const roundedPrice = Math.round(adjustedPrice);
 
           doc
             .fillColor("#2cd40a")
@@ -274,24 +275,15 @@ router.post("/", async (req, res) => {
         SELECT name, price, details, image_url
         FROM products
         WHERE subcategory_id = ${subcat.id}
+        AND price BETWEEN ${minPrice} AND ${maxPrice}
         ORDER BY price ASC, name ASC
       `;
 
-      if (products.length === 0) {
-        doc.addPage();
-        renderHeader();
-        doc
-          .fontSize(20)
-          .text(`Subcategory: ${subcat.name}`, { align: "center" })
-          .moveDown();
-        doc.text("No products available for this subcategory.", {
-          align: "center",
-        });
-      } else {
+      if (products.length > 0) {
         await renderProducts(products, subcat.name);
       }
     }
-
+    // sendProgress({ stage: "completed", progress: 100 });
     doc.end();
   } catch (error) {
     console.error("Error generating catalog:", error);
