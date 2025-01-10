@@ -143,3 +143,9 @@
     left: -100%;
   }
 }
+.leftside_navbar{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
