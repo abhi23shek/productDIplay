@@ -23,19 +23,19 @@ function FrontPage() {
     const fetchData = async () => {
       try {
         const productResponse = await fetch(
-          "http://localhost:3001/api/products"
+          `${process.env.REACT_APP_SERVER_URL}/api/products`
         );
         const productsData = await productResponse.json();
 
         const categoryResponse = await fetch(
-          "http://localhost:3001/api/categories"
+          `${process.env.REACT_APP_SERVER_URL}/api/categories`
         );
         const categoriesData = await categoryResponse.json();
 
         const subcategoriesData = {};
         for (const category of categoriesData) {
           const response = await fetch(
-            `http://localhost:3001/api/subcategories/${category.id}`
+            `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${category.id}`
           );
           subcategoriesData[category.id] = await response.json();
         }

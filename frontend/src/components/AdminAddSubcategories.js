@@ -21,7 +21,7 @@ const AdminAddSubcategories = ({ categories }) => {
     setError(""); // Clear previous errors
     try {
       const response = await fetch(
-        `http://localhost:3001/api/subcategories/${categoryId}`
+        `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${categoryId}`
       );
 
       if (response.ok) {
@@ -50,11 +50,14 @@ const AdminAddSubcategories = ({ categories }) => {
     const newSubcategory = { name: subcategoryName, category_id: categoryId };
 
     try {
-      const response = await fetch("http://localhost:3001/api/subcategories", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newSubcategory),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/subcategories`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newSubcategory),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -74,7 +77,7 @@ const AdminAddSubcategories = ({ categories }) => {
   const handleDeleteSubcategory = async (subcategoryId) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/subcategories/${subcategoryId}`,
+        `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${subcategoryId}`,
         {
           method: "DELETE",
         }

@@ -22,7 +22,9 @@ const PrintCatalog = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/api/categories");
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/api/categories`
+      );
       setCategories(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -40,7 +42,7 @@ const PrintCatalog = () => {
 
     axios
       .post(
-        "http://localhost:3001/api/print-catalog",
+        `${process.env.REACT_APP_SERVER_URL}/api/print-catalog`,
         {
           categoryId: categoryName,
           companyName,

@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
     try {
       // Send username and password to backend for authentication
       const response = await axios.post(
-        "http://localhost:3001/api/auth/login",
+        `${process.env.REACT_APP_SERVER_URL}/api/auth/login`,
         {
           username,
           password,

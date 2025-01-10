@@ -19,19 +19,19 @@ function AdminDisplay() {
     const fetchData = async () => {
       try {
         const productResponse = await fetch(
-          "http://localhost:3001/api/products"
+          `${process.env.REACT_APP_SERVER_URL}/api/products`
         );
         const productsData = await productResponse.json();
 
         const categoryResponse = await fetch(
-          "http://localhost:3001/api/categories"
+          `${process.env.REACT_APP_SERVER_URL}/api/categories`
         );
         const categoriesData = await categoryResponse.json();
 
         const subcategoriesData = {};
         for (const category of categoriesData) {
           const response = await fetch(
-            `http://localhost:3001/api/subcategories/${category.id}`
+            `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${category.id}`
           );
           subcategoriesData[category.id] = await response.json();
         }
@@ -168,9 +168,12 @@ function AdminDisplay() {
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to the backend
-      const response = await fetch(`http://localhost:3001/api/products/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/products/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (response.ok) {
         // Update the local state to remove the product from the list
