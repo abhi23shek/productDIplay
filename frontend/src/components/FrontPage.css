@@ -502,7 +502,9 @@ h2, h3, h4{
   width: 100%;
   text-align: center;
   font-weight: bold;
+  font-size: 3vh;
 }
+
 
 .modal-body {
   display: flex;
@@ -530,8 +532,8 @@ h2, h3, h4{
 .Model-price{
   display: flex;
  align-items: baseline;
-  justify-content: center;
-  gap: 10px;
+  justify-content: flex-start;
+  gap: 20px;
   
 }
 .Model-price-value{
@@ -542,6 +544,19 @@ h2, h3, h4{
 }
 .Model-price h5{
   font-weight: bold;
+  font-size: 3vh ;
+}
+.Model-description h5{
+  font-size: 3vh;
+}
+.Model-description{
+  display: flex;
+  align-items: center;
+
+}
+.btn-close{
+  width: 3vh;
+  height: 3vh;
 }
 
 .loader{

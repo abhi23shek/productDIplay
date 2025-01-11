@@ -412,8 +412,9 @@ function FrontPage() {
                         ₹{modalProduct.price}
                       </div>
                     </div>
-
-                    <h5>{modalProduct.details}</h5>
+                    <div className="Model-description">
+                      <h5>{modalProduct.details}</h5>
+                    </div>
                   </div>
                 </div>
               </div>
