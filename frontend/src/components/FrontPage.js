@@ -187,6 +187,7 @@ function FrontPage() {
   if (loading) {
     return (
       <div className="loader">
+        <img src={require("./image/ShivCollection-logo3.png")} />
         <p> product loading...</p>
         <BarLoader
           cssOverride={{}}

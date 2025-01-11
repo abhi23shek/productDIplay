@@ -18,7 +18,7 @@ const Navbar = () => {
         <div className="leftside_navbar">
           <div className="navbar-logo mx-auto" onClick={() => navigate("/")}>
             <img
-              src={require("./image/ShivCollection logo.png")} // Update with your actual logo path
+              src={require("./image/ShivCollection-logo3.png")} // Update with your actual logo path
               alt="Company Logo"
               className="logo-img"
             />

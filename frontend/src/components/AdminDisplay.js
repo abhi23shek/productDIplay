@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AdminProductCards from "./AdminProductCards";
 import "./AdminDisplay.css";
+import BarLoader from "react-spinners/BarLoader";
 
 function AdminDisplay() {
   const [products, setProducts] = useState([]);
@@ -163,7 +164,17 @@ function AdminDisplay() {
   };
 
   if (loading) {
-    return <p>Loading products...</p>;
+    return (
+      <div className="loader">
+        <p> product loading...</p>
+        <BarLoader
+          cssOverride={{}}
+          height={10}
+          speedMultiplier={1}
+          width={300}
+        />
+      </div>
+    );
   }
   const handleDelete = async (id) => {
     try {
