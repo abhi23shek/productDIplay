@@ -169,7 +169,7 @@ function FrontPage() {
   if (loading) {
     return (
       <div className="loader">
-        <p> product loading ...</p>
+        <p> product loading...</p>
         <BarLoader
           cssOverride={{}}
           height={10}
@@ -200,7 +200,7 @@ function FrontPage() {
           <HeroSection />
         </div>
 
-        <div className="category-section my-4 category-text text-dark">
+        <div className="category-section my-4 category-text text-dark rounded-pill">
           <h2>Categories</h2>
           <div className="row row-cols-auto">
             <div className="btn-group flex-wrap" role="group">
