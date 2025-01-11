@@ -166,7 +166,7 @@ function FrontPage() {
     return grouped;
   };
 
-  if (loading) {
+  if (true) {
     return (
       <div className="loader">
         <p> product loading...</p>
