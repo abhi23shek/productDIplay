@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 import HeroSection from "./HeroSection";
 import ProductCards from "./ProductCards";
 import Footer from "./Footer";
-
+import BarLoader from "react-spinners/BarLoader";
 function FrontPage() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -167,7 +167,17 @@ function FrontPage() {
   };
 
   if (loading) {
-    return <p>Loading products...</p>;
+    return (
+      <div className="loader">
+        <p> product loading...</p>
+        <BarLoader
+          cssOverride={{}}
+          height={10}
+          speedMultiplier={1}
+          width={300}
+        />
+      </div>
+    );
   }
 
   const groupedProducts = groupProducts();
@@ -190,7 +200,7 @@ function FrontPage() {
           <HeroSection />
         </div>
 
-        <div className="category-section my-4 category-text text-dark">
+        <div className="category-section my-4 category-text text-dark rounded-pill">
           <h2>Categories</h2>
           <div className="row row-cols-auto">
             <div className="btn-group flex-wrap" role="group">

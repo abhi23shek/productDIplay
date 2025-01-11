@@ -119,12 +119,12 @@ const AdminAddProduct = ({ categories }) => {
       console.log(productData.image_url);
       setName("");
       setPrice("");
-      // setDetails("");
-      // setImageFile(null);
-      // setImageUrl("");
+      setDetails("Size-");
+      setImageFile(null);
+      setImageUrl("");
       // setCategoryId("");
       // setSubcategoryId("");
-      // setNoImage(false); // Reset "No Image" checkbox
+      setNoImage(false); // Reset "No Image" checkbox
     } catch (error) {
       console.error("Error adding product:", error);
     }

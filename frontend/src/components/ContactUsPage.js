@@ -81,7 +81,7 @@ function ContactUsPage() {
                 <i className="bi bi-telephone"></i> Phone: +91 9958660231
               </li>
               <li>
-                <i className="bi bi-envelope"></i> Email: support@company.com
+                <i className="bi bi-envelope"></i> Email: sueksh3333@gmail.com
               </li>
             </ul>
             <div className="social-icons mt-4">

@@ -43,3 +43,5 @@ out/
 # Temporary files
 *.swp
 *.swo
+
+package-lock.json
