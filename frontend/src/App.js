@@ -62,6 +62,7 @@ function App() {
           />
         </Routes>
       </AuthProvider>
+      <SpeedInsights />
     </Router>
   );
 }
