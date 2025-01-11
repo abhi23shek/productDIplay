@@ -75,15 +75,14 @@
   transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
-.navbar .navbar-brand.border,
-.navbar .nav-link.border {
+.NavBorder{
   border: 2px solid black; /* Highlight the active tab */
 }
-
-.navbar .navbar-brand,
-.navbar .nav-link {
+.NavBorderNotActive{
   border: none; /* Default for inactive buttons */
 }
+
+
 .navbar-logo {
   text-align: center;
   display: flex;
@@ -92,7 +91,7 @@
 }
 
 .logo-img {
-  width: 15vh; /* Adjust as needed */
+  width: 13vh; /* Adjust as needed */
   height: auto;
   object-fit: contain; /* Ensures the logo scales nicely */
   margin-right: 10px;

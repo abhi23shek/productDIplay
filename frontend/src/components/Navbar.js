@@ -25,7 +25,7 @@ const Navbar = () => {
           </div>
           <button
             className={`navbar-brand text-dark rounded-pill px-4 shiny-text ${
-              isActive("/") ? "border border-dark" : ""
+              isActive("/") ? "NavBorder" : "NavBorderNotActive"
             } home-btn`}
             onClick={() => navigate("/")}
           >
@@ -33,7 +33,7 @@ const Navbar = () => {
           </button>
           <button
             className={`nav-link navbar-brand text-dark rounded-pill px-4 shiny-text ${
-              isActive("/Contact-us") ? "border border-dark" : ""
+              isActive("/Contact-us") ? "NavBorder" : "NavBorderNotActive"
             } about-btn`}
             onClick={() => navigate("/Contact-us")}
           >
