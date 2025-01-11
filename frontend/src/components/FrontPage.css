@@ -548,6 +548,7 @@ h2, h3, h4{
 }
 .Model-description h5{
   font-size: 3vh;
+  font-weight: lighter;
 }
 .Model-description{
   display: flex;

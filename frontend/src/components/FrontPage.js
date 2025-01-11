@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./FrontPage.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./Navbar";
@@ -18,7 +18,7 @@ function FrontPage() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [modalProduct, setModalProduct] = useState(null); // State for the selected product modal
-
+  const modalRef = useRef(null); // Ref for the modal content
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,6 +58,24 @@ function FrontPage() {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        modalProduct &&
+        modalRef.current &&
+        !modalRef.current.contains(event.target)
+      ) {
+        closeModal();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [modalProduct]);
 
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);
@@ -181,7 +199,6 @@ function FrontPage() {
   }
 
   const groupedProducts = groupProducts();
-
   const openModal = (product) => {
     setModalProduct(product);
   };
@@ -387,7 +404,7 @@ function FrontPage() {
           style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
         >
           <div className="modal-dialog modal-lg">
-            <div className="modal-content">
+            <div className="modal-content" ref={modalRef}>
               <div className="modal-header">
                 <h3 className="modal-title">{modalProduct.name}</h3>
                 <button
