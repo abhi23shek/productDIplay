@@ -5,6 +5,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { AuthProvider, useAuth } from "./components/AuthContext";
 import Login from "./components/Login";
 import FrontPage from "./components/FrontPage";

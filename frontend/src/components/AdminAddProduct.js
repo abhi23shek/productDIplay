@@ -23,7 +23,7 @@ const AdminAddProduct = ({ categories }) => {
   const fetchSubcategories = async (categoryId) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/subcategories/${categoryId}`
+        `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${categoryId}`
       );
       const data = await response.json();
       if (Array.isArray(data)) {
@@ -70,10 +70,13 @@ const AdminAddProduct = ({ categories }) => {
         const formData = new FormData();
         formData.append("image", imageFile);
 
-        const response = await fetch("http://localhost:3001/api/upload-image", {
-          method: "POST",
-          body: formData,
-        });
+        const response = await fetch(
+          `${process.env.REACT_APP_SERVER_URL}/api/upload-image`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
         const result = await response.json();
         if (result.imageUrl) {
@@ -98,11 +101,14 @@ const AdminAddProduct = ({ categories }) => {
     };
 
     try {
-      const response = await fetch("http://localhost:3001/api/products", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(productData),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/products`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(productData),
+        }
+      );
 
       if (response.ok) {
         setMessage("Product added successfully");

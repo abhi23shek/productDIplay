@@ -6,7 +6,9 @@ const AdminProductList = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:3001/api/products");
+        const response = await fetch(
+          `${process.env.REACT_APP_SERVER_URL}/api/products`
+        );
 
         // Check if the response is ok (status 200)
         if (response.ok) {
@@ -27,9 +29,12 @@ const AdminProductList = () => {
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to the backend
-      const response = await fetch(`http://localhost:3001/api/products/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/products/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (response.ok) {
         // Update the local state to remove the product from the list

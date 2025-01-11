@@ -16,7 +16,9 @@ const AdminDashboard = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/categories");
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/categories`
+      );
       const data = await response.json();
       setCategories(data);
     } catch (error) {

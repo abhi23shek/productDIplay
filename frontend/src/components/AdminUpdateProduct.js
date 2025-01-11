@@ -21,7 +21,7 @@ const UpdateProduct = () => {
     const fetchProductDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/products/${productId}`
+          `${process.env.REACT_APP_SERVER_URL}/api/products/${productId}`
         );
         setProduct(response.data.product);
         setImagePreview(response.data.product.image_url);
@@ -44,7 +44,7 @@ const UpdateProduct = () => {
         formData.append("image", imageFile);
 
         const response = await axios.post(
-          "http://localhost:3001/api/upload-image",
+          `${process.env.REACT_APP_SERVER_URL}/api/upload-image`,
           formData
         );
         uploadedImageUrl = response.data.imageUrl;
@@ -57,7 +57,7 @@ const UpdateProduct = () => {
     try {
       const updatedProduct = { ...product, image_url: uploadedImageUrl };
       const response = await axios.put(
-        `http://localhost:3001/api/products/${productId}`,
+        `${process.env.REACT_APP_SERVER_URL}/api/products/${productId}`,
         updatedProduct
       );
       setMessage(`Product updated successfully: ${response.data.product.name}`);

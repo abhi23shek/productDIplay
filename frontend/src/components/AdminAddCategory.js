@@ -10,7 +10,9 @@ const AdminAddCategory = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/categories");
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/categories`
+      );
       const data = await response.json();
       setCategories(data);
     } catch (error) {
@@ -21,7 +23,7 @@ const AdminAddCategory = () => {
   const deleteCategory = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/categories/${id}`,
+        `${process.env.REACT_APP_SERVER_URL}/api/categories/${id}`,
         {
           method: "DELETE",
         }
@@ -43,11 +45,14 @@ const AdminAddCategory = () => {
     const categoryData = { name: categoryName };
 
     try {
-      const response = await fetch("http://localhost:3001/api/categories", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(categoryData),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/categories`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(categoryData),
+        }
+      );
       // console.log("Category added:", data);
       const data = await response.json();
       console.log("Category added");
