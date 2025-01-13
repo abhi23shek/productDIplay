@@ -14,6 +14,8 @@ import AdminUpdateProduct from "./components/AdminUpdateProduct";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import PrintCatalog from "./components/PrintCatalog";
 import ContactUsPage from "./components/ContactUsPage";
+import AdminUploadCatalog from "./components/AdminUploadCatalog";
+import Downloads from "./components/Downloads";
 
 const ProtectedRoute = ({ children }) => {
   const { auth } = useAuth();
@@ -34,6 +36,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/downloads" element={<Downloads />} />
           <Route path="/" element={<FrontPage />} />
           <Route path="/Contact-us" element={<ContactUsPage />} />
           <Route
@@ -57,6 +60,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <PrintCatalog />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/uploadCatalog"
+            element={
+              <ProtectedRoute>
+                <AdminUploadCatalog />
               </ProtectedRoute>
             }
           />

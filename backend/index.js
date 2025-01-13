@@ -14,6 +14,7 @@ const subcategoryRoutes = require("./routes/subcategories");
 const uploadRoutes = require("./routes/upload");
 const loginRoutes = require("./routes/login");
 const printcatalog = require("./routes/printCatalog");
+const publiccatalog = require("./routes/publiccatalog");
 
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
@@ -21,6 +22,7 @@ app.use("/api/subcategories", subcategoryRoutes);
 app.use("/api/upload-image", uploadRoutes);
 app.use("/api/auth", loginRoutes);
 app.use("/api/print-catalog", printcatalog);
+app.use("/api/publiccatalog", publiccatalog);
 
 // Server setup
 const port = 3001;

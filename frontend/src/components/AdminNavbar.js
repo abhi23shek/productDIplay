@@ -24,6 +24,12 @@ const AdminNavbar = () => {
           >
             Print Catalog
           </a>
+          <a
+            href="/uploadcatalog"
+            className="navbar-brand Admin-btn btn1 text-dark rounded-pill px-4 shiny-text"
+          >
+            Upload Catalog
+          </a>
         </div>
         <div className="Adminrightside_navbar">
           <li className="nav-item">

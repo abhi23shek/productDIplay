@@ -45,3 +45,5 @@ out/
 *.swo
 
 package-lock.json
+
+uploads
