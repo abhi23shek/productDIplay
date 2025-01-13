@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Navbar from "./Navbar";
 
 const Downloads = () => {
   const [catalogs, setCatalogs] = useState([]);
@@ -79,32 +80,37 @@ const Downloads = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h1 className="mb-4">Available Downloads</h1>
-      {loading && <p>Loading catalogs...</p>}
-      {error && <p>{error}</p>}
-      {!loading && !error && catalogs.length === 0 && (
-        <p>No catalogs available for download.</p>
-      )}
-      <div className="row row-cols-1 row-cols-md-3 g-4">
-        {catalogs.map((catalog, index) => (
-          <div key={index} className="col">
-            <div className="card shadow-sm">
-              {/* Preview image or first letter of file name as preview */}
-              {generatePreviewImage(catalog.name)}
-              <div className="card-body">
-                <h5 className="card-title">{catalog.name}</h5>
-                {/* Download button */}
-                <button
-                  onClick={() => handleDownload(catalog.filename)}
-                  className="btn btn-success w-100"
-                >
-                  Download
-                </button>
+    <div>
+      <div className="ContactNavbar">
+        <Navbar />
+      </div>
+      <div className="container mt-4">
+        <h1 className="mb-4">Catalogs: </h1>
+        {loading && <p>Loading catalogs...</p>}
+        {error && <p>{error}</p>}
+        {!loading && !error && catalogs.length === 0 && (
+          <p>No catalogs available for download.</p>
+        )}
+        <div className="row row-cols-1 row-cols-md-3 g-4">
+          {catalogs.map((catalog, index) => (
+            <div key={index} className="col">
+              <div className="card shadow-sm">
+                {/* Preview image or first letter of file name as preview */}
+                {generatePreviewImage(catalog.name)}
+                <div className="card-body">
+                  <h5 className="card-title">{catalog.name}</h5>
+                  {/* Download button */}
+                  <button
+                    onClick={() => handleDownload(catalog.filename)}
+                    className="btn btn-success w-100"
+                  >
+                    Download
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

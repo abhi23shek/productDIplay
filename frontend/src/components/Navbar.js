@@ -39,6 +39,14 @@ const Navbar = () => {
           >
             Contact Us
           </button>
+          <button
+            className={`nav-link navbar-brand text-dark rounded-pill px-4 shiny-text ${
+              isActive("/downloads") ? "NavBorder" : "NavBorderNotActive"
+            } about-btn`}
+            onClick={() => navigate("/downloads")}
+          >
+            Downloads
+          </button>
         </div>
         <div className="rightside_navbar">
           <div className="d-flex">
