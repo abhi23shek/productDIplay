@@ -39,7 +39,7 @@ body {
   padding: 20px;
   background: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 100px;
+  border-radius: 10vh;
   gap: 7%;
   position: relative;
   overflow: visible;
@@ -58,7 +58,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  border-radius: 100px; /* Ensures rounded corners */
+  border-radius: 10vh; /* Ensures rounded corners */
   padding: 3px; /* Controls the border thickness */
   background: linear-gradient(var(--angle), #f39c12, #8e44ad, #3498db); /* Gradient */
   -webkit-mask: 
@@ -102,7 +102,7 @@ body {
   padding: 20px;
   background: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 100px !important;
+  border-radius: 10vh !important;
   gap: 7%;
   position: relative;
   z-index: 1;
@@ -114,7 +114,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  border-radius: 100px; /* Ensures rounded corners */
+  border-radius: 10vh; /* Ensures rounded corners */
   padding: 3px; /* Controls the border thickness */
   background: linear-gradient(var(--angle), #21D1E5, #c331fd, #8A3DB3,#FF434B); /* Gradient */
   -webkit-mask: 
@@ -269,7 +269,7 @@ body {
   margin: 20px 0;
   gap: 15px;
   padding: 25px;
-  border-radius: 100px;
+  border-radius: 10vh;
   border: 1px solid #dee2e6;
   transition: all 0.3s ease-in-out;
   background: #ffffff;
@@ -286,7 +286,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  border-radius: 100px; /* Ensures rounded corners */
+  border-radius: 10vh; /* Ensures rounded corners */
   padding: 3px; /* Controls the border thickness */
   background: linear-gradient(var(--angle),#0093E9 1%,#C850C0 46%, #23C5D6 100%); /* Gradient */
   -webkit-mask: 
@@ -562,10 +562,10 @@ h2, h3, h4{
 @media (max-width:768px){
   .category-section {
     margin: 10px 10px;
-    padding: 20px;
+    padding: 7vw;
     background: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 100px;
+    border-radius: 10vh;
     gap: 7%;
     position: relative;
     overflow: visible;
@@ -575,7 +575,7 @@ h2, h3, h4{
   .category-text {
     font-family: "Chelsea Market", serif;
     font-weight: 400;
-    font-size: 2rem;
+    font-size: 6vw;
     font-style: normal;
     display: flex;
     align-items:center;
@@ -584,13 +584,13 @@ h2, h3, h4{
 
   }
   .category-text h2{
-    font-size: 5vh !important;
+    font-size: 10vw !important;
   }
   .btn-group button {
-    font-size: 35px;
+    font-size: 8vw;
     font-weight: 600;
-    padding: 5px 10px;
-    margin: 10px;
+    padding: 1vw 3vw;
+    margin: 0px;
     border-radius: 20px;
     border: none;
     transition: background-color 0.3s, transform 0.3s;
@@ -611,7 +611,7 @@ h2, h3, h4{
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 30px;
+    font-size: 6vw;
     font-weight: bold;
     text-align: center;
     line-height: 1;
@@ -624,7 +624,7 @@ h2, h3, h4{
   .subcategory-text {
     font-family: "Chelsea Market", serif;
     font-weight: 400;
-    font-size: 2rem;
+    font-size: 4vw;
     font-style: normal;
     display: flex;
     align-items: center;
@@ -632,14 +632,15 @@ h2, h3, h4{
     flex-direction: column;
   }
   .subcategory-text h3{
-    font-size: 5vh;
+    font-size: 9vw;
   }
   .subcategory-section {
     margin: 20px 10px;
-    padding-top: 60px;
+    padding-top: 3vh;
+    padding-bottom: 3vh;
     background: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 100px !important;
+    border-radius: 10vh !important;
     gap: 7%;
     position: relative;
     z-index: 1;
@@ -654,20 +655,24 @@ h2, h3, h4{
 
   .subcategory-section .dropdown-menu.show {
     display: block;
-    font-size: 25px;
-    border-radius: 20px;
+    font-size: 6vw;
+    border-radius: 4vh;
   }
   .dropdown-toggle{
-    width: 250px;
-    height: 70px;
-    border-radius: 40px;
-    font-size: 25px;
+    width: 67vw;
+    height: 9vh;
+    border-radius: 13vw;
+    font-size: 7vw;
+  
+  }
+  .dropdown-item.active{
+    border-radius: 1.7vh;
   }
 
   .filter-tab {
-    padding: 10px !important;
-    padding-top: 40px !important;
-    padding-bottom: 40px !important;
+    padding: 5vh !important;
+    padding-top: 4vh !important;
+    padding-bottom: 4vh !important;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -676,35 +681,43 @@ h2, h3, h4{
 
   .search-bar input
    {
-    width: 300px;
-    height: 70px;
+    width: 80vw;
+    height: 10vh;
   }
 
   .price-filter {
     display: flex;
-    justify-content:center;
-    gap: 10px;
 
   }
   .Price-filter-input{
     display: flex;
-    gap: 70px;
+    gap: 8vw;
   }
   
   .price-filter-button{
     display: flex;
-    gap: 60px;
+    gap: 8vw;
   }
  
 
   .price-filter label {
 
-    width: 100px;
+    width: 30vw;
   }
+  .price-filter input{
+    width: 35vw;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+  
 
   .price-filter .btn-primary,
   .price-filter .btn-secondary.reset-btn {
-    width: 100px;
+    width: 30vw;
     text-align: center;
   }
 
