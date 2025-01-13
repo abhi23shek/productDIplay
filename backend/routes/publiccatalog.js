@@ -2,8 +2,6 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const { pdf2img } = require("pdf2image");
-const poppler = require("pdf-poppler");
 
 const uploadsDir = path.join(__dirname, "uploads");
 const router = express.Router();
