@@ -350,6 +350,15 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: border-color 0.3s, box-shadow 0.3s;
 }
+.Price-filter-input{
+  display: flex;
+  gap: 7px;
+}
+
+.price-filter-button{
+  display: flex;
+  gap: 7px;
+}
 
 .price-filter input:focus {
   border-color: #0d6efd;
@@ -398,33 +407,7 @@ body {
   transform: scale(0.95);
 }
 
-@media (max-width: 768px) {
-  .filter-tab {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 20px;
-  }
 
-  .search-bar input,
-  .price-filter input {
-    width: 100%;
-  }
-
-  .price-filter {
-    justify-content: flex-start;
-    gap: 10px;
-  }
-
-  .price-filter label {
-    width: 100%;
-  }
-
-  .price-filter .btn-primary,
-  .price-filter .btn-secondary.reset-btn {
-    width: 100%;
-    text-align: center;
-  }
-}
 .btn-group button {
   font-size: 20px;
   padding: 5px 10px;
@@ -574,5 +557,137 @@ h2, h3, h4{
   font-weight: 400;
   font-style: normal;
   font-size: 4vh;
+
+}
+@media (max-width:600px){
+  .category-section {
+    margin: 10px 10px;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 100px;
+    gap: 7%;
+    position: relative;
+    overflow: visible;
+    z-index: 1;
+  }
+  
+  .category-text {
+    font-family: "Chelsea Market", serif;
+    font-weight: 400;
+    font-size: 2rem;
+    font-style: normal;
+    display: flex;
+    align-items:center;
+    flex-direction: column;
+   
+
+  }
+  .category-text h2{
+    font-size: 5vh !important;
+  }
+  .btn-group button {
+    font-size: 40px;
+    font-weight: 600;
+    padding: 5px 10px;
+    margin: 10px;
+    border-radius: 20px;
+    border: none;
+    transition: background-color 0.3s, transform 0.3s;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    
+  }
+  .btn-group{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+  }
+  .btn.active{
+    color: #119957;
+  }
+  .badge {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1;
+    color: #d66c1a;
+    background-color:transparent;
+    border-radius: 30px;
+    padding: 0px;
+    
+  }
+  .subcategory-text {
+    font-family: "Chelsea Market", serif;
+    font-weight: 400;
+    font-size: 2rem;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+  .subcategory-text h3{
+    font-size: 5vh;
+  }
+  .subcategory-section {
+    margin: 20px 10px;
+    padding-top: 60px;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 100px !important;
+    gap: 7%;
+    position: relative;
+    z-index: 1;
+  }
+
+  .filter-tab {
+    padding: 10px !important;
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .search-bar input
+   {
+    width: 300px;
+    height: 70px;
+  }
+
+  .price-filter {
+    display: flex;
+    justify-content:center;
+    gap: 10px;
+
+  }
+  .Price-filter-input{
+    display: flex;
+    gap: 70px;
+  }
+  
+  .price-filter-button{
+    display: flex;
+    gap: 60px;
+  }
+ 
+
+  .price-filter label {
+
+    width: 100px;
+  }
+
+  .price-filter .btn-primary,
+  .price-filter .btn-secondary.reset-btn {
+    width: 100px;
+    text-align: center;
+  }
+
 
 }

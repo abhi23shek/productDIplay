@@ -202,7 +202,7 @@ function AdminDisplay() {
   return (
     <div className="Admin-Parent-container">
       <div className="Admin-Display-Heading"> Product Display</div>
-      <div className="filter-tab text-dark rounded-pill">
+      <div className="filter-tab text-dark">
         <div className="search-bar">
           <input
             type="text"
@@ -291,7 +291,7 @@ function AdminDisplay() {
           </div>
         </div>
         {subcategories[selectedCategory]?.length > 0 && (
-          <div className="subcategory-section my-4 subcategory-text text-dark rounded-pill">
+          <div className="subcategory-section my-4 subcategory-text text-dark">
             <h3>Subcategories</h3>
             <div className="row row-cols-auto">
               <div className="btn-group flex-wrap" role="group">
