@@ -218,7 +218,7 @@ function FrontPage() {
           <HeroSection />
         </div>
 
-        <div className="category-section my-4 category-text text-dark rounded-pill">
+        <div className="category-section my-4 category-text text-dark">
           <h2>Categories</h2>
           <div className="row row-cols-auto">
             <div className="btn-group flex-wrap" role="group">
@@ -263,7 +263,7 @@ function FrontPage() {
         </div>
 
         {subcategories[selectedCategory]?.length > 0 && (
-          <div className="subcategory-section my-4 subcategory-text text-dark rounded-pill">
+          <div className="subcategory-section my-4 subcategory-text text-dark">
             <h3>Subcategories</h3>
             <div className="row row-cols-auto">
               <div className="btn-group flex-wrap" role="group">
@@ -316,7 +316,7 @@ function FrontPage() {
           </div>
         )}
 
-        <div className="filter-tab text-dark rounded-pill">
+        <div className="filter-tab text-dark">
           <div className="search-bar">
             <input
               type="text"
@@ -326,38 +326,42 @@ function FrontPage() {
             />
           </div>
           <div className="price-filter">
-            <label>
-              <input
-                type="number"
-                value={minPrice}
-                placeholder="Min price:"
-                onChange={(e) => setMinPrice(e.target.value)}
-              />
-            </label>
-            <label>
-              <input
-                type="number"
-                value={maxPrice}
-                placeholder="Max price:"
-                onChange={(e) => setMaxPrice(e.target.value)}
-              />
-            </label>
-            <button className="btn btn-primary" onClick={handlePriceFilter}>
-              Apply
-            </button>
-            <button
-              className="btn btn-secondary reset-btn"
-              onClick={() => {
-                setMinPrice("");
-                setMaxPrice("");
-                setSearchTerm("");
-                setSelectedCategory("All");
-                setSelectedSubcategory("All");
-                setFilteredProducts(products);
-              }}
-            >
-              Reset
-            </button>
+            <div className="Price-filter-input">
+              <label>
+                <input
+                  type="number"
+                  value={minPrice}
+                  placeholder="Min price:"
+                  onChange={(e) => setMinPrice(e.target.value)}
+                />
+              </label>
+              <label>
+                <input
+                  type="number"
+                  value={maxPrice}
+                  placeholder="Max price:"
+                  onChange={(e) => setMaxPrice(e.target.value)}
+                />
+              </label>
+            </div>
+            <div className="price-filter-button">
+              <button className="btn btn-primary" onClick={handlePriceFilter}>
+                Apply
+              </button>
+              <button
+                className="btn btn-secondary reset-btn"
+                onClick={() => {
+                  setMinPrice("");
+                  setMaxPrice("");
+                  setSearchTerm("");
+                  setSelectedCategory("All");
+                  setSelectedSubcategory("All");
+                  setFilteredProducts(products);
+                }}
+              >
+                Reset
+              </button>
+            </div>
           </div>
         </div>
         <div className="product-grid">
