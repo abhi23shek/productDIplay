@@ -19,6 +19,8 @@ function FrontPage() {
   const [maxPrice, setMaxPrice] = useState("");
   const [modalProduct, setModalProduct] = useState(null); // State for the selected product modal
   const modalRef = useRef(null); // Ref for the modal content
+  const [isSubcategoryDropdownOpen, setIsSubcategoryDropdownOpen] =
+    useState(false); // State for toggling the dropdown
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -207,6 +209,9 @@ function FrontPage() {
   const closeModal = () => {
     setModalProduct(null);
   };
+  const toggleDropdown = () => {
+    setIsSubcategoryDropdownOpen(!isSubcategoryDropdownOpen);
+  };
 
   return (
     <div className="Frontpageparent">
@@ -265,34 +270,49 @@ function FrontPage() {
         {subcategories[selectedCategory]?.length > 0 && (
           <div className="subcategory-section my-4 subcategory-text text-dark">
             <h3>Subcategories</h3>
-            <div className="row row-cols-auto">
-              <div className="btn-group flex-wrap" role="group">
-                <div className="d-flex align-items-center mb-2">
-                  <button
-                    className={`btn btn-outline-secondary ${
-                      selectedSubcategory === "All" ? "active" : ""
-                    }`}
-                    onClick={() => handleSubcategoryChange("All")}
-                  >
-                    All
-                  </button>
-                  {selectedSubcategory === "All" && (
-                    <span className="badge">
-                      {
-                        products.filter(
-                          (product) => product.category_id === selectedCategory
-                        ).length
-                      }
-                    </span>
-                  )}
+
+            {/* Dropdown Button for Small Screens */}
+            <div className="d-md-none">
+              <button
+                className="btn btn-secondary dropdown-toggle"
+                onClick={toggleDropdown}
+              >
+                {isSubcategoryDropdownOpen
+                  ? "Hide Subcategories"
+                  : "Show Subcategories"}
+              </button>
+              {isSubcategoryDropdownOpen && (
+                <div className="dropdown-menu show">
+                  {subcategories[selectedCategory].map((sub) => (
+                    <button
+                      key={sub.id}
+                      className={`dropdown-item ${
+                        sub.id === selectedSubcategory ? "active" : ""
+                      }`}
+                      onClick={() => handleSubcategoryChange(sub.id)}
+                    >
+                      {sub.name}
+                    </button>
+                  ))}
                 </div>
-                {subcategories[selectedCategory].map((sub) => {
-                  const subcategoryCount = products.filter(
-                    (product) =>
-                      product.category_id === selectedCategory &&
-                      product.subcategory_id === sub.id
-                  ).length;
-                  return (
+              )}
+            </div>
+
+            {/* Subcategory Buttons for Larger Screens */}
+            <div className="d-none d-md-block">
+              <div className="row row-cols-auto">
+                <div className="btn-group flex-wrap" role="group">
+                  <div className="d-flex align-items-center mb-2">
+                    <button
+                      className={`btn btn-outline-secondary ${
+                        selectedSubcategory === "All" ? "active" : ""
+                      }`}
+                      onClick={() => handleSubcategoryChange("All")}
+                    >
+                      All
+                    </button>
+                  </div>
+                  {subcategories[selectedCategory].map((sub) => (
                     <div
                       key={sub.id}
                       className="d-flex align-items-center mb-2"
@@ -305,12 +325,9 @@ function FrontPage() {
                       >
                         {sub.name}
                       </button>
-                      {sub.id === selectedSubcategory && (
-                        <span className="badge">{subcategoryCount}</span>
-                      )}
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
             </div>
           </div>

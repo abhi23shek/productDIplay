@@ -559,7 +559,7 @@ h2, h3, h4{
   font-size: 4vh;
 
 }
-@media (max-width:600px){
+@media (max-width:768px){
   .category-section {
     margin: 10px 10px;
     padding: 20px;
@@ -587,7 +587,7 @@ h2, h3, h4{
     font-size: 5vh !important;
   }
   .btn-group button {
-    font-size: 40px;
+    font-size: 35px;
     font-weight: 600;
     padding: 5px 10px;
     margin: 10px;
@@ -643,6 +643,25 @@ h2, h3, h4{
     gap: 7%;
     position: relative;
     z-index: 1;
+  }
+  .subcategory-section .dropdown-menu {
+    display: none;
+    position: relative;
+    background: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
+  }
+
+  .subcategory-section .dropdown-menu.show {
+    display: block;
+    font-size: 25px;
+    border-radius: 20px;
+  }
+  .dropdown-toggle{
+    width: 250px;
+    height: 70px;
+    border-radius: 40px;
+    font-size: 25px;
   }
 
   .filter-tab {
