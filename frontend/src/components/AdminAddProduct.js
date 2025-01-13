@@ -52,12 +52,24 @@ const AdminAddProduct = ({ categories }) => {
     }
   };
 
+  // const handleFileChange = (e) => {
+  //   if (noImage) return; // Prevent file selection if "No Image" is checked
+  //   const file = e.target.files[0];
+  //   setImageFile(file);
+  // };
   const handleFileChange = (e) => {
-    if (noImage) return; // Prevent file selection if "No Image" is checked
     const file = e.target.files[0];
-    setImageFile(file);
+    if (file && file.type.startsWith("image/")) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      alert("Please select a valid image file");
+    }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
