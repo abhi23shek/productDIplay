@@ -11,10 +11,13 @@ const AdminUploadCatalog = () => {
   // Fetch the list of existing catalogs on component mount
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_SERVER_URL}/api/publiccatalog`)
+      .get(`${process.env.REACT_APP_SERVER_URL}/api/gdrive`)
+
       .then((response) => {
         setCatalogs(response.data);
+        setCatalogs(response.data);
       })
+
       .catch((error) => {
         console.error("Error fetching catalogs:", error);
       });
@@ -39,7 +42,7 @@ const AdminUploadCatalog = () => {
 
     try {
       await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/api/publiccatalog`,
+        `${process.env.REACT_APP_SERVER_URL}/api/gdrive`,
         formData,
         {
           headers: {
@@ -53,7 +56,7 @@ const AdminUploadCatalog = () => {
 
       // Fetch updated catalog list after successful upload
       const updatedCatalogs = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}/api/publiccatalog`
+        `${process.env.REACT_APP_SERVER_URL}/api/gdrive`
       );
       setCatalogs(updatedCatalogs.data);
     } catch (error) {
@@ -67,10 +70,13 @@ const AdminUploadCatalog = () => {
   const handleDelete = async (filename) => {
     try {
       await axios.delete(
-        `${process.env.REACT_APP_SERVER_URL}/api/publiccatalog/${filename}`
+        `${process.env.REACT_APP_SERVER_URL}/api/gdrive/${filename}`
       );
+      const updatedCatalogs = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/api/gdrive`
+      );
+      setCatalogs(updatedCatalogs.data);
       setMessage("Catalog deleted successfully!");
-      setCatalogs(catalogs.filter((catalog) => catalog.filename !== filename));
     } catch (error) {
       setMessage("Failed to delete catalog. Please try again.");
       console.error("Delete error:", error);
@@ -79,8 +85,9 @@ const AdminUploadCatalog = () => {
 
   const handleDownload = (filename) => {
     // Trigger download for the given filename
+
     window.open(
-      `${process.env.REACT_APP_SERVER_URL}/api/publiccatalog/download/${filename}`,
+      `${process.env.REACT_APP_SERVER_URL}/api/gdrive/download/${filename}`,
       "_blank"
     );
   };
@@ -119,19 +126,19 @@ const AdminUploadCatalog = () => {
         <ul className="list-group">
           {catalogs.map((catalog) => (
             <li
-              key={catalog.filename}
+              key={catalog.id}
               className="list-group-item d-flex justify-content-between align-items-center"
             >
               <span>{catalog.name}</span>
               <div>
                 <button
-                  onClick={() => handleDownload(catalog.filename)}
+                  onClick={() => handleDownload(catalog.name)}
                   className="btn btn-success btn-sm me-2"
                 >
                   Download
                 </button>
                 <button
-                  onClick={() => handleDelete(catalog.filename)}
+                  onClick={() => handleDelete(catalog.name)}
                   className="btn btn-danger btn-sm"
                 >
                   Delete

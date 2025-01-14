@@ -47,27 +47,4 @@ const uploadToImgbb = async (imageFile) => {
   }
 };
 
-// const express = require("express");
-// const multer = require("multer");
-// const uploadToImgbb = require("../helpers/uploadToImgbb");
-
-// const router = express.Router();
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage: storage });
-
-// router.post("/", upload.single("image"), async (req, res) => {
-//   if (!req.file) {
-//     return res.status(400).json({ error: "No file uploaded" });
-//   }
-
-//   try {
-//     const imageFile = req.file;
-//     const imageUrl = await uploadToImgbb(imageFile);
-//     res.json({ imageUrl });
-//   } catch (error) {
-//     console.error("Error uploading image:", error);
-//     res.status(500).json({ error: "Error uploading image" });
-//   }
-// });
-
 module.exports = router;

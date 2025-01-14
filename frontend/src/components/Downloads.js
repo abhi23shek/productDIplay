@@ -11,7 +11,7 @@ const Downloads = () => {
     const fetchCatalogs = async () => {
       try {
         const updatedCatalogs = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/api/publiccatalog`
+          `${process.env.REACT_APP_SERVER_URL}/api/gdrive`
         );
         setCatalogs(updatedCatalogs.data);
       } catch (err) {
@@ -26,7 +26,7 @@ const Downloads = () => {
 
   const handleDownload = (filename) => {
     window.open(
-      `${process.env.REACT_APP_SERVER_URL}/api/publiccatalog/download/${filename}`,
+      `${process.env.REACT_APP_SERVER_URL}/api/gdrive/download/${filename}`,
       "_blank"
     );
   };
@@ -101,7 +101,7 @@ const Downloads = () => {
                   <h5 className="card-title">{catalog.name}</h5>
                   {/* Download button */}
                   <button
-                    onClick={() => handleDownload(catalog.filename)}
+                    onClick={() => handleDownload(catalog.name)}
                     className="btn btn-success w-100"
                   >
                     Download
