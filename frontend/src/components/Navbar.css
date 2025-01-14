@@ -1,7 +1,13 @@
+
+.nav-btn-groups{
+  display: flex;
+  justify-content: space-between;
+}
 .home-btn {
   transition: all 0.3s ease-in-out;
   background: transparent !important;
 }
+
 
 .home-btn:hover {
   background-color: #f0f0f0; /* Lighter background on hover */
@@ -147,4 +153,16 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+}
+
+@media (max-width:768px) {
+  .icon{
+    display: block;
+  }
+  .nav-bar-destop{
+    display: none !important;
+  }
+  .navbar{
+    padding: 0px !important;
+  }
 }
