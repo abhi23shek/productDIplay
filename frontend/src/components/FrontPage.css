@@ -560,9 +560,25 @@ h2, h3, h4{
 
 }
 @media (max-width:768px){
+  .app-container {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-height: 100vh; /* Ensure it covers the full height of the screen */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .app-container {
+    background: radial-gradient(circle, #ffffff, #f9f9f9, #f2f2f2, #ececec);
+    min-height: 100vh;
+    padding: 2vw;
+    padding-top: 0.5vh;
+    animation: light-gradient 40s ease-in-out infinite;
+  }
   .category-section {
-    margin: 10px 10px;
-    padding: 7vw;
+    margin: 1vh 1vw;
+    padding: 5vw;
     background: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10vh;
@@ -661,8 +677,8 @@ h2, h3, h4{
   .dropdown-toggle{
     width: 67vw;
     height: 9vh;
-    border-radius: 13vw;
-    font-size: 7vw;
+    border-radius: 9vw;
+    font-size: 6vw;
   
   }
   .dropdown-item.active{
@@ -683,6 +699,7 @@ h2, h3, h4{
    {
     width: 80vw;
     height: 10vh;
+    font-size: 3vh;
   }
 
   .price-filter {
