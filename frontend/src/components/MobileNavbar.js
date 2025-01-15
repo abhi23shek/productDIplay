@@ -20,7 +20,7 @@ const MobileNavbar = () => {
             className="company-logo"
           />
         </div>
-        <div className="companyname">shivcollection</div>
+        <div className="companyname">shiv collection</div>
 
         {/* Hamburger Menu */}
         <div className="menu-toggle">
