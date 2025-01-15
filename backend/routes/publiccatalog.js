@@ -49,39 +49,6 @@ router.post("/", upload.array("catalogs", 10), (req, res) => {
 
   res.status(200).send({ message: "Catalogs uploaded successfully!" });
 });
-// router.post("/", upload.array("catalogs", 10), (req, res) => {
-//   if (!req.files || req.files.length === 0) {
-//     return res.status(400).send("No files uploaded.");
-//   }
-
-//   // Generate preview images for each catalog PDF
-//   req.files.forEach((file) => {
-//     const filePath = path.join(uploadsDir, file.filename);
-//     const outputFile = path.join(uploadsDir, `preview_${file.filename}.png`); // Output image file name
-
-//     const options = {
-//       format: "png",
-//       page: 1, // Convert the first page of the PDF
-//     };
-
-//     poppler
-//       .convert(filePath, options)
-//       .then(() => {
-//         // After conversion, save the preview file
-//         catalogs.push({
-//           name: file.originalname,
-//           url: `/uploads/${file.filename}`,
-//           preview: `/uploads/preview_${file.filename}.png`, // Path to the preview image
-//           filename: file.filename,
-//         });
-//       })
-//       .catch((err) => {
-//         console.error("Error generating preview:", err);
-//       });
-//   });
-
-//   res.status(200).send({ message: "Catalogs uploaded successfully!" });
-// });
 
 // Endpoint to fetch all catalogs
 router.get("/", (req, res) => {
