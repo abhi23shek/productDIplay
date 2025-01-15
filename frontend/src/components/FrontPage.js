@@ -186,7 +186,7 @@ function FrontPage() {
     return grouped;
   };
 
-  if (true) {
+  if (loading) {
     return (
       <div className="loader">
         <img src={require("./image/ShivCollection-logo3.png")} />
