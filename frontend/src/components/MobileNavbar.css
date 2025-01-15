@@ -157,8 +157,9 @@
     font-display: fallback;
   }
   .companyname{
-    font-family: 'Mokoto', sans-serif;
+    font-family: 'Mokoto';
     font-size: 5vw;
     color: #000000;
+    font-display: swap;
   }
   
