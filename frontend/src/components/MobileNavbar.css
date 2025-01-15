@@ -154,6 +154,7 @@
     src: url('../fonts/mokoto-mokoto-regular-400.ttf') format('truetype'); /* Adjust path if necessary */
     font-weight: normal; /* You can define different weights like 'bold' */
     font-style: normal; /* Define font style if needed */
+    display: swap;
   }
   .companyname{
     font-family: 'Mokoto', sans-serif;
