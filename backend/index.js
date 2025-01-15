@@ -16,7 +16,6 @@ const loginRoutes = require("./routes/login");
 const printcatalog = require("./routes/printCatalog");
 // const publiccatalog = require("./routes/publiccatalog");
 const gdrive = require("./routes/gdrive");
-const contactus = require("./routes/contactus");
 
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
@@ -26,7 +25,7 @@ app.use("/api/auth", loginRoutes);
 app.use("/api/print-catalog", printcatalog);
 // app.use("/api/publiccatalog", publiccatalog);
 app.use("/api/gdrive", gdrive);
-app.use("/api/contactus", contactus);
+
 // Server setup
 const port = 3001;
 app.listen(port, () => {
