@@ -46,7 +46,7 @@
   }
   
   .company-logo {
-    height: 7vh;
+    height: 8vh;
     width: auto;
     cursor: pointer;
   }
@@ -147,5 +147,19 @@
     .custom-navbar {
       display: none;
     }
+  }
+  
+  @font-face {
+    font-family: 'Mokoto';
+    src: url('../fonts/mokoto-mokoto-regular-400.otf') format('opentype'); /* Adjust path if necessary */
+    font-weight: normal; /* You can define different weights like 'bold' */
+    font-style: normal; /* Define font style if needed */
+    font-display: fallback;
+  }
+  .companyname{
+    font-family: 'Mokoto';
+    font-size: 4.8vw;
+    color: #000000;
+    font-display: swap;
   }
   

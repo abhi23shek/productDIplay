@@ -737,6 +737,42 @@ h2, h3, h4{
     width: 30vw;
     text-align: center;
   }
+ 
+  .product-grid {
+    display: flex;
+    flex-wrap: wrap; /* Prevent wrapping */
+    gap: 20px;
+    overflow-x: auto; /* Add horizontal scrolling */
+    padding: 1px;
+    flex-direction: column;
+  }
+  .product-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1vw;
+    justify-content: flex-start;
+    flex-direction: row;
+    padding: 1vw;
+  }
+  .loader{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full screen height */
+    background-color: #f8f9fa; /* Optional: Light background color */
+    flex-direction: column;
+  }
+  .loader p{
+    font-family: "Orbitron", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 4vh;
+  
+  }
+  .loader img{
+    width: 90vw;
+  }
 
 
 }

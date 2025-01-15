@@ -186,20 +186,20 @@ function FrontPage() {
     return grouped;
   };
 
-  if (loading) {
-    return (
-      <div className="loader">
-        <img src={require("./image/ShivCollection-logo3.png")} />
-        <p> product loading...</p>
-        <BarLoader
-          cssOverride={{}}
-          height={10}
-          speedMultiplier={1}
-          width={300}
-        />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="loader">
+  //       <img src={require("./image/ShivCollection-logo3.png")} />
+  //       <p> product loading...</p>
+  //       <BarLoader
+  //         cssOverride={{}}
+  //         height={10}
+  //         speedMultiplier={1}
+  //         width={300}
+  //       />
+  //     </div>
+  //   );
+  // }
 
   const groupedProducts = groupProducts();
   const openModal = (product) => {
