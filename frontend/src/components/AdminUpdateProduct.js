@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const UpdateProduct = () => {
   const { id: productId } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState({
     name: "",
     price: "",
@@ -96,6 +97,28 @@ const UpdateProduct = () => {
       <div className="card shadow-lg">
         <div className="card-header text-center">
           <h2>Update Product</h2>
+          <button
+            onClick={() => navigate(-1)}
+            style={{
+              position: "absolute",
+              left: "20px",
+              top: "20px",
+              padding: "5px 10px",
+              borderRadius: "8px",
+              border: "none",
+              backgroundColor: "#6c757d",
+              color: "white",
+              fontSize: "19px",
+              fontWeight: "500",
+              cursor: "pointer",
+              transition: "background-color 0.3s ease",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+            }}
+            onMouseOver={(e) => (e.target.style.backgroundColor = "#5a6268")}
+            onMouseOut={(e) => (e.target.style.backgroundColor = "#6c757d")}
+          >
+            ← Back
+          </button>
         </div>
         <div className="card-body">
           {error && <p className="alert alert-danger">{error}</p>}
