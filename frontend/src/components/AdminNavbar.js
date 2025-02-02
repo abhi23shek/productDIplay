@@ -6,7 +6,7 @@ const AdminNavbar = () => {
   const { logout } = useAuth();
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
         <div className="Adminleftside_navbar">
           {/* Home Button on the Leftmost */}
