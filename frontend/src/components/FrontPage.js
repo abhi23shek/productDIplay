@@ -11,6 +11,7 @@ function FrontPage() {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState({});
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [displayOrder, setDisplayOrder] = useState([]); // Tracks visual display order
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedSubcategory, setSelectedSubcategory] = useState("All");
@@ -18,13 +19,13 @@ function FrontPage() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [modalProduct, setModalProduct] = useState(null);
-  const [currentProductIndex, setCurrentProductIndex] = useState(0); // Track current product index
+  const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const modalRef = useRef(null);
   const [isSubcategoryDropdownOpen, setIsSubcategoryDropdownOpen] =
     useState(false);
-  const [touchStartX, setTouchStartX] = useState(0); // Track touch start position
+  const [touchStartX, setTouchStartX] = useState(0);
 
-  // Fetch products, categories, and subcategories
+  // Fetch initial data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -62,11 +63,10 @@ function FrontPage() {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
-  // Close modal when clicking outside
+  // Close modal on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -77,25 +77,32 @@ function FrontPage() {
         closeModal();
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [modalProduct]);
 
-  // Handle category change
+  // Build display order when filtered products change
+  useEffect(() => {
+    const newDisplayOrder = [];
+    const grouped = groupProducts();
+
+    // Flatten the grouped structure into displayOrder
+    Object.values(grouped).forEach((categoryGroup) => {
+      Object.values(categoryGroup).forEach((subcategoryGroup) => {
+        subcategoryGroup.forEach((product) => newDisplayOrder.push(product));
+      });
+    });
+
+    setDisplayOrder(newDisplayOrder);
+  }, [filteredProducts]);
+
+  // Category/subcategory handlers
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);
     setSelectedSubcategory("All");
-    if (categoryId === "All") {
-      setFilteredProducts(products);
-    } else {
-      filterProducts(searchTerm, categoryId, "All", minPrice, maxPrice);
-    }
+    filterProducts(searchTerm, categoryId, "All", minPrice, maxPrice);
   };
 
-  // Handle subcategory change
   const handleSubcategoryChange = (subcategoryId) => {
     setSelectedSubcategory(subcategoryId);
     filterProducts(
@@ -107,7 +114,7 @@ function FrontPage() {
     );
   };
 
-  // Handle search input
+  // Search and price filtering
   const handleSearch = (event) => {
     const term = event.target.value.toLowerCase();
     setSearchTerm(term);
@@ -120,7 +127,6 @@ function FrontPage() {
     );
   };
 
-  // Handle price filter
   const handlePriceFilter = () => {
     filterProducts(
       searchTerm,
@@ -131,7 +137,7 @@ function FrontPage() {
     );
   };
 
-  // Filter products based on search, category, subcategory, and price
+  // Filter products
   const filterProducts = (term, categoryId, subcategoryId, min, max) => {
     let filtered = products;
 
@@ -156,10 +162,7 @@ function FrontPage() {
     if (min !== "" || max !== "") {
       filtered = filtered.filter((product) => {
         const price = parseFloat(product.price);
-        return (
-          (!min || price >= parseFloat(min)) &&
-          (!max || price <= parseFloat(max))
-        );
+        return (!min || price >= min) && (!max || price <= max);
       });
     }
 
@@ -169,10 +172,9 @@ function FrontPage() {
     setFilteredProducts(filtered);
   };
 
-  // Group products by category and subcategory
+  // Group products and build display order
   const groupProducts = () => {
     const grouped = {};
-
     filteredProducts.forEach((product) => {
       const categoryName =
         categories.find((cat) => cat.id === product.category_id)?.name ||
@@ -182,74 +184,54 @@ function FrontPage() {
           (sub) => sub.id === product.subcategory_id
         )?.name || "Uncategorized";
 
-      if (!grouped[categoryName]) {
-        grouped[categoryName] = {};
-      }
-
-      if (!grouped[categoryName][subcategoryName]) {
+      if (!grouped[categoryName]) grouped[categoryName] = {};
+      if (!grouped[categoryName][subcategoryName])
         grouped[categoryName][subcategoryName] = [];
-      }
-
       grouped[categoryName][subcategoryName].push(product);
     });
-
     return grouped;
   };
 
-  // Open modal and set current product index
+  // Modal navigation
   const openModal = (product) => {
-    const index = filteredProducts.findIndex((p) => p.id === product.id);
+    const index = displayOrder.findIndex((p) => p.id === product.id);
     setCurrentProductIndex(index);
     setModalProduct(product);
   };
 
-  // Close modal
   const closeModal = () => {
     setModalProduct(null);
     setCurrentProductIndex(0);
   };
 
-  // Navigate to the next product
   const handleNextProduct = () => {
-    const nextIndex = (currentProductIndex + 1) % filteredProducts.length;
+    const nextIndex = (currentProductIndex + 1) % displayOrder.length;
     setCurrentProductIndex(nextIndex);
-    setModalProduct(filteredProducts[nextIndex]);
+    setModalProduct(displayOrder[nextIndex]);
   };
 
-  // Navigate to the previous product
   const handlePreviousProduct = () => {
     const prevIndex =
-      (currentProductIndex - 1 + filteredProducts.length) %
-      filteredProducts.length;
+      (currentProductIndex - 1 + displayOrder.length) % displayOrder.length;
     setCurrentProductIndex(prevIndex);
-    setModalProduct(filteredProducts[prevIndex]);
+    setModalProduct(displayOrder[prevIndex]);
   };
 
-  // Handle touch start for swipe functionality
-  const handleTouchStart = (e) => {
-    setTouchStartX(e.touches[0].clientX);
-  };
-
-  // Handle touch end for swipe functionality
+  // Swipe handling
+  const handleTouchStart = (e) => setTouchStartX(e.touches[0].clientX);
   const handleTouchEnd = (e) => {
-    const touchEndX = e.changedTouches[0].clientX;
-    const deltaX = touchEndX - touchStartX;
-
-    if (deltaX > 50) {
-      // Swipe right (previous product)
-      handlePreviousProduct();
-    } else if (deltaX < -50) {
-      // Swipe left (next product)
-      handleNextProduct();
-    }
+    const deltaX = e.changedTouches[0].clientX - touchStartX;
+    if (deltaX > 50) handlePreviousProduct();
+    else if (deltaX < -50) handleNextProduct();
   };
 
-  // Group products for display
+  // Render
   const groupedProducts = groupProducts();
 
   return (
     <div className="Frontpageparent">
       <div className="app-container">
+        {/* Navbar and Hero Section */}
         <div className="frontnavbar">
           <Navbar />
         </div>
@@ -257,7 +239,7 @@ function FrontPage() {
           <HeroSection />
         </div>
 
-        {/* Category Section */}
+        {/* Category Selection */}
         <div className="category-section my-4 category-text text-dark">
           <h2>Categories</h2>
           <div className="row row-cols-auto">
@@ -275,37 +257,38 @@ function FrontPage() {
                   <span className="badge">{products.length}</span>
                 )}
               </div>
-              {categories.map((category) => {
-                const categoryCount = products.filter(
-                  (product) => product.category_id === category.id
-                ).length;
-                return (
-                  <div
-                    key={category.id}
-                    className="d-flex align-items-center mb-2"
+              {categories.map((category) => (
+                <div
+                  key={category.id}
+                  className="d-flex align-items-center mb-2"
+                >
+                  <button
+                    className={`btn btn-outline-primary ${
+                      category.id === selectedCategory ? "active" : ""
+                    }`}
+                    onClick={() => handleCategoryChange(category.id)}
                   >
-                    <button
-                      className={`btn btn-outline-primary ${
-                        category.id === selectedCategory ? "active" : ""
-                      }`}
-                      onClick={() => handleCategoryChange(category.id)}
-                    >
-                      {category.name}
-                    </button>
-                    {category.id === selectedCategory && (
-                      <span className="badge">{categoryCount}</span>
-                    )}
-                  </div>
-                );
-              })}
+                    {category.name}
+                  </button>
+                  {category.id === selectedCategory && (
+                    <span className="badge">
+                      {
+                        products.filter((p) => p.category_id === category.id)
+                          .length
+                      }
+                    </span>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Subcategory Section */}
+        {/* Subcategory Selection */}
         {subcategories[selectedCategory]?.length > 0 && (
           <div className="subcategory-section my-4 subcategory-text text-dark">
             <h3>Subcategories</h3>
+            {/* Mobile Dropdown */}
             <div className="d-md-none">
               <button
                 className="btn btn-secondary dropdown-toggle"
@@ -333,6 +316,7 @@ function FrontPage() {
                 </div>
               )}
             </div>
+            {/* Desktop Buttons */}
             <div className="d-none d-md-block">
               <div className="row row-cols-auto">
                 <div className="btn-group flex-wrap" role="group">
@@ -367,7 +351,7 @@ function FrontPage() {
           </div>
         )}
 
-        {/* Filter Section */}
+        {/* Filters */}
         <div className="filter-tab text-dark">
           <div className="search-bar">
             <input
@@ -383,7 +367,7 @@ function FrontPage() {
                 <input
                   type="number"
                   value={minPrice}
-                  placeholder="Min price:"
+                  placeholder="Min price"
                   onChange={(e) => setMinPrice(e.target.value)}
                 />
               </label>
@@ -391,7 +375,7 @@ function FrontPage() {
                 <input
                   type="number"
                   value={maxPrice}
-                  placeholder="Max price:"
+                  placeholder="Max price"
                   onChange={(e) => setMaxPrice(e.target.value)}
                 />
               </label>
@@ -420,13 +404,12 @@ function FrontPage() {
         {/* Product Grid */}
         <div className="product-grid">
           {Object.entries(groupedProducts).map(
-            ([categoryName, subcategoryGroups]) => (
+            ([categoryName, subcategories]) => (
               <div key={categoryName} className="category-group">
                 <h3>
-                  {categoryName} (
-                  {Object.values(subcategoryGroups).flat().length})
+                  {categoryName} ({Object.values(subcategories).flat().length})
                 </h3>
-                {Object.entries(subcategoryGroups).map(
+                {Object.entries(subcategories).map(
                   ([subcategoryName, products]) => (
                     <div key={subcategoryName} className="subcategory-group">
                       <h3>
@@ -456,10 +439,9 @@ function FrontPage() {
         </div>
       </div>
 
-      {/* Footer */}
       <Footer />
 
-      {/* Modal for Product Details */}
+      {/* Product Modal */}
       {modalProduct && (
         <div
           className="modal show"
@@ -503,21 +485,15 @@ function FrontPage() {
                 </div>
               </div>
               <div className="modal-footer">
-                {/* Next/Previous Buttons for Larger Screens */}
-                <div className="d-block">
-                  <button
-                    className="btn btn-secondary me-2"
-                    onClick={handlePreviousProduct}
-                  >
-                    Previous
-                  </button>
-                  <button
-                    className="btn btn-primary"
-                    onClick={handleNextProduct}
-                  >
-                    Next
-                  </button>
-                </div>
+                <button
+                  className="btn btn-secondary me-2"
+                  onClick={handlePreviousProduct}
+                >
+                  Previous
+                </button>
+                <button className="btn btn-primary" onClick={handleNextProduct}>
+                  Next
+                </button>
               </div>
             </div>
           </div>
