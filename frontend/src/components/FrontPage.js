@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 import HeroSection from "./HeroSection";
 import ProductCards from "./ProductCards";
 import Footer from "./Footer";
-import BarLoader from "react-spinners/BarLoader";
+
 function FrontPage() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -17,10 +17,14 @@ function FrontPage() {
   const [loading, setLoading] = useState(true);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-  const [modalProduct, setModalProduct] = useState(null); // State for the selected product modal
-  const modalRef = useRef(null); // Ref for the modal content
+  const [modalProduct, setModalProduct] = useState(null);
+  const [currentProductIndex, setCurrentProductIndex] = useState(0); // Track current product index
+  const modalRef = useRef(null);
   const [isSubcategoryDropdownOpen, setIsSubcategoryDropdownOpen] =
-    useState(false); // State for toggling the dropdown
+    useState(false);
+  const [touchStartX, setTouchStartX] = useState(0); // Track touch start position
+
+  // Fetch products, categories, and subcategories
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,6 +45,7 @@ function FrontPage() {
           );
           subcategoriesData[category.id] = await response.json();
         }
+
         const sortedProducts = Array.isArray(productsData)
           ? productsData.sort(
               (a, b) => parseFloat(a.price) - parseFloat(b.price)
@@ -61,6 +66,7 @@ function FrontPage() {
     fetchData();
   }, []);
 
+  // Close modal when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -73,12 +79,12 @@ function FrontPage() {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [modalProduct]);
 
+  // Handle category change
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);
     setSelectedSubcategory("All");
@@ -89,6 +95,7 @@ function FrontPage() {
     }
   };
 
+  // Handle subcategory change
   const handleSubcategoryChange = (subcategoryId) => {
     setSelectedSubcategory(subcategoryId);
     filterProducts(
@@ -100,6 +107,7 @@ function FrontPage() {
     );
   };
 
+  // Handle search input
   const handleSearch = (event) => {
     const term = event.target.value.toLowerCase();
     setSearchTerm(term);
@@ -112,6 +120,7 @@ function FrontPage() {
     );
   };
 
+  // Handle price filter
   const handlePriceFilter = () => {
     filterProducts(
       searchTerm,
@@ -122,6 +131,7 @@ function FrontPage() {
     );
   };
 
+  // Filter products based on search, category, subcategory, and price
   const filterProducts = (term, categoryId, subcategoryId, min, max) => {
     let filtered = products;
 
@@ -152,14 +162,14 @@ function FrontPage() {
         );
       });
     }
-    // Sort filtered products by price
+
     filtered = filtered.sort(
       (a, b) => parseFloat(a.price) - parseFloat(b.price)
     );
-
     setFilteredProducts(filtered);
   };
 
+  // Group products by category and subcategory
   const groupProducts = () => {
     const grouped = {};
 
@@ -186,32 +196,56 @@ function FrontPage() {
     return grouped;
   };
 
-  // if (loading) {
-  //   return (
-  //     <div className="loader">
-  //       <img src={require("./image/ShivCollection-logo3.png")} />
-  //       <p> product loading...</p>
-  //       <BarLoader
-  //         cssOverride={{}}
-  //         height={10}
-  //         speedMultiplier={1}
-  //         width={300}
-  //       />
-  //     </div>
-  //   );
-  // }
-
-  const groupedProducts = groupProducts();
+  // Open modal and set current product index
   const openModal = (product) => {
+    const index = filteredProducts.findIndex((p) => p.id === product.id);
+    setCurrentProductIndex(index);
     setModalProduct(product);
   };
 
+  // Close modal
   const closeModal = () => {
     setModalProduct(null);
+    setCurrentProductIndex(0);
   };
-  const toggleDropdown = () => {
-    setIsSubcategoryDropdownOpen(!isSubcategoryDropdownOpen);
+
+  // Navigate to the next product
+  const handleNextProduct = () => {
+    const nextIndex = (currentProductIndex + 1) % filteredProducts.length;
+    setCurrentProductIndex(nextIndex);
+    setModalProduct(filteredProducts[nextIndex]);
   };
+
+  // Navigate to the previous product
+  const handlePreviousProduct = () => {
+    const prevIndex =
+      (currentProductIndex - 1 + filteredProducts.length) %
+      filteredProducts.length;
+    setCurrentProductIndex(prevIndex);
+    setModalProduct(filteredProducts[prevIndex]);
+  };
+
+  // Handle touch start for swipe functionality
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  // Handle touch end for swipe functionality
+  const handleTouchEnd = (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const deltaX = touchEndX - touchStartX;
+
+    if (deltaX > 50) {
+      // Swipe right (previous product)
+      handlePreviousProduct();
+    } else if (deltaX < -50) {
+      // Swipe left (next product)
+      handleNextProduct();
+    }
+  };
+
+  // Group products for display
+  const groupedProducts = groupProducts();
 
   return (
     <div className="Frontpageparent">
@@ -223,6 +257,7 @@ function FrontPage() {
           <HeroSection />
         </div>
 
+        {/* Category Section */}
         <div className="category-section my-4 category-text text-dark">
           <h2>Categories</h2>
           <div className="row row-cols-auto">
@@ -267,15 +302,16 @@ function FrontPage() {
           </div>
         </div>
 
+        {/* Subcategory Section */}
         {subcategories[selectedCategory]?.length > 0 && (
           <div className="subcategory-section my-4 subcategory-text text-dark">
             <h3>Subcategories</h3>
-
-            {/* Dropdown Button for Small Screens */}
             <div className="d-md-none">
               <button
                 className="btn btn-secondary dropdown-toggle"
-                onClick={toggleDropdown}
+                onClick={() =>
+                  setIsSubcategoryDropdownOpen(!isSubcategoryDropdownOpen)
+                }
               >
                 {isSubcategoryDropdownOpen
                   ? "Hide Subcategories"
@@ -297,8 +333,6 @@ function FrontPage() {
                 </div>
               )}
             </div>
-
-            {/* Subcategory Buttons for Larger Screens */}
             <div className="d-none d-md-block">
               <div className="row row-cols-auto">
                 <div className="btn-group flex-wrap" role="group">
@@ -333,6 +367,7 @@ function FrontPage() {
           </div>
         )}
 
+        {/* Filter Section */}
         <div className="filter-tab text-dark">
           <div className="search-bar">
             <input
@@ -381,6 +416,8 @@ function FrontPage() {
             </div>
           </div>
         </div>
+
+        {/* Product Grid */}
         <div className="product-grid">
           {Object.entries(groupedProducts).map(
             ([categoryName, subcategoryGroups]) => (
@@ -402,7 +439,6 @@ function FrontPage() {
                             onClick={() => openModal(product)}
                           >
                             <ProductCards
-                              key={product.id}
                               image={product.image_url}
                               name={product.name}
                               price={product.price}
@@ -419,14 +455,23 @@ function FrontPage() {
           )}
         </div>
       </div>
+
+      {/* Footer */}
       <Footer />
+
+      {/* Modal for Product Details */}
       {modalProduct && (
         <div
           className="modal show"
           style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
         >
           <div className="modal-dialog modal-lg">
-            <div className="modal-content" ref={modalRef}>
+            <div
+              className="modal-content"
+              ref={modalRef}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
               <div className="modal-header">
                 <h3 className="modal-title">{modalProduct.name}</h3>
                 <button
@@ -437,7 +482,7 @@ function FrontPage() {
               </div>
               <div className="modal-body">
                 <div className="row">
-                  <div className=" Model-image col-md-auto">
+                  <div className="Model-image col-md-auto">
                     <img
                       src={modalProduct.image_url}
                       alt={modalProduct.name}
@@ -455,6 +500,23 @@ function FrontPage() {
                       <h5>{modalProduct.details}</h5>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                {/* Next/Previous Buttons for Larger Screens */}
+                <div className="d-none d-md-block">
+                  <button
+                    className="btn btn-secondary me-2"
+                    onClick={handlePreviousProduct}
+                  >
+                    Previous
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleNextProduct}
+                  >
+                    Next
+                  </button>
                 </div>
               </div>
             </div>
