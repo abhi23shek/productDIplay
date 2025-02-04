@@ -176,6 +176,27 @@ function AdminDisplay() {
       </div>
     );
   }
+  // const handleDelete = async (id) => {
+  //   try {
+  //     // Send a DELETE request to the backend
+  //     const response = await fetch(
+  //       `${process.env.REACT_APP_SERVER_URL}/api/products/${id}`,
+  //       {
+  //         method: "DELETE",
+  //       }
+  //     );
+
+  //     if (response.ok) {
+  //       // Update the local state to remove the product from the list
+  //       setFilteredProducts(products.filter((product) => product.id !== id));
+  //     } else {
+  //       console.error("Error deleting product:", response.statusText);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting product:", error);
+  //   }
+  // };
+
   const handleDelete = async (id) => {
     try {
       // Send a DELETE request to the backend
@@ -187,8 +208,13 @@ function AdminDisplay() {
       );
 
       if (response.ok) {
-        // Update the local state to remove the product from the list
-        setFilteredProducts(products.filter((product) => product.id !== id));
+        // Update both `products` and `filteredProducts` states
+        setProducts((prevProducts) =>
+          prevProducts.filter((product) => product.id !== id)
+        );
+        setFilteredProducts((prevFilteredProducts) =>
+          prevFilteredProducts.filter((product) => product.id !== id)
+        );
       } else {
         console.error("Error deleting product:", response.statusText);
       }
