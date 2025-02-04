@@ -476,6 +476,9 @@ h2, h3, h4{
   background-color:#0d6efd ;
   border-radius: 30px;
 }
+.modal-content{
+  height: auto;
+}
 .modal-header {
   text-align: center;
   font-weight: bold;
@@ -497,8 +500,12 @@ h2, h3, h4{
 
 .modal-body img {
   width: 60vh;
-  height: auto;
+  height: inherit;
   margin-bottom: 20px;
+  object-fit: contain;
+}
+.Model-image{
+  height: 70vh;
 }
 
 .modal-body p {
@@ -772,6 +779,9 @@ h2, h3, h4{
   }
   .loader img{
     width: 90vw;
+  }
+  .modal-content{
+    height: auto;
   }
 
 
