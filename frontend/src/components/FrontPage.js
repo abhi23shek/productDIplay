@@ -504,7 +504,7 @@ function FrontPage() {
               </div>
               <div className="modal-footer">
                 {/* Next/Previous Buttons for Larger Screens */}
-                <div className="d-none d-md-block">
+                <div className="d-block">
                   <button
                     className="btn btn-secondary me-2"
                     onClick={handlePreviousProduct}
