@@ -5,6 +5,8 @@ import axios from "axios";
 const UpdateProduct = () => {
   const { id: productId } = useParams();
   const navigate = useNavigate();
+
+  // State for product details
   const [product, setProduct] = useState({
     name: "",
     price: "",
@@ -13,6 +15,11 @@ const UpdateProduct = () => {
     category_id: "",
     subcategory_id: "",
   });
+
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const [selectedSubcategoryId, setSelectedSubcategoryId] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
   const [message, setMessage] = useState("");
@@ -24,17 +31,81 @@ const UpdateProduct = () => {
         const response = await axios.get(
           `${process.env.REACT_APP_SERVER_URL}/api/products/${productId}`
         );
-        setProduct(response.data.product);
-        setImagePreview(response.data.product.image_url);
+        const productData = response.data.product;
+        setProduct(productData);
+        setImagePreview(productData.image_url);
+        setSelectedCategoryId(productData.category_id);
+        setSelectedSubcategoryId(productData.subcategory_id);
+
+        if (productData.category_id) {
+          fetchSubcategories(productData.category_id);
+        }
       } catch (err) {
         setError("Failed to fetch product details. Please try again.");
       }
     };
 
-    if (productId) fetchProductDetails();
-    else setError("Product ID is missing in the URL.");
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_SERVER_URL}/api/categories`
+        );
+        setCategories(response.data);
+      } catch (err) {
+        setError("Failed to fetch categories. Please try again.");
+      }
+    };
+
+    if (productId) {
+      fetchProductDetails();
+      fetchCategories();
+    } else {
+      setError("Product ID is missing in the URL.");
+    }
   }, [productId]);
 
+  // Fetch subcategories when a category is selected
+  const fetchSubcategories = async (categoryId) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${categoryId}`
+      );
+      setSubcategories(response.data);
+    } catch (err) {
+      setError("Failed to fetch subcategories. Please try again.");
+    }
+  };
+
+  // Handle category selection
+  const handleCategoryChange = (e) => {
+    const categoryId = e.target.value;
+    setSelectedCategoryId(categoryId);
+    setSelectedSubcategoryId(""); // Reset subcategory when category changes
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      category_id: categoryId,
+      subcategory_id: "",
+    }));
+
+    // Fetch subcategories for the selected category
+    if (categoryId) {
+      fetchSubcategories(categoryId);
+    } else {
+      setSubcategories([]);
+    }
+  };
+
+  // Handle subcategory selection
+  const handleSubcategoryChange = (e) => {
+    const subcategoryId = e.target.value;
+    setSelectedSubcategoryId(subcategoryId);
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      subcategory_id: subcategoryId,
+    }));
+  };
+
+  // Handle form submission
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -44,19 +115,34 @@ const UpdateProduct = () => {
         const formData = new FormData();
         formData.append("image", imageFile);
 
-        const response = await axios.post(
-          `${process.env.REACT_APP_SERVER_URL}/api/upload-image`,
-          formData
+        const response = await fetch(
+          `https://api.imgbb.com/1/upload?key=f3ad9357dc8e5de801518188f6938306`,
+          {
+            method: "POST",
+            body: formData,
+          }
         );
-        uploadedImageUrl = response.data.imageUrl;
+
+        const result = await response.json();
+        if (result.data && result.data.url) {
+          uploadedImageUrl = result.data.url;
+        } else {
+          throw new Error("Image upload failed");
+        }
       } catch (err) {
+        console.error("Error uploading image:", err);
         setError("Failed to upload the image.");
         return;
       }
     }
 
     try {
-      const updatedProduct = { ...product, image_url: uploadedImageUrl };
+      const updatedProduct = {
+        ...product,
+        image_url: uploadedImageUrl,
+        category_id: selectedCategoryId,
+        subcategory_id: selectedSubcategoryId,
+      };
       const response = await axios.put(
         `${process.env.REACT_APP_SERVER_URL}/api/products/${productId}`,
         updatedProduct
@@ -68,17 +154,20 @@ const UpdateProduct = () => {
     }
   };
 
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
   };
 
+  // Handle file changes
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
   };
 
+  // Handle image paste
   const handlePaste = (e) => {
     const clipboardData = e.clipboardData || e.originalEvent.clipboardData;
     const items = clipboardData.items;
@@ -126,26 +215,37 @@ const UpdateProduct = () => {
           <form onSubmit={handleUpdate}>
             <div className="row mb-3">
               <div className="col-md-6">
-                <label className="form-label">Category ID</label>
-                <input
-                  type="text"
-                  name="category_id"
-                  value={product.category_id || ""}
-                  onChange={handleChange}
-                  className="form-control"
-                  placeholder="Enter category ID"
-                />
+                <label className="form-label">Category</label>
+                <select
+                  className="form-select"
+                  value={selectedCategoryId}
+                  onChange={handleCategoryChange}
+                  required
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="col-md-6">
-                <label className="form-label">Subcategory ID</label>
-                <input
-                  type="text"
-                  name="subcategory_id"
-                  value={product.subcategory_id || ""}
-                  onChange={handleChange}
-                  className="form-control"
-                  placeholder="Enter subcategory ID"
-                />
+                <label className="form-label">Subcategory</label>
+                <select
+                  className="form-select"
+                  value={selectedSubcategoryId}
+                  onChange={handleSubcategoryChange}
+                  required
+                  disabled={!selectedCategoryId || subcategories.length === 0}
+                >
+                  <option value="">Select Subcategory</option>
+                  {subcategories.map((subcategory) => (
+                    <option key={subcategory.id} value={subcategory.id}>
+                      {subcategory.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
             <div className="row mb-3">

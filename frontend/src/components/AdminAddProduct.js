@@ -65,89 +65,6 @@ const AdminAddProduct = ({ categories }) => {
       alert("Please select a valid image file");
     }
   };
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   let uploadedImageUrl = imageUrl;
-
-  //   if (noImage) {
-  //     uploadedImageUrl = "https://i.ibb.co/p0nQhDT/image.png"; // Set default URL if "No Image" is checked
-  //   } else if (imageFile) {
-  //     try {
-  //       const formData = new FormData();
-  //       formData.append("image", imageFile);
-
-  //       // const blob = new Blob([imageFile.buffer], { type: imageFile.mimetype });
-
-  //       // formData.append("image", blob, imageFile.originalname);
-
-  //       // const response = await fetch(
-  //       //   `${process.env.REACT_APP_SERVER_URL}/api/upload-image`,
-  //       //   {
-  //       //     method: "POST",
-  //       //     body: formData,
-  //       //   }
-  //       // );
-
-  //       const response = await fetch(
-  //         `https://api.imgbb.com/1/upload?key=39b062fae1837179dc7dd8be00fb9d79`,
-  //         {
-  //           method: "POST",
-  //           body: formData,
-  //         }
-  //       );
-
-  //       const result = await response.json();
-  //       if (result.imageUrl) {
-  //         uploadedImageUrl = result.imageUrl;
-  //         console.log(uploadedImageUrl);
-  //       } else {
-  //         throw new Error("Image upload failed");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error uploading image:", error);
-  //       return;
-  //     }
-  //   }
-
-  //   const productData = {
-  //     name: name,
-  //     price: price,
-  //     details: details,
-  //     image_url: uploadedImageUrl, // Use the image URL (either uploaded or pasted)
-  //     category_id: categoryId,
-  //     subcategory_id: subcategoryId,
-  //   };
-
-  //   try {
-  //     const response = await fetch(
-  //       `${process.env.REACT_APP_SERVER_URL}/api/products`,
-  //       {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify(productData),
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       setMessage("Product added successfully");
-  //       setTimeout(() => {
-  //         setMessage("");
-  //       }, 3000);
-  //     }
-  //     console.log(productData.image_url);
-  //     setName("");
-  //     setPrice("");
-  //     setDetails("Size-");
-  //     setImageFile(null);
-  //     setImageUrl("");
-  //     // setCategoryId("");
-  //     // setSubcategoryId("");
-  //     setNoImage(false); // Reset "No Image" checkbox
-  //   } catch (error) {
-  //     console.error("Error adding product:", error);
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -170,11 +87,11 @@ const AdminAddProduct = ({ categories }) => {
         );
 
         const result = await response.json();
-        console.log("ImgBB API Response:", result); // Log the API response
+        // console.log("ImgBB API Response:", result); // Log the API response
 
         if (result.data && result.data.url) {
           uploadedImageUrl = result.data.url; // Use the URL from the response
-          console.log("Uploaded Image URL:", uploadedImageUrl);
+          // console.log("Uploaded Image URL:", uploadedImageUrl);
         } else {
           throw new Error("Image upload failed");
         }
