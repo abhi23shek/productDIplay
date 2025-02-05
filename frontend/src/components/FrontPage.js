@@ -5,8 +5,11 @@ import Navbar from "./Navbar";
 import HeroSection from "./HeroSection";
 import ProductCards from "./ProductCards";
 import Footer from "./Footer";
+// import { CartContext } from "./context/Cart";
+// import Cart from "./Cart";
 
 function FrontPage() {
+  // const { cartItems, addToCart } = useContext(CartContext);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState({});
@@ -422,11 +425,18 @@ function FrontPage() {
                             onClick={() => openModal(product)}
                           >
                             <ProductCards
+                              id={product.id}
                               image={product.image_url}
                               name={product.name}
                               price={product.price}
                               description={product.details}
                             />
+                            {/* <button
+                              onClick={() => addToCart(product)}
+                              className="px-4 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+                            >
+                              Add to cart
+                            </button> */}
                           </div>
                         ))}
                       </div>
@@ -438,7 +448,12 @@ function FrontPage() {
           )}
         </div>
       </div>
-
+      <button
+        className="btn btn-primary position-fixed bottom-0 end-0 m-3"
+        style={{ zIndex: 9999 }} // Ensures it stays on top of other elements
+      >
+        CART
+      </button>
       <Footer />
 
       {/* Product Modal */}
