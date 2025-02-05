@@ -482,31 +482,31 @@ h2, h3, h4{
 .modal-header {
   text-align: center;
   font-weight: bold;
+  padding: 1vh 5vw;
 }
 
 .modal-title {
   width: 100%;
   text-align: center;
   font-weight: bold;
-  font-size: 3vh;
+  font-size: 4vh;
 }
 
 
 .modal-body {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  justify-content: space-around;
+  
 }
 
 .modal-body img {
-  width: 60vh;
-  height: inherit;
+  height: 50vh;
   margin-bottom: 20px;
   object-fit: contain;
 }
-.Model-image{
-  height: 70vh;
-}
+
 
 .modal-body p {
   text-align: center;
@@ -780,8 +780,18 @@ h2, h3, h4{
   .loader img{
     width: 90vw;
   }
-  .modal-content{
-    height: auto;
+ 
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1vh 5vw;
+  }
+  .modal-body img {
+    width: 80vw;
+    height: 50vh;
+    margin-bottom: 20px;
+    object-fit: contain;
   }
 
 
