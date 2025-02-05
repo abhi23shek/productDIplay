@@ -67,7 +67,7 @@ export default function Cart() {
                 <td>{item.category}</td>
                 <td>
                   <img
-                    src={item.image}
+                    src={item.image_url}
                     alt={item.title}
                     className="img-fluid"
                     style={{ maxWidth: "100px", height: "auto" }}

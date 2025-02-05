@@ -2,15 +2,22 @@ import React, { useContext } from "react";
 import "./ProductCards.css";
 import { CartContext } from "./context/Cart";
 
-const ProductCards = ({ id, category, image, name, price, description }) => {
-  const product = { id, category, image, name, price, description };
+const ProductCards = ({
+  id,
+  category,
+  image_url,
+  name,
+  price,
+  description,
+}) => {
+  const product = { id, category, image_url, name, price, description };
   const { cartItems, addToCart, removeFromCart } = useContext(CartContext);
 
   const cartProduct = cartItems.find((item) => item.id === product.id);
 
   return (
     <div className="product-card">
-      <img src={image} alt={name} className="product-image" />
+      <img src={image_url} alt={name} className="product-image" />
       <div className="product-details">
         <h5 className="product-name">{name}</h5>
         <p className="product-price">₹{Number(price).toFixed(2)}</p>
