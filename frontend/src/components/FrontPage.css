@@ -482,13 +482,14 @@ h2, h3, h4{
 .modal-header {
   text-align: center;
   font-weight: bold;
+  padding: 1vh 5vw;
 }
 
 .modal-title {
   width: 100%;
   text-align: center;
   font-weight: bold;
-  font-size: 3vh;
+  font-size: 4vh;
 }
 
 
@@ -496,17 +497,16 @@ h2, h3, h4{
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 1vh 5vw;
 }
 
 .modal-body img {
-  width: 60vh;
-  height: inherit;
+  width: 80vw;
+  height: 50vh;
   margin-bottom: 20px;
   object-fit: contain;
 }
-.Model-image{
-  height: 70vh;
-}
+
 
 .modal-body p {
   text-align: center;
