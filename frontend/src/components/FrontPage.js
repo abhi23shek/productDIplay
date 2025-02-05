@@ -215,8 +215,8 @@ function FrontPage() {
   };
 
   // Function to handle removing the product from the cart
-  const handleRemoveFromCart = (product) => {
-    removeFromCart(product);
+  const handleRemoveFromCart = (product, flag = false) => {
+    removeFromCart(product, flag);
   };
 
   // Check if the modal product is in the cart
@@ -514,7 +514,13 @@ function FrontPage() {
                     {cartProduct ? (
                       <div className="d-flex align-items-center gap-1 mt-3">
                         <button
-                          onClick={() => handleRemoveFromCart(modalProduct)}
+                          onClick={() => {
+                            if (cartProduct.quantity === 1) {
+                              handleRemoveFromCart(modalProduct, true);
+                            } else {
+                              handleRemoveFromCart(modalProduct);
+                            }
+                          }}
                           className="btn btn-danger btn-sm"
                         >
                           -
