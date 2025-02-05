@@ -510,48 +510,48 @@ function FrontPage() {
                     <div className="Model-description">
                       <h5>{modalProduct.details}</h5>
                     </div>
-                    {/* Add to Cart Section */}
-                    {cartProduct ? (
-                      <div className="d-flex align-items-center gap-1 mt-3">
-                        <button
-                          onClick={() => {
-                            if (cartProduct.quantity === 1) {
-                              handleRemoveFromCart(modalProduct, true);
-                            } else {
-                              handleRemoveFromCart(modalProduct);
-                            }
-                          }}
-                          className="btn btn-danger btn-sm"
-                        >
-                          -
-                        </button>
-                        <button
-                          className="btn btn-success btn-sm d-flex align-items-center"
-                          disabled
-                        >
-                          <i className="bi bi-cart me-1"></i>
-                          {cartProduct.quantity}
-                        </button>
-                        <button
-                          onClick={() => handleAddToCart(modalProduct)}
-                          className="btn btn-warning btn-sm"
-                        >
-                          +
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => handleAddToCart(modalProduct)}
-                        className="btn btn-warning btn-sm mt-3"
-                      >
-                        Add to Cart
-                      </button>
-                    )}
                   </div>
                 </div>
               </div>
 
               <div className="modal-footer">
+                {/* Add to Cart Section */}
+                {cartProduct ? (
+                  <div className="d-flex align-items-center gap-1 mt-3">
+                    <button
+                      onClick={() => {
+                        if (cartProduct.quantity === 1) {
+                          handleRemoveFromCart(modalProduct, true);
+                        } else {
+                          handleRemoveFromCart(modalProduct);
+                        }
+                      }}
+                      className="btn btn-danger btn-sm"
+                    >
+                      -
+                    </button>
+                    <button
+                      className="btn btn-success btn-sm d-flex align-items-center"
+                      disabled
+                    >
+                      <i className="bi bi-cart me-1"></i>
+                      {cartProduct.quantity}
+                    </button>
+                    <button
+                      onClick={() => handleAddToCart(modalProduct)}
+                      className="btn btn-warning btn-sm"
+                    >
+                      +
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => handleAddToCart(modalProduct)}
+                    className="btn btn-warning btn-sm mt-3"
+                  >
+                    Add to Cart
+                  </button>
+                )}
                 <button
                   className="btn btn-secondary me-2"
                   onClick={handlePreviousProduct}
