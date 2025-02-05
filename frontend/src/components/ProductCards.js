@@ -2,11 +2,10 @@ import React, { useContext } from "react";
 import "./ProductCards.css";
 import { CartContext } from "./context/Cart";
 
-const ProductCards = ({ id, image, name, price, description }) => {
-  const product = { id, image, name, price, description };
-  const { cartItems, addToCart } = useContext(CartContext);
+const ProductCards = ({ id, category, image, name, price, description }) => {
+  const product = { id, category, image, name, price, description };
+  const { cartItems, addToCart, removeFromCart } = useContext(CartContext);
 
-  // Check if the product is already in the cart
   const cartProduct = cartItems.find((item) => item.id === product.id);
 
   return (
@@ -18,17 +17,38 @@ const ProductCards = ({ id, image, name, price, description }) => {
         <p className="product-description">{description}</p>
       </div>
 
-      {/* Display either quantity or "Add to cart" based on whether the product is in the cart */}
       {cartProduct ? (
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            addToCart(product);
-          }}
-          className="btn btn-success btn-sm"
-        >
-          {cartProduct.quantity} in cart
-        </button>
+        <div className="d-flex align-items-center justify-content-center gap-1">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (cartProduct.quantity === 1) {
+                removeFromCart(product, true);
+              } else {
+                removeFromCart(product);
+              }
+            }}
+            className="btn btn-danger btn-sm"
+          >
+            -
+          </button>
+          <button
+            className="btn btn-success btn-sm d-flex align-items-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <i className="bi bi-cart me-1"></i>
+            {cartProduct.quantity}
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart(product);
+            }}
+            className="btn btn-warning btn-sm"
+          >
+            +
+          </button>
+        </div>
       ) : (
         <button
           onClick={(e) => {

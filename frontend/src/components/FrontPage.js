@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useNavigate, useEffect, useState, useRef } from "react";
 import "./FrontPage.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./Navbar";
@@ -10,6 +10,7 @@ import Footer from "./Footer";
 
 function FrontPage() {
   // const { cartItems, addToCart } = useContext(CartContext);
+
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState({});
@@ -426,17 +427,12 @@ function FrontPage() {
                           >
                             <ProductCards
                               id={product.id}
+                              category={categoryName}
                               image={product.image_url}
                               name={product.name}
                               price={product.price}
                               description={product.details}
                             />
-                            {/* <button
-                              onClick={() => addToCart(product)}
-                              className="px-4 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
-                            >
-                              Add to cart
-                            </button> */}
                           </div>
                         ))}
                       </div>
@@ -448,12 +444,14 @@ function FrontPage() {
           )}
         </div>
       </div>
-      <button
+      <a
+        href="/cart"
         className="btn btn-primary position-fixed bottom-0 end-0 m-3"
-        style={{ zIndex: 9999 }} // Ensures it stays on top of other elements
+        style={{ zIndex: 9999 }}
       >
-        CART
-      </button>
+        MY CART
+      </a>
+
       <Footer />
 
       {/* Product Modal */}
