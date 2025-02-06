@@ -2,8 +2,14 @@ import { useContext, useState } from "react";
 import { CartContext } from "./context/Cart";
 
 export default function Cart() {
-  const { cartItems, addToCart, removeFromCart, clearCart, getCartTotal } =
-    useContext(CartContext);
+  const {
+    cartItems,
+    addToCart,
+    removeFromCart,
+    clearCart,
+    getCartTotal,
+    setQuantity,
+  } = useContext(CartContext);
 
   const [showOrderForm, setShowOrderForm] = useState(false);
   const [name, setName] = useState("");
@@ -77,19 +83,34 @@ export default function Cart() {
                 <td>₹{item.price}</td>
                 <td>
                   <div className="d-flex justify-content-between align-items-center">
-                    <button
+                    {/* <button
                       className="btn btn-secondary btn-sm me-2"
                       onClick={() => addToCart(item)}
                     >
                       +
-                    </button>
-                    <span>{item.quantity}</span>
-                    <button
+                    </button> */}
+                    {/* <span>{item.quantity}</span> */}
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      // min="0"
+                      style={{ width: "60px", textAlign: "center" }}
+                      onChange={(e) => {
+                        const newQuantity = parseInt(e.target.value);
+
+                        setQuantity(item, newQuantity);
+
+                        // if (isNaN(newQuantity)) {
+                        //   removeFromCart(item, true);
+                        // }
+                      }}
+                    />
+                    {/* <button
                       className="btn btn-secondary btn-sm ms-2"
                       onClick={() => removeFromCart(item)}
                     >
                       -
-                    </button>
+                    </button> */}
                   </div>
                 </td>
                 <td>

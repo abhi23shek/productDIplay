@@ -25,26 +25,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // const removeFromCart = (item) => {
-  //   const isItemInCart = cartItems.find((cartItem) => cartItem.id === item.id);
-
-  //   if (isItemInCart.quantity === 1) {
-  //     const updatedCartItems = cartItems.filter(
-  //       (cartItem) => cartItem.id !== item.id
-  //     );
-  //     setCartItems(updatedCartItems);
-  //     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems)); // Update localStorage
-  //   } else {
-  //     const updatedCartItems = cartItems.map((cartItem) =>
-  //       cartItem.id === item.id
-  //         ? { ...cartItem, quantity: cartItem.quantity - 1 }
-  //         : cartItem
-  //     );
-  //     setCartItems(updatedCartItems);
-  //     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems)); // Update localStorage
-  //   }
-  // };
-
   const removeFromCart = (item, removeCompletely = false) => {
     let updatedCartItems;
 
@@ -80,6 +60,20 @@ export const CartProvider = ({ children }) => {
     );
   };
 
+  const setQuantity = (item, quantity) => {
+    if (quantity <= 0) {
+      // If the quantity is less than or equal to 0, remove the item from the cart
+      removeFromCart(item);
+    } else {
+      // Update the quantity of the item in the cart
+      const updatedCartItems = cartItems.map((cartItem) =>
+        cartItem.id === item.id ? { ...cartItem, quantity: quantity } : cartItem
+      );
+      setCartItems(updatedCartItems);
+      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems)); // Update localStorage
+    }
+  };
+
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
@@ -92,6 +86,7 @@ export const CartProvider = ({ children }) => {
         removeFromCart,
         clearCart,
         getCartTotal,
+        setQuantity,
       }}
     >
       {children}
