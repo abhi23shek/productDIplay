@@ -1,12 +1,16 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import "./FrontPage.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./Navbar";
 import HeroSection from "./HeroSection";
 import ProductCards from "./ProductCards";
 import Footer from "./Footer";
+import { CartContext } from "./context/Cart";
+// import Cart from "./Cart";
 
 function FrontPage() {
+  // const { cartItems, addToCart } = useContext(CartContext);
+
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState({});
@@ -24,6 +28,7 @@ function FrontPage() {
   const [isSubcategoryDropdownOpen, setIsSubcategoryDropdownOpen] =
     useState(false);
   const [touchStartX, setTouchStartX] = useState(0);
+  const { cartItems, addToCart, removeFromCart } = useContext(CartContext);
 
   // Fetch initial data
   useEffect(() => {
@@ -193,16 +198,31 @@ function FrontPage() {
   };
 
   // Modal navigation
-  const openModal = (product) => {
+  const openModal = (product, category) => {
+    setModalProduct({ ...product, category });
     const index = displayOrder.findIndex((p) => p.id === product.id);
     setCurrentProductIndex(index);
-    setModalProduct(product);
   };
 
   const closeModal = () => {
     setModalProduct(null);
     setCurrentProductIndex(0);
   };
+
+  // Function to handle adding the product to the cart
+  const handleAddToCart = (product) => {
+    addToCart(product);
+  };
+
+  // Function to handle removing the product from the cart
+  const handleRemoveFromCart = (product, flag = false) => {
+    removeFromCart(product, flag);
+  };
+
+  // Check if the modal product is in the cart
+  const cartProduct = modalProduct
+    ? cartItems.find((item) => item.id === modalProduct.id)
+    : null;
 
   const handleNextProduct = () => {
     const nextIndex = (currentProductIndex + 1) % displayOrder.length;
@@ -419,10 +439,12 @@ function FrontPage() {
                         {products.map((product) => (
                           <div
                             key={product.id}
-                            onClick={() => openModal(product)}
+                            onClick={() => openModal(product, categoryName)}
                           >
                             <ProductCards
-                              image={product.image_url}
+                              id={product.id}
+                              category={categoryName}
+                              image_url={product.image_url}
                               name={product.name}
                               price={product.price}
                               description={product.details}
@@ -438,6 +460,13 @@ function FrontPage() {
           )}
         </div>
       </div>
+      <a
+        href="/cart"
+        className="btn btn-primary position-fixed bottom-0 end-0 m-3"
+        style={{ zIndex: 9999 }}
+      >
+        MY CART
+      </a>
 
       <Footer />
 
@@ -484,7 +513,45 @@ function FrontPage() {
                   </div>
                 </div>
               </div>
+
               <div className="modal-footer">
+                {/* Add to Cart Section */}
+                {cartProduct ? (
+                  <div className="d-flex align-items-center gap-1 mt-3">
+                    <button
+                      onClick={() => {
+                        if (cartProduct.quantity === 1) {
+                          handleRemoveFromCart(modalProduct, true);
+                        } else {
+                          handleRemoveFromCart(modalProduct);
+                        }
+                      }}
+                      className="btn btn-danger btn-sm"
+                    >
+                      -
+                    </button>
+                    <button
+                      className="btn btn-success btn-sm d-flex align-items-center"
+                      disabled
+                    >
+                      <i className="bi bi-cart me-1"></i>
+                      {cartProduct.quantity}
+                    </button>
+                    <button
+                      onClick={() => handleAddToCart(modalProduct)}
+                      className="btn btn-warning btn-sm"
+                    >
+                      +
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => handleAddToCart(modalProduct)}
+                    className="btn btn-warning btn-sm mt-3"
+                  >
+                    Add to Cart
+                  </button>
+                )}
                 <button
                   className="btn btn-secondary me-2"
                   onClick={handlePreviousProduct}
