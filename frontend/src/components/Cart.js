@@ -83,12 +83,12 @@ export default function Cart() {
                 <td>₹{item.price}</td>
                 <td>
                   <div className="d-flex justify-content-between align-items-center">
-                    {/* <button
+                    <button
                       className="btn btn-secondary btn-sm me-2"
                       onClick={() => addToCart(item)}
                     >
                       +
-                    </button> */}
+                    </button>
                     {/* <span>{item.quantity}</span> */}
                     <input
                       type="number"
@@ -105,12 +105,12 @@ export default function Cart() {
                         // }
                       }}
                     />
-                    {/* <button
+                    <button
                       className="btn btn-secondary btn-sm ms-2"
                       onClick={() => removeFromCart(item)}
                     >
                       -
-                    </button> */}
+                    </button>
                   </div>
                 </td>
                 <td>
