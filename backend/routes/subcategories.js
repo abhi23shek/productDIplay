@@ -53,4 +53,32 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// Update a subcategory
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, category_id } = req.body;
+
+  if (!name || !category_id) {
+    return res.status(400).json({ error: "Name and category ID are required" });
+  }
+
+  try {
+    const result = await pool`
+      UPDATE subcategories 
+      SET name = ${name}, category_id = ${category_id} 
+      WHERE id = ${id} 
+      RETURNING *;
+    `;
+
+    if (result.length === 0) {
+      return res.status(404).json({ error: "Subcategory not found" });
+    }
+
+    res.json(result[0]);
+  } catch (err) {
+    console.error("Error updating subcategory:", err);
+    res.status(500).json({ error: "Error updating subcategory" });
+  }
+});
+
 module.exports = router;
