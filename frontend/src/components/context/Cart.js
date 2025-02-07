@@ -63,7 +63,7 @@ export const CartProvider = ({ children }) => {
   const setQuantity = (item, quantity) => {
     if (quantity <= 0) {
       // If the quantity is less than or equal to 0, remove the item from the cart
-      removeFromCart(item);
+      removeFromCart(item, true);
     } else {
       // Update the quantity of the item in the cart
       const updatedCartItems = cartItems.map((cartItem) =>
