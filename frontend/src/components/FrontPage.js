@@ -28,7 +28,8 @@ function FrontPage() {
   const [isSubcategoryDropdownOpen, setIsSubcategoryDropdownOpen] =
     useState(false);
   const [touchStartX, setTouchStartX] = useState(0);
-  const { cartItems, addToCart, removeFromCart } = useContext(CartContext);
+  const { cartItems, addToCart, removeFromCart, setQuantity } =
+    useContext(CartContext);
 
   // Fetch initial data
   useEffect(() => {
@@ -530,13 +531,26 @@ function FrontPage() {
                     >
                       -
                     </button>
-                    <button
+                    {/* <button
                       className="btn btn-success btn-sm d-flex align-items-center"
                       disabled
-                    >
-                      <i className="bi bi-cart me-1"></i>
-                      {cartProduct.quantity}
-                    </button>
+                    > */}
+                    {/* <i className="bi bi-cart me-1"></i>
+                      {cartProduct.quantity} */}
+
+                    <input
+                      onClick={(e) => e.stopPropagation()}
+                      type="number"
+                      value={cartProduct.quantity}
+                      // min="0"
+                      style={{ width: "60px", textAlign: "center" }}
+                      onChange={(e) => {
+                        const newQuantity = parseInt(e.target.value);
+
+                        setQuantity(cartProduct, newQuantity);
+                      }}
+                    />
+                    {/* </button> */}
                     <button
                       onClick={() => handleAddToCart(modalProduct)}
                       className="btn btn-warning btn-sm"
