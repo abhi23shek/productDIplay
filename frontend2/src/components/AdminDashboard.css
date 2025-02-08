@@ -1,0 +1,11 @@
+.Admin-Navbar{
+padding: 10px;
+padding-bottom: 0px;
+position: sticky;
+width: 100%;
+padding-left: 20px;
+padding-right: 20px;
+}
+.Admin-display{
+ padding: 10px;
+}

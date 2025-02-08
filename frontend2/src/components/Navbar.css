@@ -1,0 +1,141 @@
+.navbar {
+  padding: 16px 40px;
+  background: transparent !important;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  top: 0;
+  position: sticky;
+  z-index: 10;
+}
+
+.nav-bar-desktop {
+  display: flex !important;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.leftside_navbar {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.nav-link {
+  background: none;
+  border: none;
+  color: #42474d;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: #008060;
+}
+
+.nav-link.active {
+  color: #008060;
+  font-weight: 600;
+}
+
+.nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #008060;
+}
+
+.rightside_navbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.login-btn {
+  background: none;
+  border: none;
+  color: #42474d;
+  font-size: 16px;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+}
+
+.login-btn:hover {
+  color: #008060;
+}
+
+.signup-btn {
+  background: #008060;
+  color: white !important;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.signup-btn:hover {
+  background: #006e52;
+  transform: translateY(-1px);
+}
+
+.admin-btn {
+  background: #f3f4f6;
+  color: #008060 !important;
+  border: 2px solid #008060;
+  padding: 8px 16px;
+
+  border-radius: 4px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.admin-btn:hover {
+  background: #e5e7eb;
+}
+
+.logo-img {
+  height: 40px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.logo-img:hover {
+  transform: scale(1.05);
+}
+
+.mobilenav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .nav-bar-desktop {
+    display: none !important;
+  }
+  
+  .mobilenav {
+    display: block;
+    width: 100%;
+  }
+}

@@ -1,0 +1,36 @@
+.Admin-product-grid{
+    display: flex;
+    flex-wrap: wrap; /* Prevent wrapping */
+    overflow-x: auto; /* Add horizontal scrolling */
+    padding: 5px;
+    flex-direction: column;
+
+}
+.Admin-subcategory-group{
+    padding-top: 1vh;
+    margin-top: 3vh;
+}
+.Admin-product-cards{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+.Admin-Display-Heading{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 4vh;
+    display: flex;
+    justify-content: center;
+
+}
+.Admin-product-card{
+    width: 150px;
+    border: 1px solid #010101;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    background-color: white;
+    height: 400px;
+    
+}
