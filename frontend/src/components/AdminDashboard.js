@@ -4,7 +4,7 @@ import AdminAddProduct from "./AdminAddProduct";
 import AdminAddSubcategories from "./AdminAddSubcategories";
 import AdminNavbar from "./AdminNavbar";
 import AdminDisplay from "./AdminDisplay";
-import AdminProductList from "./AdminProductList";
+// import AdminProductList from "./AdminProductList";
 import "./AdminDashboard.css";
 
 const AdminDashboard = () => {

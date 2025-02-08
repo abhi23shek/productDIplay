@@ -47,4 +47,31 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+
+  if (!name) {
+    return res.status(400).json({ error: "Name is required" });
+  }
+
+  try {
+    const result = await pool`
+      UPDATE categories 
+      SET name = ${name} 
+      WHERE id = ${id} 
+      RETURNING *;
+    `;
+
+    if (result.length === 0) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+
+    res.json(result[0]);
+  } catch (err) {
+    console.error("Error updating category:", err);
+    res.status(500).json({ error: "Error updating category" });
+  }
+});
+
 module.exports = router;

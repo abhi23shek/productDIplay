@@ -1,11 +1,21 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  Suspense,
+} from "react";
+
 import "./FrontPage.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./Navbar";
 import HeroSection from "./HeroSection";
+
 import ProductCards from "./ProductCards";
 import Footer from "./Footer";
 import { CartContext } from "./context/Cart";
+// const ProductCards = React.lazy(() => import("./ProductCards"));
+// const Footer = React.lazy(() => import("./Footer"));
 // import Cart from "./Cart";
 
 function FrontPage() {
@@ -28,46 +38,117 @@ function FrontPage() {
   const [isSubcategoryDropdownOpen, setIsSubcategoryDropdownOpen] =
     useState(false);
   const [touchStartX, setTouchStartX] = useState(0);
-  const { cartItems, addToCart, removeFromCart } = useContext(CartContext);
+  const { cartItems, addToCart, removeFromCart, setQuantity } =
+    useContext(CartContext);
 
   // Fetch initial data
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const productResponse = await fetch(
+  //         `${process.env.REACT_APP_SERVER_URL}/api/products`
+  //       );
+  //       const productsData = await productResponse.json();
+
+  //       const categoryResponse = await fetch(
+  //         `${process.env.REACT_APP_SERVER_URL}/api/categories`
+  //       );
+  //       const categoriesData = await categoryResponse.json();
+
+  //       const subcategoriesData = {};
+  //       for (const category of categoriesData) {
+  //         const response = await fetch(
+  //           `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${category.id}`
+  //         );
+  //         subcategoriesData[category.id] = await response.json();
+  //       }
+
+  //       const sortedProducts = Array.isArray(productsData)
+  //         ? productsData.sort(
+  //             (a, b) => parseFloat(a.price) - parseFloat(b.price)
+  //           )
+  //         : [];
+
+  //       setProducts(sortedProducts);
+  //       setCategories(Array.isArray(categoriesData) ? categoriesData : []);
+  //       setSubcategories(subcategoriesData);
+  //       setFilteredProducts(sortedProducts);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+
+  // import { useEffect, useState } from "react";
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const productResponse = await fetch(
-          `${process.env.REACT_APP_SERVER_URL}/api/products`
-        );
-        const productsData = await productResponse.json();
+        const storedProducts = sessionStorage.getItem("products");
+        const storedCategories = sessionStorage.getItem("categories");
+        const storedSubcategories = sessionStorage.getItem("subcategories");
 
-        const categoryResponse = await fetch(
-          `${process.env.REACT_APP_SERVER_URL}/api/categories`
-        );
-        const categoriesData = await categoryResponse.json();
+        if (storedProducts && storedCategories && storedSubcategories) {
+          console.log("Yes Got it");
+          // Retrieve data from sessionStorage
+          const productsData = JSON.parse(storedProducts);
+          const categoriesData = JSON.parse(storedCategories);
+          const subcategoriesData = JSON.parse(storedSubcategories);
 
-        const subcategoriesData = {};
-        for (const category of categoriesData) {
-          const response = await fetch(
-            `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${category.id}`
+          setProducts(productsData);
+          setCategories(categoriesData);
+          setSubcategories(subcategoriesData);
+          setFilteredProducts(productsData); // Assuming you want the initial filter to be all products
+        } else {
+          console.log("NO Didn't get it");
+          // Fetch data from the server
+          const productResponse = await fetch(
+            `${process.env.REACT_APP_SERVER_URL}/api/products`
           );
-          subcategoriesData[category.id] = await response.json();
+          const productsData = await productResponse.json();
+
+          const categoryResponse = await fetch(
+            `${process.env.REACT_APP_SERVER_URL}/api/categories`
+          );
+          const categoriesData = await categoryResponse.json();
+
+          const subcategoriesData = {};
+          for (const category of categoriesData) {
+            const response = await fetch(
+              `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${category.id}`
+            );
+            subcategoriesData[category.id] = await response.json();
+          }
+
+          const sortedProducts = Array.isArray(productsData)
+            ? productsData.sort(
+                (a, b) => parseFloat(a.price) - parseFloat(b.price)
+              )
+            : [];
+
+          setProducts(sortedProducts);
+          setCategories(Array.isArray(categoriesData) ? categoriesData : []);
+          setSubcategories(subcategoriesData);
+          setFilteredProducts(sortedProducts);
+
+          // Store data in sessionStorage
+          sessionStorage.setItem("products", JSON.stringify(sortedProducts));
+          sessionStorage.setItem("categories", JSON.stringify(categoriesData));
+          sessionStorage.setItem(
+            "subcategories",
+            JSON.stringify(subcategoriesData)
+          );
         }
-
-        const sortedProducts = Array.isArray(productsData)
-          ? productsData.sort(
-              (a, b) => parseFloat(a.price) - parseFloat(b.price)
-            )
-          : [];
-
-        setProducts(sortedProducts);
-        setCategories(Array.isArray(categoriesData) ? categoriesData : []);
-        setSubcategories(subcategoriesData);
-        setFilteredProducts(sortedProducts);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 
@@ -423,6 +504,7 @@ function FrontPage() {
 
         {/* Product Grid */}
         <div className="product-grid">
+          {/* <Suspense fallback={<div>Loading Products...</div>}> */}
           {Object.entries(groupedProducts).map(
             ([categoryName, subcategories]) => (
               <div key={categoryName} className="category-group">
@@ -458,6 +540,7 @@ function FrontPage() {
               </div>
             )
           )}
+          {/* </Suspense> */}
         </div>
       </div>
       <a
@@ -530,13 +613,26 @@ function FrontPage() {
                     >
                       -
                     </button>
-                    <button
+                    {/* <button
                       className="btn btn-success btn-sm d-flex align-items-center"
                       disabled
-                    >
-                      <i className="bi bi-cart me-1"></i>
-                      {cartProduct.quantity}
-                    </button>
+                    > */}
+                    {/* <i className="bi bi-cart me-1"></i>
+                      {cartProduct.quantity} */}
+
+                    <input
+                      onClick={(e) => e.stopPropagation()}
+                      type="number"
+                      value={cartProduct.quantity}
+                      // min="0"
+                      style={{ width: "60px", textAlign: "center" }}
+                      onChange={(e) => {
+                        const newQuantity = parseInt(e.target.value);
+
+                        setQuantity(cartProduct, newQuantity);
+                      }}
+                    />
+                    {/* </button> */}
                     <button
                       onClick={() => handleAddToCart(modalProduct)}
                       className="btn btn-warning btn-sm"

@@ -18,6 +18,15 @@ import AdminUploadCatalog from "./components/AdminUploadCatalog";
 import Downloads from "./components/Downloads";
 import ContactusSuccess from "./components/ContactusSuccess";
 import Cart from "./components/Cart";
+import TrialProductCard from "./components/trial/TrialProductCard";
+
+const sampleProduct = {
+  image: "https://i.ibb.co/d78tPG7/image.png", // Replace with your image URL
+  name: "Awesome Product",
+  price: 29.99,
+  description:
+    "This is a detailed description of the product.  It can span multiple lines and provide all the necessary information to the user.",
+};
 
 const ProtectedRoute = ({ children }) => {
   const { auth } = useAuth();
@@ -74,6 +83,10 @@ function App() {
                 <AdminUploadCatalog />
               </ProtectedRoute>
             }
+          />
+          <Route
+            path="/temp"
+            element={<TrialProductCard product={sampleProduct} />}
           />
         </Routes>
       </AuthProvider>
