@@ -11,11 +11,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./Navbar";
 import HeroSection from "./HeroSection";
 
-// import ProductCards from "./ProductCards";
-// import Footer from "./Footer";
+import ProductCards from "./ProductCards";
+import Footer from "./Footer";
 import { CartContext } from "./context/Cart";
-const ProductCards = React.lazy(() => import("./ProductCards"));
-const Footer = React.lazy(() => import("./Footer"));
+// const ProductCards = React.lazy(() => import("./ProductCards"));
+// const Footer = React.lazy(() => import("./Footer"));
 // import Cart from "./Cart";
 
 function FrontPage() {
@@ -504,44 +504,43 @@ function FrontPage() {
 
         {/* Product Grid */}
         <div className="product-grid">
-          <Suspense fallback={<div>Loading Products...</div>}>
-            {Object.entries(groupedProducts).map(
-              ([categoryName, subcategories]) => (
-                <div key={categoryName} className="category-group">
-                  <h3>
-                    {categoryName} ({Object.values(subcategories).flat().length}
-                    )
-                  </h3>
-                  {Object.entries(subcategories).map(
-                    ([subcategoryName, products]) => (
-                      <div key={subcategoryName} className="subcategory-group">
-                        <h3>
-                          {subcategoryName} ({products.length})
-                        </h3>
-                        <div className="product-cards">
-                          {products.map((product) => (
-                            <div
-                              key={product.id}
-                              onClick={() => openModal(product, categoryName)}
-                            >
-                              <ProductCards
-                                id={product.id}
-                                category={categoryName}
-                                image_url={product.image_url}
-                                name={product.name}
-                                price={product.price}
-                                description={product.details}
-                              />
-                            </div>
-                          ))}
-                        </div>
+          {/* <Suspense fallback={<div>Loading Products...</div>}> */}
+          {Object.entries(groupedProducts).map(
+            ([categoryName, subcategories]) => (
+              <div key={categoryName} className="category-group">
+                <h3>
+                  {categoryName} ({Object.values(subcategories).flat().length})
+                </h3>
+                {Object.entries(subcategories).map(
+                  ([subcategoryName, products]) => (
+                    <div key={subcategoryName} className="subcategory-group">
+                      <h3>
+                        {subcategoryName} ({products.length})
+                      </h3>
+                      <div className="product-cards">
+                        {products.map((product) => (
+                          <div
+                            key={product.id}
+                            onClick={() => openModal(product, categoryName)}
+                          >
+                            <ProductCards
+                              id={product.id}
+                              category={categoryName}
+                              image_url={product.image_url}
+                              name={product.name}
+                              price={product.price}
+                              description={product.details}
+                            />
+                          </div>
+                        ))}
                       </div>
-                    )
-                  )}
-                </div>
-              )
-            )}
-          </Suspense>
+                    </div>
+                  )
+                )}
+              </div>
+            )
+          )}
+          {/* </Suspense> */}
         </div>
       </div>
       <a
