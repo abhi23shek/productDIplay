@@ -1,7 +1,9 @@
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { CartContext } from "./context/Cart";
 
 export default function Cart() {
+  const navigate = useNavigate(); // Initialize useNavigate
   const {
     cartItems,
     addToCart,
@@ -33,6 +35,14 @@ export default function Cart() {
 
   return (
     <div className="container py-5">
+      {/* Back Button */}
+      <button
+        className="btn btn-secondary mb-4"
+        onClick={() => navigate(-1)} // Go back to the previous page
+      >
+        &larr; Back
+      </button>
+
       <h1 className="text-center mb-4">Your Shopping Cart</h1>
 
       <div className="table-responsive">

@@ -127,7 +127,7 @@ const AdminAddProduct = ({ categories }) => {
           setMessage("");
         }, 3000);
       }
-      console.log("Product Data:", productData);
+      // console.log("Product Data:", productData);
       setName("");
       setPrice("");
       setDetails("Size-");
