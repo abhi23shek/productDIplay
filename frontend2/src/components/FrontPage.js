@@ -115,19 +115,13 @@ function FrontPage() {
             subcategoriesData[category.id] = await response.json();
           }
 
-          const sortedProducts = Array.isArray(productsData)
-            ? productsData.sort(
-                (a, b) => parseFloat(a.price) - parseFloat(b.price)
-              )
-            : [];
-
-          setProducts(sortedProducts);
+          setProducts(productsData);
           setCategories(Array.isArray(categoriesData) ? categoriesData : []);
           setSubcategories(subcategoriesData);
-          setFilteredProducts(sortedProducts);
+          setFilteredProducts(productsData);
 
           // Store data in sessionStorage
-          sessionStorage.setItem("products", JSON.stringify(sortedProducts));
+          sessionStorage.setItem("products", JSON.stringify(productsData));
           sessionStorage.setItem("categories", JSON.stringify(categoriesData));
           sessionStorage.setItem(
             "subcategories",
