@@ -314,7 +314,7 @@ body {
 .loader p {
   font-family: "Orbitron", serif;
   font-optical-sizing: auto;
-  font-weight: 400;
+  font-weight: 500;
   font-style: normal;
   font-size: 4vh;
 }
@@ -371,7 +371,7 @@ body {
   .loader p {
     font-family: "Orbitron", serif;
     font-optical-sizing: auto;
-    font-weight: 400;
+    font-weight: 500;
     font-style: normal;
     font-size: 4vh;
   }

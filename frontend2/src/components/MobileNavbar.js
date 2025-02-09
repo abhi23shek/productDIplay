@@ -20,7 +20,7 @@ const MobileNavbar = () => {
             className="company-logo"
           />
         </div>
-        <div className="companyname">shiv collection</div>
+        <div className="companyname">Shiv Collection</div>
 
         {/* Hamburger Menu */}
         <div className="menu-toggle">
@@ -78,7 +78,7 @@ const MobileNavbar = () => {
                   <button
                     className={`M-nav-btn ${
                       isActive("/admin") ? "M-active" : "M-notactive"
-                    } login-btn`}
+                    } M-login-btn`}
                     onClick={() => navigate("/admin")}
                   >
                     Login

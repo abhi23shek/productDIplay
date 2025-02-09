@@ -17,6 +17,13 @@
     font-family: "Chelsea Market", serif;
     width: 100%;
   }
+  .M-login-btn{
+    font-size: 3vh ;
+    background-color: transparent;
+    font-weight: 400;
+    font-family: "Chelsea Market", serif;
+    width: 100%;
+  }
   .M-notactive{
     border: none;
 
@@ -157,8 +164,9 @@
     font-display: fallback;
   }
   .companyname{
-    font-family: 'Mokoto';
-    font-size: 4.8vw;
+    font-family: "Orbitron", serif;
+    font-size: 7vw;
+    font-size: 500;
     color: #000000;
     font-display: swap;
   }
