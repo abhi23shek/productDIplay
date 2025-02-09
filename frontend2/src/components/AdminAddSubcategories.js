@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 
 const AdminAddSubcategories = ({ categories }) => {
   const [categoryId, setCategoryId] = useState(""); // Selected category ID
-  const [subcategories, setSubcategories] = useState([]); // List of subcategories for the selected category
+  const [subcategories, setSubcategories] = useState([]); // Subcategories of the selected category
   const [subcategoryName, setSubcategoryName] = useState(""); // Name of the new subcategory
-  const [loading, setLoading] = useState(false); // Loading state for fetching subcategories
-  const [error, setError] = useState(""); // Error state for handling errors
+  const [editingSubcategory, setEditingSubcategory] = useState(null); // ID of subcategory being edited
+  const [updatedSubcategoryName, setUpdatedSubcategoryName] = useState(""); // Updated name for subcategory
+  const [loading, setLoading] = useState(false); // Loading state
+  const [error, setError] = useState(""); // Error message
 
-  // Fetch subcategories when the selected category changes
+  // Fetch subcategories when category changes
   useEffect(() => {
     if (categoryId) {
       fetchSubcategories(categoryId);
@@ -16,34 +18,33 @@ const AdminAddSubcategories = ({ categories }) => {
     }
   }, [categoryId]);
 
+  // Fetch subcategories from backend
   const fetchSubcategories = async (categoryId) => {
-    setLoading(true); // Start loading
-    setError(""); // Clear previous errors
+    setLoading(true);
+    setError("");
     try {
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${categoryId}`
       );
-
       if (response.ok) {
         const data = await response.json();
         setSubcategories(data);
       } else {
-        console.error("Failed to fetch subcategories:", response.statusText);
-        setError("Failed to load subcategories. Please try again later.");
+        setError("Failed to load subcategories. Please try again.");
       }
     } catch (error) {
-      console.error("Error fetching subcategories:", error);
-      setError("Error fetching subcategories. Please try again later.");
+      setError("Error fetching subcategories. Please try again.");
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
   };
 
+  // Add a new subcategory
   const handleAddSubcategory = async (e) => {
     e.preventDefault();
 
     if (!categoryId || !subcategoryName.trim()) {
-      alert("Please select a category and provide a subcategory name.");
+      alert("Please select a category and enter a subcategory name.");
       return;
     }
 
@@ -60,45 +61,69 @@ const AdminAddSubcategories = ({ categories }) => {
       );
 
       if (response.ok) {
-        const data = await response.json();
-        console.log("Subcategory added:", data);
-        setSubcategoryName(""); // Clear input field
-        fetchSubcategories(categoryId); // Refresh subcategories list
+        setSubcategoryName("");
+        fetchSubcategories(categoryId); // Refresh list
       } else {
-        console.error("Error adding subcategory:", response.statusText);
         alert("Error adding subcategory. Please try again.");
       }
     } catch (error) {
-      console.error("Error adding subcategory:", error);
       alert("Error adding subcategory. Please try again.");
     }
   };
 
-  const handleDeleteSubcategory = async (subcategoryId) => {
+  // Update an existing subcategory
+  const handleUpdateSubcategory = async (subcategoryId) => {
+    if (!updatedSubcategoryName.trim()) {
+      alert("Please enter a subcategory name.");
+      return;
+    }
+
     try {
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${subcategoryId}`,
         {
-          method: "DELETE",
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: updatedSubcategoryName,
+            category_id: categoryId,
+          }),
         }
       );
 
       if (response.ok) {
-        console.log("Subcategory deleted successfully");
-        fetchSubcategories(categoryId); // Refresh the subcategory list
+        setEditingSubcategory(null);
+        setUpdatedSubcategoryName("");
+        fetchSubcategories(categoryId); // Refresh list
       } else {
-        console.error("Failed to delete subcategory:", response.statusText);
+        alert("Error updating subcategory. Please try again.");
+      }
+    } catch (error) {
+      alert("Error updating subcategory. Please try again.");
+    }
+  };
+
+  // Delete a subcategory
+  const handleDeleteSubcategory = async (subcategoryId) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${subcategoryId}`,
+        { method: "DELETE" }
+      );
+
+      if (response.ok) {
+        fetchSubcategories(categoryId); // Refresh list
+      } else {
         alert("Failed to delete subcategory. Please try again.");
       }
     } catch (error) {
-      console.error("Error deleting subcategory:", error);
       alert("Error deleting subcategory. Please try again.");
     }
   };
 
   return (
     <div className="container my-4">
-      {/* Add Subcategory Section */}
+      {/* Add Subcategory Form */}
       <div className="card mb-4 shadow-sm">
         <div className="card-body">
           <h2 className="card-title text-center mb-3">Add Subcategory</h2>
@@ -138,7 +163,7 @@ const AdminAddSubcategories = ({ categories }) => {
         </div>
       </div>
 
-      {/* Subcategories in Selected Category */}
+      {/* Display Subcategories */}
       {categoryId && (
         <div className="card shadow-sm">
           <div className="card-body">
@@ -146,13 +171,9 @@ const AdminAddSubcategories = ({ categories }) => {
               Subcategories in Selected Category
             </h3>
 
-            {/* Loading State */}
             {loading && <p className="text-center text-muted">Loading...</p>}
-
-            {/* Error State */}
             {error && <p className="text-center text-danger">{error}</p>}
 
-            {/* Subcategories or Empty Message */}
             {!loading && !error && subcategories.length > 0 ? (
               <ul className="list-group">
                 {subcategories.map((subcategory) => (
@@ -160,20 +181,55 @@ const AdminAddSubcategories = ({ categories }) => {
                     key={subcategory.id}
                     className="list-group-item d-flex justify-content-between align-items-center"
                   >
-                    <span className="fw-bold">{subcategory.name}</span>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDeleteSubcategory(subcategory.id)}
-                    >
-                      Delete
-                    </button>
+                    {editingSubcategory === subcategory.id ? (
+                      <input
+                        type="text"
+                        className="form-control me-2"
+                        value={updatedSubcategoryName}
+                        onChange={(e) =>
+                          setUpdatedSubcategoryName(e.target.value)
+                        }
+                      />
+                    ) : (
+                      <span className="fw-bold">{subcategory.name}</span>
+                    )}
+
+                    <div>
+                      {editingSubcategory === subcategory.id ? (
+                        <button
+                          className="btn btn-success btn-sm me-2"
+                          onClick={() =>
+                            handleUpdateSubcategory(subcategory.id)
+                          }
+                        >
+                          Save
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-warning btn-sm me-2"
+                          onClick={() => {
+                            setEditingSubcategory(subcategory.id);
+                            setUpdatedSubcategoryName(subcategory.name);
+                          }}
+                        >
+                          Edit
+                        </button>
+                      )}
+
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleDeleteSubcategory(subcategory.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </li>
                 ))}
               </ul>
             ) : (
               !loading && (
                 <p className="text-center text-muted">
-                  No subcategories found for this category.
+                  No subcategories found.
                 </p>
               )
             )}

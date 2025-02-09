@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const UpdateProduct = () => {
+const AdminUpdate = () => {
   const { id: productId } = useParams();
   const navigate = useNavigate();
 
@@ -24,7 +24,9 @@ const UpdateProduct = () => {
   const [imagePreview, setImagePreview] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [useDefaultImage, setUseDefaultImage] = useState(false);
 
+  // Fetch product details and categories on component mount
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
@@ -48,7 +50,7 @@ const UpdateProduct = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/api/categories`
+          `${process.env.REACT_APP_SERVER_URL}/api/categoriesforadmin`
         );
         setCategories(response.data);
       } catch (err) {
@@ -110,7 +112,10 @@ const UpdateProduct = () => {
     e.preventDefault();
 
     let uploadedImageUrl = imagePreview;
-    if (imageFile) {
+
+    if (useDefaultImage) {
+      uploadedImageUrl = "https://i.ibb.co/p0nQhDT/image.png"; // Replace with your default image URL
+    } else if (imageFile) {
       try {
         const formData = new FormData();
         formData.append("image", imageFile);
@@ -293,12 +298,14 @@ const UpdateProduct = () => {
                   className="form-control"
                   onChange={handleFileChange}
                   accept="image/*"
+                  disabled={useDefaultImage}
                 />
                 <textarea
                   className="form-control mt-3"
                   onPaste={handlePaste}
                   placeholder="Paste image here (Ctrl+V)"
                   rows="3"
+                  disabled={useDefaultImage}
                 ></textarea>
                 {imagePreview && (
                   <div className="mt-3 text-center">
@@ -310,6 +317,22 @@ const UpdateProduct = () => {
                     />
                   </div>
                 )}
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    id="useDefaultImage"
+                    checked={useDefaultImage}
+                    onChange={(e) => setUseDefaultImage(e.target.checked)}
+                  />
+                  <label className="form-check-label" htmlFor="useDefaultImage">
+                    Use Default Image
+                  </label>
+                </div>
               </div>
             </div>
             <div className="text-center">
@@ -324,4 +347,4 @@ const UpdateProduct = () => {
   );
 };
 
-export default UpdateProduct;
+export default AdminUpdate;
