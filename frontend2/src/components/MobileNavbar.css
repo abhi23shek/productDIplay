@@ -164,8 +164,9 @@
     font-display: fallback;
   }
   .companyname{
-    font-family: 'Mokoto';
-    font-size: 4.8vw;
+    font-family: "Orbitron", serif;
+    font-size: 7vw;
+    font-size: 500;
     color: #000000;
     font-display: swap;
   }
