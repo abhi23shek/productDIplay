@@ -6,7 +6,7 @@
     padding-right: 6vw;
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 4000;
    
     width: 100vw !important;
   }
@@ -107,7 +107,7 @@
     width: 40vw;
     text-align: left;
     overflow: hidden;
-    z-index: 1000;
+    z-index: 4000;
   }
   
   .menu-dropdown ul {
