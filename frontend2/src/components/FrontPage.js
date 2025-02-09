@@ -84,6 +84,7 @@ function FrontPage() {
 
         if (storedProducts && storedCategories && storedSubcategories) {
           console.log("Yes Got it");
+          setLoading(false);
           // Retrieve data from sessionStorage
           const productsData = JSON.parse(storedProducts);
           const categoriesData = JSON.parse(storedCategories);
