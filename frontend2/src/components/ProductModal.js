@@ -13,6 +13,7 @@ const ProductModal = ({
   handleTouchEnd,
   currentProductIndex,
   displayOrder,
+  setQuantity,
 }) => {
   const modalRef = useRef(null);
 
@@ -88,13 +89,25 @@ const ProductModal = ({
                 >
                   -
                 </button>
-                <button
+                {/* <button
                   className="btn btn-success btn-sm d-flex align-items-center"
                   disabled
                 >
                   <i className="bi bi-cart me-1"></i>
                   {cartProduct.quantity}
-                </button>
+                </button> */}
+                <input
+                  onClick={(e) => e.stopPropagation()}
+                  type="number"
+                  value={cartProduct.quantity}
+                  // min="0"
+                  style={{ width: "60px", textAlign: "center" }}
+                  onChange={(e) => {
+                    const newQuantity = parseInt(e.target.value);
+
+                    setQuantity(cartProduct, newQuantity);
+                  }}
+                />
                 <button
                   onClick={() => handleAddToCart(modalProduct)}
                   className="btn btn-warning btn-sm"

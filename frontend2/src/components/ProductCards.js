@@ -11,7 +11,8 @@ const ProductCards = ({
   description,
 }) => {
   const product = { id, category, image_url, name, price, description };
-  const { cartItems, addToCart, removeFromCart } = useContext(CartContext);
+  const { cartItems, addToCart, removeFromCart, setQuantity } =
+    useContext(CartContext);
 
   const cartProduct = cartItems.find((item) => item.id === product.id);
 
@@ -44,13 +45,26 @@ const ProductCards = ({
           >
             -
           </button>
-          <button
+
+          <input
+            onClick={(e) => e.stopPropagation()}
+            type="number"
+            value={cartProduct.quantity}
+            // min="0"
+            style={{ width: "60px", textAlign: "center" }}
+            onChange={(e) => {
+              const newQuantity = parseInt(e.target.value);
+
+              setQuantity(cartProduct, newQuantity);
+            }}
+          />
+          {/* <button
             className="btn btn-success btn-sm d-flex align-items-center"
             onClick={(e) => e.stopPropagation()}
           >
             <i className="bi bi-cart me-1"></i>
             {cartProduct.quantity}
-          </button>
+          </button> */}
           <button
             onClick={(e) => {
               e.stopPropagation();

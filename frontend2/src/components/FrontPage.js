@@ -29,7 +29,8 @@ function FrontPage() {
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const modalRef = useRef(null);
   const [touchStartX, setTouchStartX] = useState(0);
-  const { cartItems, addToCart, removeFromCart } = useContext(CartContext);
+  const { cartItems, addToCart, removeFromCart, setQuantity } =
+    useContext(CartContext);
 
   // Fetch initial data
   // useEffect(() => {
@@ -427,6 +428,7 @@ function FrontPage() {
           handleNextProduct={handleNextProduct}
           handleTouchStart={handleTouchStart}
           handleTouchEnd={handleTouchEnd}
+          setQuantity={setQuantity}
         />
       )}
     </div>
