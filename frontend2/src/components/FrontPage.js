@@ -5,9 +5,11 @@ import Navbar from "./Navbar";
 import ProductCards from "./ProductCards";
 import Footer from "./Footer";
 import { CartContext } from "./context/Cart";
-import CategoryFilter from "./CategoryFilter";
+import ResponsiveCategoryFilter from "./ResponsiveCategoryFilter";
+import ResponsiveSubcategoryFilter from "./ResponsiveSubcategoryFilter";
 import SubcategoryFilter from "./SubcategoryFilter";
 import BarLoader from "react-spinners/BarLoader";
+
 // import Cart from "./Cart";
 
 function FrontPage() {
@@ -282,11 +284,10 @@ function FrontPage() {
 
         {/* Category Selection */}
         <div className="Category-section-frontpage">
-          <CategoryFilter
+          <ResponsiveCategoryFilter
             categories={categories}
             selectedCategory={selectedCategory}
             onCategoryChange={handleCategoryChange}
-            products={products}
             searchTerm={searchTerm}
             handleSearch={handleSearch}
             minPrice={minPrice}
@@ -300,7 +301,7 @@ function FrontPage() {
 
         <div className="frontpage-content">
           {/* Subcategory Selection */}
-          <SubcategoryFilter
+          <ResponsiveSubcategoryFilter
             subcategories={subcategories}
             selectedCategory={selectedCategory}
             selectedSubcategory={selectedSubcategory}

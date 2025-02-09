@@ -15,7 +15,7 @@ const MobileNavbar = () => {
         {/* Company Logo */}
         <div className="logo-container" onClick={() => navigate("/")}>
           <img
-            src={require("./image/ShivCollection-logo3.png")}
+            src={require("./image/ShivCollection-logo4.png")}
             alt="Company Logo"
             className="company-logo"
           />

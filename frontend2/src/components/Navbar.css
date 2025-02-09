@@ -138,4 +138,15 @@
     display: block;
     width: 100%;
   }
+  .navbar {
+    padding: 0px 0px;
+    background: transparent !important;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    top: 0;
+    position: sticky;
+    z-index: 10;
+  }
 }
