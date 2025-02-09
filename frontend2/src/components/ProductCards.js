@@ -17,7 +17,12 @@ const ProductCards = ({
 
   return (
     <div className="product-card">
-      <img src={image_url} alt={name} className="product-image" />
+      <img
+        src={image_url}
+        alt={name}
+        className="product-image"
+        loading="lazy"
+      />
       <div className="product-details">
         <h5 className="product-name">{name}</h5>
         <p className="product-price">₹{Number(price).toFixed(2)}</p>

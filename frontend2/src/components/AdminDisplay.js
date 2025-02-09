@@ -25,7 +25,7 @@ function AdminDisplay() {
         const productsData = await productResponse.json();
 
         const categoryResponse = await fetch(
-          `${process.env.REACT_APP_SERVER_URL}/api/categories`
+          `${process.env.REACT_APP_SERVER_URL}/api/categoriesforadmin`
         );
         const categoriesData = await categoryResponse.json();
 

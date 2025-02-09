@@ -3,6 +3,9 @@ import React, { useState, useEffect } from "react";
 const AdminAddCategory = () => {
   const [categoryName, setCategoryName] = useState("");
   const [categories, setCategories] = useState([]);
+  const [editCategoryId, setEditCategoryId] = useState(null);
+  const [editCategoryName, setEditCategoryName] = useState("");
+  const [editCategoryShow, setEditCategoryShow] = useState(true);
 
   useEffect(() => {
     fetchCategories();
@@ -11,7 +14,7 @@ const AdminAddCategory = () => {
   const fetchCategories = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/categories`
+        `${process.env.REACT_APP_SERVER_URL}/api/categoriesforadmin`
       );
       const data = await response.json();
       setCategories(data);
@@ -23,7 +26,7 @@ const AdminAddCategory = () => {
   const deleteCategory = async (id) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/categories/${id}`,
+        `${process.env.REACT_APP_SERVER_URL}/api/categoriesforadmin/${id}`,
         {
           method: "DELETE",
         }
@@ -40,28 +43,74 @@ const AdminAddCategory = () => {
     }
   };
 
+  const updateCategory = async (id) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/categoriesforadmin/${id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: editCategoryName,
+            show: editCategoryShow,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error updating category");
+      }
+
+      console.log("Category updated");
+      setEditCategoryId(null); // Exit edit mode
+      setEditCategoryName(""); // Clear input
+      setEditCategoryShow(true); // Reset show checkbox
+      fetchCategories(); // Refresh categories
+    } catch (error) {
+      console.error("Error updating category:", error);
+    }
+  };
+
+  const toggleShow = async (id, currentShow) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/api/categoriesforadmin/${id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ show: !currentShow }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error toggling show status");
+      }
+
+      console.log("Show status updated");
+      fetchCategories(); // Refresh categories
+    } catch (error) {
+      console.error("Error toggling show status:", error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const categoryData = { name: categoryName };
+    const categoryData = { name: categoryName, show: true }; // Default show to true
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/categories`,
+        `${process.env.REACT_APP_SERVER_URL}/api/categoriesforadmin`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(categoryData),
         }
       );
-      // console.log("Category added:", data);
       const data = await response.json();
       console.log("Category added");
 
-      // Reset form after successful submission
-      setCategoryName("");
-
-      // Fetch the updated categories list
-      fetchCategories();
+      setCategoryName(""); // Reset form
+      fetchCategories(); // Refresh list
     } catch (error) {
       console.error("Error adding category:", error);
     }
@@ -104,13 +153,67 @@ const AdminAddCategory = () => {
                 key={category.id}
                 className="list-group-item d-flex justify-content-between align-items-center"
               >
-                <span className="fw-bold">{category.name}</span>
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={() => deleteCategory(category.id)}
-                >
-                  Delete
-                </button>
+                {/* Checkbox to toggle show status */}
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    checked={category.show}
+                    onChange={() => toggleShow(category.id, category.show)}
+                  />
+                </div>
+
+                {editCategoryId === category.id ? (
+                  // Show input field when editing
+                  <div className="d-flex w-100">
+                    <input
+                      type="text"
+                      className="form-control me-2"
+                      value={editCategoryName}
+                      onChange={(e) => setEditCategoryName(e.target.value)}
+                    />
+                    <div className="form-check ms-2">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        checked={editCategoryShow}
+                        onChange={(e) => setEditCategoryShow(e.target.checked)}
+                      />
+                      <label className="form-check-label">
+                        Show on Front Page
+                      </label>
+                    </div>
+                    <button
+                      className="btn btn-success btn-sm"
+                      onClick={() => updateCategory(category.id)}
+                    >
+                      Save
+                    </button>
+                  </div>
+                ) : (
+                  // Show category name when not editing
+                  <>
+                    <span className="fw-bold">{category.name}</span>
+                    <div>
+                      <button
+                        className="btn btn-warning btn-sm me-2"
+                        onClick={() => {
+                          setEditCategoryId(category.id);
+                          setEditCategoryName(category.name);
+                          setEditCategoryShow(category.show);
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => deleteCategory(category.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </>
+                )}
               </li>
             ))}
           </ul>
