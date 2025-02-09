@@ -235,73 +235,6 @@ body {
 }
 
 
-.modal-content {
-  height: auto;
-}
-.modal-header {
-  text-align: center;
-  font-weight: bold;
-  padding: 1vh 5vw;
-}
-
-.modal-title {
-  width: 100%;
-  text-align: center;
-  font-weight: bold;
-  font-size: 4vh;
-}
-
-.modal-body {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.modal-body img {
-  height: 50vh;
-  margin-bottom: 20px;
-  object-fit: contain;
-}
-
-.modal-body p {
-  text-align: center;
-  font-size: 1rem;
-  line-height: 1.5;
-  margin-top: 15px;
-}
-
-.modal-body h5 {
-  text-align: center;
-  margin-top: 10px;
-}
-.Model-price {
-  display: flex;
-  align-items: baseline;
-  justify-content: flex-start;
-  gap: 20px;
-}
-.Model-price-value {
-  color: green;
-  font-size: 3vh;
-  font-weight: bold;
-}
-.Model-price h5 {
-  font-weight: bold;
-  font-size: 3vh;
-}
-.Model-description h5 {
-  font-size: 3vh;
-  font-weight: lighter;
-}
-.Model-description {
-  display: flex;
-  align-items: center;
-}
-.btn-close {
-  width: 3vh;
-  height: 3vh;
-}
 
 .loader {
   display: flex;
@@ -379,16 +312,5 @@ body {
     width: 90vw;
   }
 
-  .modal-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1vh 5vw;
-  }
-  .modal-body img {
-    width: 80vw;
-    height: 50vh;
-    margin-bottom: 20px;
-    object-fit: contain;
-  }
+ 
 }

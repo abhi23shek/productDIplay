@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "./MobileCategoryFilter.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 import Button from "@mui/material/Button";
 
 const MobileCategoryFilter = ({
@@ -50,70 +50,76 @@ const MobileCategoryFilter = ({
         <FontAwesomeIcon
           icon={faSearch}
           className="mobile-search-icon"
-          onClick={() => setShowFilters(!showFilters)}
+          onClick={() => setShowFilters(true)}
         />
       </div>
 
-      {/* Filter Panel */}
+      {/* Filter Panel with Overlay */}
       {showFilters && (
-        <div className="mobile-filter-panel">
-          <div className="mobile-filter-header">
-            <h3>Filters</h3>
-            <FontAwesomeIcon
-              icon={faTimes}
-              className="mobile-close-icon"
-              onClick={() => setShowFilters(false)}
-            />
-          </div>
-
-          <div className="mobile-search-container">
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchTerm}
-              onChange={handleSearch}
-              className="mobile-search-input"
-            />
-          </div>
-
-          <div className="mobile-price-filter">
-            <div className="price-inputs">
-              <input
-                type="number"
-                value={minPrice}
-                placeholder="Min price"
-                onChange={(e) => setMinPrice(e.target.value)}
-                className="mobile-price-input"
-              />
-              <input
-                type="number"
-                value={maxPrice}
-                placeholder="Max price"
-                onChange={(e) => setMaxPrice(e.target.value)}
-                className="mobile-price-input"
+        <>
+          <div
+            className="mobile-filter-overlay"
+            onClick={() => setShowFilters(false)}
+          />
+          <div className="mobile-filter-panel">
+            <div className="mobile-filter-header">
+              <h3>Filters</h3>
+              <FontAwesomeIcon
+                icon={faTimes}
+                className="mobile-close-icon"
+                onClick={() => setShowFilters(false)}
               />
             </div>
-            <div className="mobile-filter-buttons">
-              <Button
-                variant="contained"
-                className="mobile-apply-btn"
-                onClick={() => {
-                  handlePriceFilter();
-                  setShowFilters(false);
-                }}
-              >
-                Apply
-              </Button>
-              <Button
-                variant="outlined"
-                className="mobile-reset-btn"
-                onClick={resetFilters}
-              >
-                Reset
-              </Button>
+
+            <div className="mobile-search-container">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={handleSearch}
+                className="mobile-search-input"
+              />
+            </div>
+
+            <div className="mobile-price-filter">
+              <div className="price-inputs">
+                <input
+                  type="number"
+                  value={minPrice}
+                  placeholder="Min price"
+                  onChange={(e) => setMinPrice(e.target.value)}
+                  className="mobile-price-input"
+                />
+                <input
+                  type="number"
+                  value={maxPrice}
+                  placeholder="Max price"
+                  onChange={(e) => setMaxPrice(e.target.value)}
+                  className="mobile-price-input"
+                />
+              </div>
+              <div className="mobile-filter-buttons">
+                <Button
+                  variant="contained"
+                  className="mobile-apply-btn"
+                  onClick={() => {
+                    handlePriceFilter();
+                    setShowFilters(false);
+                  }}
+                >
+                  Apply
+                </Button>
+                <Button
+                  variant="outlined"
+                  className="mobile-reset-btn"
+                  onClick={resetFilters}
+                >
+                  Reset
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
