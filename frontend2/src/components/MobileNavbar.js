@@ -78,7 +78,7 @@ const MobileNavbar = () => {
                   <button
                     className={`M-nav-btn ${
                       isActive("/admin") ? "M-active" : "M-notactive"
-                    } login-btn`}
+                    } M-login-btn`}
                     onClick={() => navigate("/admin")}
                   >
                     Login

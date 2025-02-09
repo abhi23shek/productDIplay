@@ -17,6 +17,13 @@
     font-family: "Chelsea Market", serif;
     width: 100%;
   }
+  .M-login-btn{
+    font-size: 3vh ;
+    background-color: transparent;
+    font-weight: 400;
+    font-family: "Chelsea Market", serif;
+    width: 100%;
+  }
   .M-notactive{
     border: none;
 
