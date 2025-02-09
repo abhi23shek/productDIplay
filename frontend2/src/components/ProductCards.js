@@ -21,7 +21,7 @@ const ProductCards = ({
         src={image_url}
         alt={name}
         className="product-image"
-        loading="eager"
+        loading="lazy"
       />
       <div className="product-details">
         <h5 className="product-name">{name}</h5>
