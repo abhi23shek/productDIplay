@@ -1,48 +1,67 @@
 import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./AuthContext";
-import "./AdminNavbar.css";
+import MobileAdminNavbar from "./MobileAdminNavbar";
+import "./Navbar.css";
 
 const AdminNavbar = () => {
   const { logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="container-fluid">
-        <div className="Adminleftside_navbar">
-          {/* Home Button on the Leftmost */}
-          <a
-            href="/"
-            className="navbar-brand Admin-btn btn1 text-dark rounded-pill px-4 shiny-text"
-          >
-            Home
-          </a>
-
-          {/* Print Catalog Button next to Home */}
-          <a
-            href="/admin/printcatalog"
-            className="navbar-brand Admin-btn btn1 text-dark rounded-pill px-4 shiny-text"
-          >
-            Print Catalog
-          </a>
-          <a
-            href="/uploadcatalog"
-            className="navbar-brand Admin-btn btn1 text-dark rounded-pill px-4 shiny-text"
-          >
-            Upload Catalog
-          </a>
-        </div>
-        <div className="Adminrightside_navbar">
-          <li className="nav-item">
-            <button
-              onClick={logout}
-              className="btn btn-danger text-dark rounded-pill px-4 shiny-text"
-            >
+    <>
+      <nav className="navbar navbar-expand-lg navbar-light bg-transparent">
+        {/* Desktop Version */}
+        <div className="container-fluid nav-bar-desktop">
+          <div className="leftside_navbar">
+            <div className="navbar-logo" onClick={() => navigate("/")}>
+              <img
+                src={require("./image/ShivCollection-logo4.png")}
+                alt="Company Logo"
+                className="logo-img"
+              />
+            </div>
+            <div className="nav-links">
+              <button
+                className={`nav-link ${isActive("/admin") ? "active" : ""}`}
+                onClick={() => navigate("/")}
+              >
+                Home
+              </button>
+              <button
+                className={`nav-link ${
+                  isActive("/admin/printcatalog") ? "active" : ""
+                }`}
+                onClick={() => navigate("/admin/printcatalog")}
+              >
+                Print Catalog
+              </button>
+              <button
+                className={`nav-link ${
+                  isActive("/admin/uploadcatalog") ? "active" : ""
+                }`}
+                onClick={() => navigate("/uploadcatalog")}
+              >
+                Upload Catalog
+              </button>
+            </div>
+          </div>
+          <div className="rightside_navbar">
+            <button onClick={logout} className="logout-btn">
               Logout
             </button>
-          </li>
+          </div>
         </div>
-      </div>
-    </nav>
+
+        {/* Mobile Version */}
+        <div className="mobile-admin-navbar">
+          <MobileAdminNavbar />
+        </div>
+      </nav>
+    </>
   );
 };
 
