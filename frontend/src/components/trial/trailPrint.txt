@@ -1,0 +1,1309 @@
+// import React, { useEffect, useState } from "react";
+// import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+// // import { PDFDocument } from "pdf-lib";
+// import axios from "axios";
+// import PrintCatNav from "./PrintCatNav";
+
+// const PrintCatalog = () => {
+//   const [categoryName, setCategoryName] = useState("");
+//   const [categories, setCategories] = useState([]);
+//   const [companyName, setCompanyName] = useState("SHIV ENTERPRISES");
+//   const [mobileNumber, setMobileNumber] = useState(
+//     "9958660231, 7838146412, 9717437131"
+//   );
+//   const [dateApplicaple, setDateApplicaple] = useState("1st April 2024");
+//   const [priceFlag, setPriceFlag] = useState(true); // Whether to show prices
+//   const [priceAdjustment, setPriceAdjustment] = useState(0); // Percentage adjustment
+//   const [minPrice, setMinPrice] = useState(0); // Minimum price
+//   const [maxPrice, setMaxPrice] = useState(1000); // Maximum price
+//   const [hintText, setHintText] = useState("Trademark:-Vidhata");
+//   const [isLoading, setIsLoading] = useState(false); // Loading state
+//   const [successMessage, setSuccessMessage] = useState(""); // Success message
+
+//   useEffect(() => {
+//     fetchCategories();
+//   }, []);
+
+//   const fetchCategories = async () => {
+//     try {
+//       const response = await axios.get(
+//         `${process.env.REACT_APP_SERVER_URL}/api/categories`
+//       );
+//       setCategories(response.data);
+//     } catch (error) {
+//       console.error("Error fetching categories:", error);
+//     }
+//   };
+
+//   const handlePrint = async () => {
+//     if (!categoryName) {
+//       alert("Please select a category.");
+//       return;
+//     }
+
+//     const selectedCategory = categories.find(
+//       (cat) => String(cat.id) === String(categoryName)
+//     );
+
+//     setIsLoading(true);
+//     setSuccessMessage(""); // Clear previous success message
+
+//     const subcategories = await axios.get(
+//       `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${categoryName}`
+//     );
+
+//     if (subcategories.length === 0) {
+//       alert({ error: "No subcategories found" });
+//     }
+
+//     // Create a new PDF document
+//     const pdfDoc = await PDFDocument.create();
+//     const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
+//     const timesRomanBoldFont = await pdfDoc.embedFont(
+//       StandardFonts.TimesRomanBold
+//     );
+
+//     const cellWidth = 180;
+//     const cellHeight = 220;
+//     const margin = 5;
+
+//     const calcTotalPage = async () => {
+//       let totalPages = 0;
+
+//       for (const subcat of subcategories.data) {
+//         try {
+//           const response = await fetch(
+//             `${process.env.REACT_APP_SERVER_URL}/api/products/productcount?subCategoryId=${subcat.id}&minPrice=${minPrice}&maxPrice=${maxPrice}`
+//           );
+
+//           if (!response.ok) {
+//             throw new Error("Failed to fetch product count");
+//           }
+
+//           const productCountResult = await response.json();
+
+//           if (!productCountResult.length) continue; // Handle empty response
+
+//           const productCount = productCountResult[0].product_count;
+//           const pagesForSubcategory = Math.ceil(productCount / 9); // 9 products per page
+//           totalPages += pagesForSubcategory;
+//         } catch (error) {
+//           console.error("Error fetching product count:", error);
+//         }
+//       }
+
+//       return totalPages;
+//     };
+
+//     let totalPages = await calcTotalPage();
+
+//     const renderHeader = (page) => {
+//       const { width, height } = page.getSize();
+//       const fontSize = 10;
+//       const textWidth = timesRomanFont.widthOfTextAtSize(
+//         `Rates List applicable from ${dateApplicaple}`,
+//         fontSize
+//       );
+
+//       page.drawText(`Rates List applicable from ${dateApplicaple}`, {
+//         x: (width - textWidth) / 2,
+//         y: height - 50,
+//         size: fontSize,
+//         font: timesRomanFont,
+//         color: rgb(1, 0, 0),
+//       });
+
+//       const companyNameWidth = timesRomanBoldFont.widthOfTextAtSize(
+//         companyName,
+//         26
+//       );
+//       page.drawText(companyName, {
+//         x: (width - companyNameWidth) / 2,
+//         y: height - 80,
+//         size: 26,
+//         font: timesRomanBoldFont,
+//         color: rgb(0, 0.3, 0.9),
+//         underline: true,
+//       });
+
+//       const mobileNumberWidth = timesRomanFont.widthOfTextAtSize(
+//         mobileNumber,
+//         18
+//       );
+//       page.drawText(mobileNumber, {
+//         x: (width - mobileNumberWidth) / 2,
+//         y: height - 110,
+//         size: 18,
+//         font: timesRomanFont,
+//         color: rgb(0.17, 0.83, 0.04),
+//       });
+
+//       const hintTextWidth = timesRomanFont.widthOfTextAtSize(
+//         `(${hintText})`,
+//         fontSize
+//       );
+//       page.drawText(`(${hintText})`, {
+//         x: (width - hintTextWidth) / 2,
+//         y: height - 130,
+//         size: fontSize,
+//         font: timesRomanFont,
+//         color: rgb(1, 0, 0),
+//       });
+//     };
+
+//     let currentPage = 0;
+
+//     const renderProducts = async (products, subcategoryName) => {
+//       let subpageno = 1;
+//       const page = pdfDoc.addPage();
+//       const { width, height } = page.getSize();
+//       let x = 50;
+//       let y = height - 150;
+//       currentPage += 1;
+
+//       renderHeader(page);
+
+//       page.drawText(subcategoryName, {
+//         x:
+//           (width - timesRomanBoldFont.widthOfTextAtSize(subcategoryName, 15)) /
+//           2,
+//         y: y - 20,
+//         size: 15,
+//         font: timesRomanBoldFont,
+//         color: rgb(0, 0, 0),
+//       });
+
+//       page.drawText(`${subpageno}`, {
+//         x: (width - timesRomanFont.widthOfTextAtSize(`${subpageno}`, 10)) / 2,
+//         y: y - 40,
+//         size: 10,
+//         font: timesRomanFont,
+//         color: rgb(0, 0, 0),
+//       });
+
+//       for (let i = 0; i < products.length; i++) {
+//         const product = products[i];
+
+//         if (y + cellHeight > height - 50) {
+//           page.drawText(`Page ${currentPage} of ${totalPages}`, {
+//             x:
+//               (width -
+//                 timesRomanFont.widthOfTextAtSize(
+//                   `Page ${currentPage} of ${totalPages}`,
+//                   10
+//                 )) /
+//               2,
+//             y: 30,
+//             size: 10,
+//             font: timesRomanFont,
+//             color: rgb(0.5, 0.5, 0.5),
+//           });
+
+//           subpageno += 1;
+//           currentPage += 1;
+//           const newPage = pdfDoc.addPage();
+//           renderHeader(newPage);
+//           x = 50;
+//           y = height - 150;
+
+//           newPage.drawText(subcategoryName, {
+//             x:
+//               (width -
+//                 timesRomanBoldFont.widthOfTextAtSize(subcategoryName, 15)) /
+//               2,
+//             y: y - 20,
+//             size: 15,
+//             font: timesRomanBoldFont,
+//             color: rgb(0, 0, 0),
+//           });
+
+//           newPage.drawText(`${subpageno}`, {
+//             x:
+//               (width - timesRomanFont.widthOfTextAtSize(`${subpageno}`, 10)) /
+//               2,
+//             y: y - 40,
+//             size: 10,
+//             font: timesRomanFont,
+//             color: rgb(0, 0, 0),
+//           });
+//         }
+
+//         // Draw product cell
+//         page.drawRectangle({
+//           x,
+//           y,
+//           width: cellWidth,
+//           height: cellHeight,
+//           borderWidth: 2,
+//           borderColor: rgb(0.05, 0.3, 0.87),
+//         });
+
+//         // Dynamically adjust font size for product name
+//         let nameFontSize = 12;
+//         let productNameWidth = timesRomanFont.widthOfTextAtSize(
+//           product.name,
+//           nameFontSize
+//         );
+//         while (productNameWidth > cellWidth - 12 && nameFontSize > 6) {
+//           nameFontSize -= 0.5;
+//           productNameWidth = timesRomanFont.widthOfTextAtSize(
+//             product.name,
+//             nameFontSize
+//           );
+//         }
+
+//         page.drawText(product.name, {
+//           x: x + 5,
+//           y: y + 3,
+//           size: nameFontSize,
+//           font: timesRomanFont,
+//           color: rgb(0, 0, 0),
+//           maxWidth: cellWidth - 10,
+//         });
+
+//         // Draw horizontal line
+//         page.drawLine({
+//           start: { x, y: y + 18 },
+//           end: { x: x + cellWidth, y: y + 18 },
+//           thickness: 1,
+//           color: rgb(0.96, 0.24, 0.02),
+//         });
+
+//         // Draw vertical line
+//         page.drawLine({
+//           start: { x: x + cellWidth / 2, y: y + 18 },
+//           end: { x: x + cellWidth / 2, y: y + 36 },
+//           thickness: 1,
+//           color: rgb(0.96, 0.24, 0.02),
+//         });
+
+//         if (priceFlag) {
+//           const basePrice = parseFloat(product.price);
+//           const adjustedPrice = basePrice + (basePrice * priceAdjustment) / 100;
+//           const roundedPrice = Math.round(adjustedPrice);
+
+//           page.drawText(`Rs.${roundedPrice}/-`, {
+//             x: x + 5,
+//             y: y + 21,
+//             size: 12,
+//             font: timesRomanFont,
+//             color: rgb(0.17, 0.83, 0.04),
+//             maxWidth: cellWidth / 2 - 40,
+//           });
+//         }
+
+//         page.drawText(product.details, {
+//           x: x + cellWidth / 2 + 5,
+//           y: y + 21,
+//           size: 12,
+//           font: timesRomanFont,
+//           color: rgb(0.17, 0.83, 0.04),
+//           maxWidth: cellWidth / 2 - 10,
+//         });
+
+//         // Draw bottom horizontal line
+//         page.drawLine({
+//           start: { x, y: y + 36 },
+//           end: { x: x + cellWidth, y: y + 36 },
+//           thickness: 1,
+//           color: rgb(0.96, 0.24, 0.02),
+//         });
+
+//         // Draw product image
+//         if (product.image_url) {
+//           try {
+//             const imageBuffer = await axios.get(product.image_url, {
+//               responseType: "arraybuffer",
+//             });
+//             const image = await pdfDoc.embedPng(imageBuffer.data);
+//             page.drawImage(image, {
+//               x: x + 20,
+//               y: y + 40,
+//               width: cellWidth - 40,
+//               height: 170,
+//             });
+//           } catch {
+//             page.drawText("[Image Not Available]", {
+//               x: x + 5,
+//               y: y + 90,
+//               size: 10,
+//               font: timesRomanFont,
+//               color: rgb(0, 0, 0),
+//             });
+//           }
+//         }
+
+//         x += cellWidth + margin;
+
+//         if ((i + 1) % 3 === 0) {
+//           x = 50;
+//           y += cellHeight + margin;
+//         }
+//       }
+
+//       page.drawText(`Page ${currentPage} of ${totalPages}`, {
+//         x:
+//           (width -
+//             timesRomanFont.widthOfTextAtSize(
+//               `Page ${currentPage} of ${totalPages}`,
+//               10
+//             )) /
+//           2,
+//         y: 30,
+//         size: 10,
+//         font: timesRomanFont,
+//         color: rgb(0.5, 0.5, 0.5),
+//       });
+//     };
+
+//     for (const subcat of subcategories.data) {
+//       try {
+//         const response = await fetch(
+//           `${process.env.REACT_APP_SERVER_URL}/api/products/productfilter?subCategoryId=${subcat.id}&minPrice=${minPrice}&maxPrice=${maxPrice}`
+//         );
+
+//         if (!response.ok) {
+//           throw new Error("Failed to fetch product count");
+//         }
+
+//         const products = await response.json();
+//         if (products.length > 0) {
+//           await renderProducts(products, subcat.name);
+//         } else {
+//           continue;
+//         }
+//       } catch (error) {
+//         console.error("Error fetching products:", error);
+//       }
+//     }
+
+//     const pdfBytes = await pdfDoc.save();
+//     const blob = new Blob([pdfBytes], { type: "application/pdf" });
+//     const url = URL.createObjectURL(blob);
+
+//     const link = document.createElement("a");
+//     link.href = url;
+//     const fileName = `${selectedCategory.name}-catalog.pdf`;
+//     link.setAttribute("download", fileName);
+//     document.body.appendChild(link);
+//     link.click();
+//     document.body.removeChild(link);
+
+//     setSuccessMessage("Catalog downloaded successfully!");
+//     setIsLoading(false);
+//   };
+
+//   // const handlePrint = async () => {
+//   //   if (!categoryName) {
+//   //     alert("Please select a category.");
+//   //     return;
+//   //   }
+//   //   const selectedCategory = categories.find(
+//   //     (cat) => String(cat.id) === String(categoryName)
+//   //   );
+
+//   //   setIsLoading(true);
+//   //   setSuccessMessage(""); // Clear previous success message
+
+//   //   const subcategories = await axios.get(
+//   //     `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${categoryName}`
+//   //   );
+
+//   //   console.log(subcategories.data);
+
+//   //   if (subcategories.length === 0) {
+//   //     alert({ error: "No subcategories found" });
+//   //   }
+
+//   //   const doc = await PDFDocument.create({
+//   //     margins: {
+//   //       top: 10.4,
+//   //       bottom: 21.4,
+//   //       left: 21.4,
+//   //       right: 21.4,
+//   //     },
+//   //     size: [595.45, 841.68],
+//   //   });
+
+//   //   // const filename = `catalog.pdf`;
+
+//   //   const cellWidth = 180;
+//   //   const cellHeight = 220;
+//   //   const margin = 5;
+//   //   // let totalProducts = 0;
+//   //   // let processedProducts = 0;
+
+//   //   const calcTotalPage = async () => {
+//   //     let totalPages = 0;
+
+//   //     for (const subcat of subcategories.data) {
+//   //       try {
+//   //         const response = await fetch(
+//   //           `${process.env.REACT_APP_SERVER_URL}/api/products/productcount?subCategoryId=${subcat.id}&minPrice=${minPrice}&maxPrice=${maxPrice}`
+//   //         );
+
+//   //         if (!response.ok) {
+//   //           throw new Error("Failed to fetch product count");
+//   //         }
+
+//   //         const productCountResult = await response.json();
+
+//   //         if (!productCountResult.length) continue; // Handle empty response
+
+//   //         const productCount = productCountResult[0].product_count;
+
+//   //         const pagesForSubcategory = Math.ceil(productCount / 9); // 9 products per page
+
+//   //         totalPages += pagesForSubcategory;
+//   //       } catch (error) {
+//   //         console.error("Error fetching product count:", error);
+//   //       }
+//   //     }
+
+//   //     return totalPages;
+//   //   };
+
+//   //   let totalPages;
+
+//   //   // totalPages = await calcTotalPage();
+
+//   //   // console.log(totalPages);
+
+//   //   const renderHeader = () => {
+//   //     doc.addPage();
+//   //     doc.font("./fonts/Bold.ttf");
+//   //     doc
+//   //       .fontSize(10)
+//   //       .fillColor("red")
+//   //       .text(`Rates List applicable from ${dateApplicaple}`, {
+//   //         align: "center",
+//   //       });
+//   //     doc.moveDown(0.2);
+
+//   //     doc
+//   //       .fillColor("#0c4edd")
+//   //       .fontSize(26)
+//   //       .text(`${companyName}`, { align: "center", underline: true });
+
+//   //     doc
+//   //       .fillColor("#2cd40a")
+//   //       .fontSize(18)
+//   //       .text(`${mobileNumber}`, { align: "center" });
+//   //     doc
+//   //       .fontSize(10)
+//   //       .fillColor("red")
+//   //       .text(`(${hintText})`, { align: "center", highlight: true });
+
+//   //     // doc.moveDown();
+//   //   };
+
+//   //   let currentPage = 0;
+
+//   //   const renderProducts = async (products, subcategoryName) => {
+//   //     let subpageno = 1;
+//   //     // doc.addPage();
+//   //     let x = doc.page.margins.left;
+//   //     let y = doc.page.margins.top + 113;
+//   //     currentPage += 1;
+//   //     // renderFooter(doc, currentPage, totalPages);
+//   //     renderHeader();
+
+//   //     doc
+//   //       .fillColor("black")
+//   //       .moveTo(x, y - 150)
+//   //       .fontSize(15)
+//   //       .text(`${subcategoryName}`, { align: "center" });
+
+//   //     doc
+//   //       .moveTo(x, y - 144)
+//   //       .fontSize(10)
+//   //       .text(`${subpageno}`, { align: "center" })
+//   //       .moveDown();
+
+//   //     for (let i = 0; i < products.length; i++) {
+//   //       const product = products[i];
+
+//   //       if (y + cellHeight > doc.page.height - doc.page.margins.bottom) {
+//   //         doc.moveDown();
+//   //         doc
+//   //           .fontSize(10)
+//   //           .fillColor("grey")
+//   //           .text(`Page ${currentPage} of ${totalPages}`, 0, 805, {
+//   //             align: "center",
+//   //           });
+//   //         subpageno = subpageno + 1;
+//   //         currentPage += 1;
+//   //         renderHeader();
+
+//   //         x = doc.page.margins.left;
+//   //         y = doc.page.margins.top + 113;
+//   //         doc
+//   //           .fillColor("black")
+//   //           .moveTo(x, y - 150)
+//   //           .fontSize(15)
+//   //           .text(`${subcategoryName}`, { align: "center" });
+//   //         doc
+//   //           .moveTo(x, y - 144)
+//   //           .fontSize(10)
+//   //           .text(`${subpageno}`, { align: "center" })
+//   //           .moveDown();
+//   //       }
+
+//   //       // Draw product cell
+//   //       doc
+//   //         .strokeColor("#0c4edd")
+//   //         .lineWidth(2)
+//   //         .rect(x, y, cellWidth, cellHeight)
+//   //         .stroke();
+
+//   //       // Dynamically adjust font size for product name
+//   //       let nameFontSize = 12;
+//   //       doc.fontSize(nameFontSize);
+//   //       while (
+//   //         doc.widthOfString(product.name) > cellWidth - 12 &&
+//   //         nameFontSize > 6
+//   //       ) {
+//   //         nameFontSize -= 0.5;
+//   //         doc.fontSize(nameFontSize);
+//   //       }
+
+//   //       doc.fillColor("black").text(product.name, x + 5, y + 3, {
+//   //         width: cellWidth - 10,
+//   //         align: "center",
+//   //       });
+
+//   //       const lineY = y + 18; // Adjust the Y-coordinate for the horizontal line
+//   //       doc
+//   //         .strokeColor("#f63c05")
+//   //         .lineWidth(1)
+//   //         .moveTo(x, lineY)
+//   //         .lineTo(x + cellWidth, lineY)
+//   //         .stroke();
+
+//   //       //Price Detail
+//   //       const eachcellWidth = 180; // Cell width
+
+//   //       // Draw vertical line to separate the two sections
+//   //       doc
+//   //         .strokeColor("#f63c05")
+//   //         .lineWidth(1)
+//   //         .moveTo(x - 35 + eachcellWidth / 2, y + 18) // Starting point for the vertical line
+//   //         .lineTo(x - 35 + eachcellWidth / 2, y + 36) // Ending point for the vertical line
+//   //         .stroke();
+
+//   //       if (priceFlag) {
+//   //         // Convert product.price to a number and calculate the adjusted price
+//   //         const basePrice = parseFloat(product.price);
+//   //         const adjustedPrice = basePrice + (basePrice * priceAdjustment) / 100;
+
+//   //         // Round the adjusted price to an integer
+//   //         const roundedPrice = Math.round(adjustedPrice);
+
+//   //         doc
+//   //           .fillColor("#2cd40a")
+//   //           .fontSize(12)
+//   //           .text(`Rs.${roundedPrice}/-`, x + 5, y + 21, {
+//   //             width: eachcellWidth / 2 - 40,
+//   //             align: "center",
+//   //           });
+//   //       }
+
+//   //       // Center and print details in the right section
+//   //       doc
+//   //         .fillColor("#2cd40a")
+//   //         .fontSize(12)
+//   //         .text(product.details, x - 35 + eachcellWidth / 2, y + 21, {
+//   //           width: eachcellWidth / 2 + 30,
+//   //           align: "center",
+//   //         });
+//   //       const lineYBI = y + 36; // Adjust the Y-coordinate for the horizontal line
+//   //       doc
+//   //         .strokeColor("#f63c05")
+//   //         .lineWidth(1)
+//   //         .moveTo(x, lineYBI)
+//   //         .lineTo(x + cellWidth, lineYBI)
+//   //         .stroke();
+
+//   //       // Draw product image
+
+//   //       if (product.image_url) {
+//   //         try {
+//   //           const imageBuffer = await axios.get(product.image_url, {
+//   //             responseType: "arraybuffer",
+//   //           });
+//   //           doc.image(Buffer.from(imageBuffer.data), x + 20, y + 40, {
+//   //             width: cellWidth - 40,
+//   //             height: 170,
+//   //             align: "center",
+//   //           });
+//   //         } catch {
+//   //           doc.text("[Image Not Available]", x + 5, y + 90);
+//   //         }
+//   //       }
+
+//   //       x += cellWidth + margin;
+
+//   //       if ((i + 1) % 3 === 0) {
+//   //         x = doc.page.margins.left;
+//   //         y += cellHeight + margin;
+//   //       }
+//   //     }
+
+//   //     doc
+//   //       .fontSize(10)
+//   //       .fillColor("grey")
+//   //       .text(`Page ${currentPage} of ${totalPages}`, 0, 805, {
+//   //         align: "center",
+//   //       });
+//   //   };
+
+//   //   totalPages = await calcTotalPage();
+
+//   //   for (const subcat of subcategories.data) {
+//   //     try {
+//   //       const response = await fetch(
+//   //         `${process.env.REACT_APP_SERVER_URL}/api/products/productfilter?subCategoryId=${subcat.id}&minPrice=${minPrice}&maxPrice=${maxPrice}`
+//   //       );
+
+//   //       if (!response.ok) {
+//   //         throw new Error("Failed to fetch product count");
+//   //       }
+
+//   //       const products = await response.json();
+//   //       console.log(products);
+
+//   //       if (products.length > 0) {
+//   //         await renderProducts(products, subcat.name);
+//   //       } else {
+//   //         continue;
+//   //       }
+
+//   //       // if (!productCountResult.length) continue; // Handle empty response
+//   //     } catch (error) {
+//   //       console.error("Error fetching products:", error);
+//   //     }
+//   //   }
+//   //   doc.end();
+
+//   //   const url = URL.createObjectURL(
+//   //     new Blob([doc], { type: "application/pdf" })
+//   //   );
+
+//   //   const link = document.createElement("a");
+//   //   link.href = url;
+//   //   const fileName = `${selectedCategory.name}-catalog.pdf`;
+
+//   //   link.setAttribute("download", fileName);
+//   //   document.body.appendChild(link);
+//   //   link.click();
+//   //   document.body.removeChild(link);
+
+//   //   setSuccessMessage("Catalog downloaded successfully!");
+//   //   setIsLoading(false);
+//   // };
+
+//   return (
+//     <div className="Admin-parent">
+//       <div className="">
+//         <PrintCatNav />
+//       </div>
+//       <div className="container my-4">
+//         <div className="card shadow-sm">
+//           <div className="card-body">
+//             <h2 className="card-title text-center mb-4">Print Catalog</h2>
+//             {isLoading && (
+//               <div className="loading-overlay">
+//                 <div className="spinner-border text-primary" role="status">
+//                   <span className="visually-hidden">Loading...</span>
+//                 </div>
+//                 <p>Generating and downloading catalog...</p>
+//               </div>
+//             )}
+//             <form>
+//               <div className="row mb-4">
+//                 <div className="col-md-6">
+//                   <label htmlFor="categoryName" className="form-label">
+//                     Select Category:
+//                   </label>
+//                   <select
+//                     id="categoryName"
+//                     className="form-select"
+//                     onChange={(e) => setCategoryName(e.target.value)}
+//                     disabled={isLoading}
+//                   >
+//                     <option value="">Select Category</option>
+//                     {categories.map((cat) => (
+//                       <option key={cat.id} value={cat.id}>
+//                         {cat.name}
+//                       </option>
+//                     ))}
+//                   </select>
+//                 </div>
+//               </div>
+//               <div className="row mb-4">
+//                 <div className="col-md-6">
+//                   <label htmlFor="companyName" className="form-label">
+//                     Company Name:
+//                   </label>
+//                   <input
+//                     type="text"
+//                     id="companyName"
+//                     className="form-control"
+//                     value={companyName}
+//                     onChange={(e) => setCompanyName(e.target.value)}
+//                     required
+//                     disabled={isLoading}
+//                   />
+//                 </div>
+//                 <div className="col-md-6">
+//                   <label htmlFor="mobileNumber" className="form-label">
+//                     Mobile Number:
+//                   </label>
+//                   <input
+//                     type="text"
+//                     id="mobileNumber"
+//                     className="form-control"
+//                     value={mobileNumber}
+//                     onChange={(e) => setMobileNumber(e.target.value)}
+//                     required
+//                     disabled={isLoading}
+//                   />
+//                 </div>
+//               </div>
+
+//               <div className="row mb-4">
+//                 <div className="col-md-6">
+//                   <label htmlFor="dateApplicable" className="form-label">
+//                     Date Applicable:
+//                   </label>
+//                   <input
+//                     type="text"
+//                     id="dateApplicable"
+//                     className="form-control"
+//                     value={dateApplicaple}
+//                     onChange={(e) => setDateApplicaple(e.target.value)}
+//                     disabled={isLoading}
+//                   />
+//                 </div>
+
+//                 <div className="col-md-6">
+//                   <label htmlFor="hintText" className="form-label">
+//                     Hint Text:
+//                   </label>
+//                   <input
+//                     type="text"
+//                     id="hintText"
+//                     className="form-control"
+//                     value={hintText}
+//                     onChange={(e) => setHintText(e.target.value)}
+//                     placeholder="Enter hint text"
+//                     disabled={isLoading}
+//                   />
+//                 </div>
+//               </div>
+
+//               <div className="row mb-4">
+//                 <div className="col-md-6">
+//                   <div className="form-check">
+//                     <input
+//                       type="checkbox"
+//                       className="form-check-input"
+//                       id="priceFlag"
+//                       checked={priceFlag}
+//                       onChange={(e) => setPriceFlag(e.target.checked)}
+//                       disabled={isLoading}
+//                     />
+//                     <label className="form-check-label" htmlFor="priceFlag">
+//                       Show Prices
+//                     </label>
+//                   </div>
+//                 </div>
+
+//                 <div className="col-md-6">
+//                   <label htmlFor="priceAdjustment" className="form-label">
+//                     Price Adjustment (%):
+//                   </label>
+//                   <input
+//                     type="number"
+//                     id="priceAdjustment"
+//                     className="form-control"
+//                     value={priceAdjustment}
+//                     onChange={(e) => setPriceAdjustment(e.target.value)}
+//                     placeholder="Enter percentage (e.g., 10 or -10)"
+//                     disabled={isLoading}
+//                   />
+//                 </div>
+//               </div>
+
+//               <div className="row mb-4">
+//                 <div className="col-md-6">
+//                   <label htmlFor="minPrice" className="form-label">
+//                     Minimum Price:
+//                   </label>
+//                   <input
+//                     type="number"
+//                     id="minPrice"
+//                     className="form-control"
+//                     value={minPrice}
+//                     onChange={(e) => setMinPrice(e.target.value)}
+//                     placeholder="Enter minimum price"
+//                     disabled={isLoading}
+//                   />
+//                 </div>
+//                 <div className="col-md-6">
+//                   <label htmlFor="maxPrice" className="form-label">
+//                     Maximum Price:
+//                   </label>
+//                   <input
+//                     type="number"
+//                     id="maxPrice"
+//                     className="form-control"
+//                     value={maxPrice}
+//                     onChange={(e) => setMaxPrice(e.target.value)}
+//                     placeholder="Enter maximum price"
+//                     disabled={isLoading}
+//                   />
+//                 </div>
+//               </div>
+
+//               <div className="text-center">
+//                 <button
+//                   type="button"
+//                   className="btn btn-primary"
+//                   onClick={handlePrint}
+//                   disabled={isLoading}
+//                 >
+//                   Print Catalog
+//                 </button>
+//               </div>
+//             </form>
+//             {successMessage && (
+//               <div className="alert alert-success mt-4" role="alert">
+//                 {successMessage}
+//               </div>
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default PrintCatalog;
+
+// //OLD WAY
+// // axios
+// //   .post(
+// //     `${process.env.REACT_APP_SERVER_URL}/api/print-catalog`,
+// //     {
+// //       categoryId: categoryName,
+// //       companyName,
+// //       mobileNumber,
+// //       dateApplicaple,
+// //       priceFlag,
+// //       priceAdjustment, // Send price adjustment value to backend
+// //       minPrice, // Include min price
+// //       maxPrice, // Include max price
+// //       hintText,
+// //     },
+// //     { responseType: "blob" }
+// //   )
+// //   .then(async (res) => {
+// //     try {
+// //       const arrayBuffer = await res.data.arrayBuffer();
+
+// //       const pdfDoc = await PDFDocument.load(arrayBuffer);
+
+// //       pdfDoc.removePage(0);
+
+// //       const modifiedPdfBytes = await pdfDoc.save();
+
+// //       const url = URL.createObjectURL(
+// //         new Blob([modifiedPdfBytes], { type: "application/pdf" })
+// //       );
+
+// //       const link = document.createElement("a");
+// //       link.href = url;
+// //       const fileName = `${selectedCategory.name}-catalog.pdf`;
+
+// //       link.setAttribute("download", fileName);
+// //       document.body.appendChild(link);
+// //       link.click();
+// //       document.body.removeChild(link);
+
+// //       setSuccessMessage("Catalog downloaded successfully!");
+// //     } catch (error) {
+// //       console.error("Error processing PDF:", error);
+// //       alert("Failed to modify the catalog PDF.");
+// //     }
+// //   })
+// //   .catch((err) => {
+// //     console.error("Error generating catalog:", err);
+// //     alert("Failed to generate catalog.");
+// //   })
+// //   .finally(() => {
+// //     setIsLoading(false);
+// //   });
+
+// // import React, { useEffect, useState } from "react";
+// // import { PDFDocument, rgb } from "pdf-lib";
+// // import axios from "axios";
+// // import PrintCatNav from "./PrintCatNav";
+
+// // const PrintCatalog = () => {
+// //   const [categoryName, setCategoryName] = useState("");
+// //   const [categories, setCategories] = useState([]);
+// //   const [companyName, setCompanyName] = useState("SHIV ENTERPRISES");
+// //   const [mobileNumber, setMobileNumber] = useState(
+// //     "9958660231, 7838146412, 9717437131"
+// //   );
+// //   const [dateApplicaple, setDateApplicaple] = useState("1st April 2024");
+// //   const [priceFlag, setPriceFlag] = useState(true); // Whether to show prices
+// //   const [priceAdjustment, setPriceAdjustment] = useState(0); // Percentage adjustment
+// //   const [minPrice, setMinPrice] = useState(0); // Minimum price
+// //   const [maxPrice, setMaxPrice] = useState(1000); // Maximum price
+// //   const [hintText, setHintText] = useState("Trademark:-Vidhata");
+// //   const [isLoading, setIsLoading] = useState(false); // Loading state
+// //   const [successMessage, setSuccessMessage] = useState(""); // Success message
+
+// //   useEffect(() => {
+// //     fetchCategories();
+// //   }, []);
+
+// //   const fetchCategories = async () => {
+// //     try {
+// //       const response = await axios.get(
+// //         `${process.env.REACT_APP_SERVER_URL}/api/categories`
+// //       );
+// //       setCategories(response.data);
+// //     } catch (error) {
+// //       console.error("Error fetching categories:", error);
+// //     }
+// //   };
+
+// //   const handlePrint = async () => {
+// //     if (!categoryName) {
+// //       alert("Please select a category.");
+// //       return;
+// //     }
+
+// //     setIsLoading(true);
+// //     setSuccessMessage(""); // Clear previous success message
+
+// //     try {
+// //       // Fetch subcategories and products for the selected category
+// //       const subcategoriesResponse = await axios.get(
+// //         `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${categoryName}`
+// //       );
+// //       const subcategories = subcategoriesResponse.data;
+
+// //       if (subcategories.length === 0) {
+// //         alert("No subcategories found for the selected category.");
+// //         return;
+// //       }
+
+// //       // Create a new PDF document
+// //       const pdfDoc = await PDFDocument.create();
+// //       const page = pdfDoc.addPage([595.45, 841.68]); // A4 size
+
+// //       // Render header
+// //       const { height } = page.getSize();
+// //       page.drawText(`Rates List applicable from ${dateApplicaple}`, {
+// //         x: 50,
+// //         y: height - 50,
+// //         size: 10,
+// //         color: rgb(1, 0, 0),
+// //       });
+// //       page.drawText(companyName, {
+// //         x: 50,
+// //         y: height - 80,
+// //         size: 26,
+// //         color: rgb(0, 0.3, 0.9),
+// //         underline: true,
+// //       });
+// //       page.drawText(mobileNumber, {
+// //         x: 50,
+// //         y: height - 120,
+// //         size: 18,
+// //         color: rgb(0.2, 0.8, 0.1),
+// //       });
+// //       page.drawText(`(${hintText})`, {
+// //         x: 50,
+// //         y: height - 140,
+// //         size: 10,
+// //         color: rgb(1, 0, 0),
+// //       });
+
+// //       // Render products for each subcategory
+// //       let y = height - 200; // Starting Y position for products
+// //       for (const subcat of subcategories) {
+// //         const productsResponse = await axios.get(
+// //           `${process.env.REACT_APP_SERVER_URL}/api/products?subcategoryId=${subcat.id}&minPrice=${minPrice}&maxPrice=${maxPrice}`
+// //         );
+// //         const products = productsResponse.data;
+
+// //         if (products.length > 0) {
+// //           page.drawText(subcat.name, {
+// //             x: 50,
+// //             y,
+// //             size: 15,
+// //             color: rgb(0, 0, 0),
+// //           });
+// //           y -= 30;
+
+// //           for (const product of products) {
+// //             if (y < 50) {
+// //               // Add a new page if the current page is full
+// //               y = height - 50;
+// //               pdfDoc.addPage([595.45, 841.68]);
+// //             }
+
+// //             page.drawText(product.name, {
+// //               x: 50,
+// //               y,
+// //               size: 12,
+// //               color: rgb(0, 0, 0),
+// //             });
+// //             y -= 20;
+
+// //             if (priceFlag) {
+// //               const basePrice = parseFloat(product.price);
+// //               const adjustedPrice =
+// //                 basePrice + (basePrice * priceAdjustment) / 100;
+// //               const roundedPrice = Math.round(adjustedPrice);
+// //               page.drawText(`Rs.${roundedPrice}/-`, {
+// //                 x: 300,
+// //                 y,
+// //                 size: 12,
+// //                 color: rgb(0.2, 0.8, 0.1),
+// //               });
+// //             }
+
+// //             y -= 20;
+// //           }
+// //         }
+// //       }
+
+// //       // Save the PDF
+// //       const pdfBytes = await pdfDoc.save();
+// //       const blob = new Blob([pdfBytes], { type: "application/pdf" });
+// //       const url = URL.createObjectURL(blob);
+
+// //       // Download the PDF
+// //       const link = document.createElement("a");
+// //       link.href = url;
+// //       link.setAttribute("download", `${categoryName}-catalog.pdf`);
+// //       document.body.appendChild(link);
+// //       link.click();
+// //       document.body.removeChild(link);
+
+// //       setSuccessMessage("Catalog downloaded successfully!");
+// //     } catch (error) {
+// //       console.error("Error generating catalog:", error);
+// //       alert("Failed to generate catalog.");
+// //     } finally {
+// //       setIsLoading(false);
+// //     }
+// //   };
+
+// //   return (
+// //     <div className="Admin-parent">
+// //       <div className="">
+// //         <PrintCatNav />
+// //       </div>
+// //       <div className="container my-4">
+// //         <div className="card shadow-sm">
+// //           <div className="card-body">
+// //             <h2 className="card-title text-center mb-4">Print Catalog</h2>
+// //             {isLoading && (
+// //               <div className="loading-overlay">
+// //                 <div className="spinner-border text-primary" role="status">
+// //                   <span className="visually-hidden">Loading...</span>
+// //                 </div>
+// //                 <p>Generating and downloading catalog...</p>
+// //               </div>
+// //             )}
+
+// //             {/* Form fields remain the same */}
+// //             <form>
+// //               <div className="row mb-4">
+// //                 <div className="col-md-6">
+// //                   <label htmlFor="categoryName" className="form-label">
+// //                     Select Category:
+// //                   </label>
+// //                   <select
+// //                     id="categoryName"
+// //                     className="form-select"
+// //                     onChange={(e) => setCategoryName(e.target.value)}
+// //                     disabled={isLoading}
+// //                   >
+// //                     <option value="">Select Category</option>
+// //                     {categories.map((cat) => (
+// //                       <option key={cat.id} value={cat.id}>
+// //                         {cat.name}
+// //                       </option>
+// //                     ))}
+// //                   </select>
+// //                 </div>
+// //               </div>
+// //               <div className="row mb-4">
+// //                 <div className="col-md-6">
+// //                   <label htmlFor="companyName" className="form-label">
+// //                     Company Name:
+// //                   </label>
+// //                   <input
+// //                     type="text"
+// //                     id="companyName"
+// //                     className="form-control"
+// //                     value={companyName}
+// //                     onChange={(e) => setCompanyName(e.target.value)}
+// //                     required
+// //                     disabled={isLoading}
+// //                   />
+// //                 </div>
+// //                 <div className="col-md-6">
+// //                   <label htmlFor="mobileNumber" className="form-label">
+// //                     Mobile Number:
+// //                   </label>
+// //                   <input
+// //                     type="text"
+// //                     id="mobileNumber"
+// //                     className="form-control"
+// //                     value={mobileNumber}
+// //                     onChange={(e) => setMobileNumber(e.target.value)}
+// //                     required
+// //                     disabled={isLoading}
+// //                   />
+// //                 </div>
+// //               </div>
+
+// //               <div className="row mb-4">
+// //                 <div className="col-md-6">
+// //                   <label htmlFor="dateApplicable" className="form-label">
+// //                     Date Applicable:
+// //                   </label>
+// //                   <input
+// //                     type="text"
+// //                     id="dateApplicable"
+// //                     className="form-control"
+// //                     value={dateApplicaple}
+// //                     onChange={(e) => setDateApplicaple(e.target.value)}
+// //                     disabled={isLoading}
+// //                   />
+// //                 </div>
+
+// //                 <div className="col-md-6">
+// //                   <label htmlFor="hintText" className="form-label">
+// //                     Hint Text:
+// //                   </label>
+// //                   <input
+// //                     type="text"
+// //                     id="hintText"
+// //                     className="form-control"
+// //                     value={hintText}
+// //                     onChange={(e) => setHintText(e.target.value)}
+// //                     placeholder="Enter hint text"
+// //                     disabled={isLoading}
+// //                   />
+// //                 </div>
+// //               </div>
+
+// //               <div className="row mb-4">
+// //                 <div className="col-md-6">
+// //                   <div className="form-check">
+// //                     <input
+// //                       type="checkbox"
+// //                       className="form-check-input"
+// //                       id="priceFlag"
+// //                       checked={priceFlag}
+// //                       onChange={(e) => setPriceFlag(e.target.checked)}
+// //                       disabled={isLoading}
+// //                     />
+// //                     <label className="form-check-label" htmlFor="priceFlag">
+// //                       Show Prices
+// //                     </label>
+// //                   </div>
+// //                 </div>
+
+// //                 <div className="col-md-6">
+// //                   <label htmlFor="priceAdjustment" className="form-label">
+// //                     Price Adjustment (%):
+// //                   </label>
+// //                   <input
+// //                     type="number"
+// //                     id="priceAdjustment"
+// //                     className="form-control"
+// //                     value={priceAdjustment}
+// //                     onChange={(e) => setPriceAdjustment(e.target.value)}
+// //                     placeholder="Enter percentage (e.g., 10 or -10)"
+// //                     disabled={isLoading}
+// //                   />
+// //                 </div>
+// //               </div>
+
+// //               <div className="row mb-4">
+// //                 <div className="col-md-6">
+// //                   <label htmlFor="minPrice" className="form-label">
+// //                     Minimum Price:
+// //                   </label>
+// //                   <input
+// //                     type="number"
+// //                     id="minPrice"
+// //                     className="form-control"
+// //                     value={minPrice}
+// //                     onChange={(e) => setMinPrice(e.target.value)}
+// //                     placeholder="Enter minimum price"
+// //                     disabled={isLoading}
+// //                   />
+// //                 </div>
+// //                 <div className="col-md-6">
+// //                   <label htmlFor="maxPrice" className="form-label">
+// //                     Maximum Price:
+// //                   </label>
+// //                   <input
+// //                     type="number"
+// //                     id="maxPrice"
+// //                     className="form-control"
+// //                     value={maxPrice}
+// //                     onChange={(e) => setMaxPrice(e.target.value)}
+// //                     placeholder="Enter maximum price"
+// //                     disabled={isLoading}
+// //                   />
+// //                 </div>
+// //               </div>
+
+// //               {/* <div className="text-center">
+// //                   <button
+// //                     type="button"
+// //                     className="btn btn-primary"
+// //                     onClick={handlePrint}
+// //                     disabled={isLoading}
+// //                   >
+// //                     Print Catalog
+// //                   </button>
+// //                 </div>
+// //               </form> */}
+// //               <div className="text-center">
+// //                 <button
+// //                   type="button"
+// //                   className="btn btn-primary"
+// //                   onClick={handlePrint}
+// //                   disabled={isLoading}
+// //                 >
+// //                   Print Catalog
+// //                 </button>
+// //               </div>
+// //             </form>
+// //             {successMessage && (
+// //               <div className="alert alert-success mt-4" role="alert">
+// //                 {successMessage}
+// //               </div>
+// //             )}
+// //           </div>
+// //         </div>
+// //       </div>
+// //     </div>
+// //   );
+// // };
+
+// // export default PrintCatalog;
