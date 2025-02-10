@@ -41,7 +41,7 @@ const ProductCards = ({
                 removeFromCart(product);
               }
             }}
-            className="btn btn-danger btn-sm"
+            className="quantity-btn-product"
           >
             -
           </button>
@@ -70,7 +70,7 @@ const ProductCards = ({
               e.stopPropagation();
               addToCart(product);
             }}
-            className="btn btn-warning btn-sm"
+            className="quantity-btn-product"
           >
             +
           </button>

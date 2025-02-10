@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from "react";
+import { FiArrowLeft, FiArrowRight, FiX } from "react-icons/fi";
 import "./ProductModal.css";
 
 const ProductModal = ({
@@ -34,50 +35,48 @@ const ProductModal = ({
   const cartProduct = cartItems.find((item) => item.id === modalProduct.id);
 
   return (
-    <div
-      className="modal show"
-      style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
-    >
-      <div className="modal-dialog modal-lg">
-        <div
-          className="modal-content"
-          ref={modalRef}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          <div className="modal-header">
-            <h3 className="modal-title">{modalProduct.name}</h3>
-            <button
-              type="button"
-              className="btn-close"
-              onClick={closeModal}
-            ></button>
-          </div>
-          <div className="modal-body">
-            <div className="row">
-              <div className="Model-image col-md-auto">
-                <img
-                  src={modalProduct.image_url}
-                  alt={modalProduct.name}
-                  className="img-fluid"
-                />
-              </div>
-              <div className="col-md-auto">
-                <div className="Model-price">
-                  <h5>Price:</h5>
-                  <div className="Model-price-value">₹{modalProduct.price}</div>
-                </div>
-                <div className="Model-description">
-                  <h5>{modalProduct.details}</h5>
-                </div>
-              </div>
-            </div>
+    <div className="modal-overlay">
+      <div
+        className="modal-container"
+        ref={modalRef}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <button className="close-btn" onClick={closeModal}>
+          <FiX size={24} />
+        </button>
+
+        <div className="modal-navigation">
+          <button className="nav-arrow prev" onClick={handlePreviousProduct}>
+            <FiArrowLeft size={32} />
+          </button>
+          <button className="nav-arrow next" onClick={handleNextProduct}>
+            <FiArrowRight size={32} />
+          </button>
+        </div>
+
+        <div className="modal-content">
+          <div className="Modal-product-image">
+            <img
+              className="Modal-product-img"
+              src={modalProduct.image_url}
+              alt={modalProduct.name}
+              loading="lazy"
+            />
           </div>
 
-          <div className="modal-footer">
+          <div className="product-details">
+            <h2 className="product-title">{modalProduct.name}</h2>
+            <div className="price-section">
+              <span className="price-label">Price:</span>
+              <span className="price-value">₹{modalProduct.price}</span>
+            </div>
+            <p className="product-description">{modalProduct.details}</p>
+
             {cartProduct ? (
-              <div className="d-flex align-items-center gap-1 mt-3">
+              <div className="quantity-controls">
                 <button
+                  className="quantity-btn btn-negtive"
                   onClick={() => {
                     if (cartProduct.quantity === 1) {
                       handleRemoveFromCart(modalProduct, true);
@@ -85,53 +84,33 @@ const ProductModal = ({
                       handleRemoveFromCart(modalProduct);
                     }
                   }}
-                  className="btn btn-danger btn-sm"
                 >
                   -
                 </button>
-                {/* <button
-                  className="btn btn-success btn-sm d-flex align-items-center"
-                  disabled
-                >
-                  <i className="bi bi-cart me-1"></i>
-                  {cartProduct.quantity}
-                </button> */}
                 <input
-                  onClick={(e) => e.stopPropagation()}
                   type="number"
                   value={cartProduct.quantity}
-                  // min="0"
-                  style={{ width: "60px", textAlign: "center" }}
+                  className="quantity-input"
                   onChange={(e) => {
                     const newQuantity = parseInt(e.target.value);
-
                     setQuantity(cartProduct, newQuantity);
                   }}
                 />
                 <button
+                  className="quantity-btn btn-postive"
                   onClick={() => handleAddToCart(modalProduct)}
-                  className="btn btn-warning btn-sm"
                 >
                   +
                 </button>
               </div>
             ) : (
               <button
+                className="add-to-cart-btn"
                 onClick={() => handleAddToCart(modalProduct)}
-                className="btn btn-warning btn-sm mt-3"
               >
                 Add to Cart
               </button>
             )}
-            <button
-              className="btn btn-secondary me-2"
-              onClick={handlePreviousProduct}
-            >
-              Previous
-            </button>
-            <button className="btn btn-primary" onClick={handleNextProduct}>
-              Next
-            </button>
           </div>
         </div>
       </div>
