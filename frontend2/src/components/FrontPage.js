@@ -30,7 +30,7 @@ function FrontPage() {
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const modalRef = useRef(null);
   const [touchStartX, setTouchStartX] = useState(0);
-  const { cartItems, addToCart, removeFromCart, setQuantity } =
+  const { cartItems, addToCart, removeFromCart, setQuantity, quantityInCart } =
     useContext(CartContext);
 
   // Fetch initial data
@@ -408,7 +408,7 @@ function FrontPage() {
           </div>
         </div>
       </div>
-      <CartButton></CartButton>
+      <CartButton itemCount={quantityInCart()}></CartButton>
 
       <Footer />
 

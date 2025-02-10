@@ -9,10 +9,15 @@ export const CartProvider = ({ children }) => {
       : []
   );
 
+  const quantityInCart = () => {
+    return cartItems.length;
+  };
+
   const addToCart = (item) => {
     const isItemInCart = cartItems.find((cartItem) => cartItem.id === item.id);
 
     if (isItemInCart) {
+      console.log(cartItems);
       setCartItems(
         cartItems.map((cartItem) =>
           cartItem.id === item.id
@@ -87,6 +92,7 @@ export const CartProvider = ({ children }) => {
         clearCart,
         getCartTotal,
         setQuantity,
+        quantityInCart,
       }}
     >
       {children}

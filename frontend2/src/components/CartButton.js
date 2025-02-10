@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import styled from "styled-components";
 
@@ -42,7 +42,7 @@ const ItemCount = styled.span`
   margin-left: 0.5rem;
 `;
 
-const CartButton = ({ itemCount = 0 }) => {
+const CartButton = ({ itemCount }) => {
   return (
     <StyledCartButton href="/cart">
       <CartIcon /> Cart
