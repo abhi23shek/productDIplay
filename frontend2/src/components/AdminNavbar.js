@@ -17,6 +17,13 @@ const AdminNavbar = () => {
         {/* Desktop Version */}
         <div className="container-fluid nav-bar-desktop">
           <div className="leftside_navbar">
+            <div className="navbar-logo" onClick={() => navigate("/")}>
+              <img
+                src={require("./image/ShivCollection-logo4.png")}
+                alt="Company Logo"
+                className="logo-img"
+              />
+            </div>
             <div className="nav-links">
               <button
                 className={`nav-link ${isActive("/admin") ? "active" : ""}`}
