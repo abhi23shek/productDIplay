@@ -9,6 +9,7 @@ import ResponsiveCategoryFilter from "./ResponsiveCategoryFilter";
 import ResponsiveSubcategoryFilter from "./ResponsiveSubcategoryFilter";
 import BarLoader from "react-spinners/BarLoader";
 import ProductModal from "./ProductModal";
+import CartButton from "./CartButton";
 // import Cart from "./Cart";
 
 function FrontPage() {
@@ -407,13 +408,7 @@ function FrontPage() {
           </div>
         </div>
       </div>
-      <a
-        href="/cart"
-        className="btn btn-primary position-fixed bottom-0 end-0 m-3"
-        style={{ zIndex: 9999 }}
-      >
-        MY CART
-      </a>
+      <CartButton></CartButton>
 
       <Footer />
 
