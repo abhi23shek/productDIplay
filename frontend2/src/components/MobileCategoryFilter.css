@@ -67,7 +67,7 @@
   
   /* Filter Panel */
   .mobile-filter-panel {
-    position: fixed;
+    position: relative;
     left: 10px;
     right: 10px;
     background: white;
