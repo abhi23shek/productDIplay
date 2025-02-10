@@ -3,6 +3,39 @@ const pool = require("../config/db");
 
 const router = express.Router();
 
+router.get("/productcount", async (req, res) => {
+  const { subCategoryId, minPrice, maxPrice } = req.query;
+
+  try {
+    const result = await pool`
+              SELECT COUNT(*) AS product_count
+              FROM products
+              WHERE subcategory_id = ${subCategoryId}
+              AND price BETWEEN ${minPrice} AND ${maxPrice}`;
+    res.json(result);
+  } catch (err) {
+    console.error("Error fetching products:", err);
+    res.status(500).json({ error: "Error fetching products" });
+  }
+});
+
+router.get("/productfilter", async (req, res) => {
+  const { subCategoryId, minPrice, maxPrice } = req.query;
+
+  try {
+    const result = await pool`
+              SELECT name, price, details, image_url
+        FROM products
+        WHERE subcategory_id = ${subCategoryId}
+        AND price BETWEEN ${minPrice} AND ${maxPrice}
+        ORDER BY price ASC, name ASC`;
+    res.json(result);
+  } catch (err) {
+    console.error("Error fetching products:", err);
+    res.status(500).json({ error: "Error fetching products" });
+  }
+});
+
 // Fetch all products
 router.get("/", async (req, res) => {
   try {
