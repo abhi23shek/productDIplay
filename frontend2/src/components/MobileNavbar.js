@@ -47,6 +47,16 @@ const MobileNavbar = () => {
               <li>
                 <button
                   className={`M-nav-btn ${
+                    isActive("/FrontPage") ? "M-active" : "M-notactive"
+                  }`}
+                  onClick={() => navigate("/FrontPage")}
+                >
+                  Product
+                </button>
+              </li>
+              <li>
+                <button
+                  className={`M-nav-btn ${
                     isActive("/Contact-us") ? "M-active" : "M-notactive"
                   }`}
                   onClick={() => navigate("/Contact-us")}

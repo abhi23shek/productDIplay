@@ -10,7 +10,7 @@ function ContactUsPage() {
         <Navbar />
       </div>
 
-      <div className="hero-section text-center p-5 bg-primary text-white">
+      <div className="contact-hero-section text-center p-5 bg-primary text-white">
         <h1>Contact Us</h1>
         <p className="mt-3">
           Have questions or feedback? We're here to help! Get in touch with us.

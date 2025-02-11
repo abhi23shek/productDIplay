@@ -31,6 +31,12 @@ const Navbar = () => {
                 Home
               </button>
               <button
+                className={`nav-link ${isActive("/FrontPage") ? "active" : ""}`}
+                onClick={() => navigate("/FrontPage")}
+              >
+                Product
+              </button>
+              <button
                 className={`nav-link ${
                   isActive("/Contact-us") ? "active" : ""
                 }`}
