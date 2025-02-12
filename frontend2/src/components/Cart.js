@@ -39,7 +39,7 @@ export default function Cart() {
     const encodedMessage = encodeURIComponent(message);
 
     // Replace with your admin's WhatsApp number
-    const adminWhatsAppNumber = "916204234534"; // Example number
+    const adminWhatsAppNumber = "919958660231"; // Example number
 
     // Open WhatsApp with the order details
     window.open(

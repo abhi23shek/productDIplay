@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Homepage.css";
 import Navbar from "./Navbar";
@@ -34,6 +34,17 @@ const PrevArrow = ({ onClick }) => (
 );
 
 const Homepage = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -47,7 +58,10 @@ const Homepage = () => {
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
   };
-  const navigate = useNavigate();
+
+  const sliderImages = isMobile
+    ? ["./image/image5.jpg", "./image/image6.jpg", "./image/image7.jpg"]
+    : ["./image/image1.jpg", "./image/image2.jpg", "./image/image3.jpg"];
 
   return (
     <div className="home-container">
@@ -55,19 +69,17 @@ const Homepage = () => {
         <Navbar />
       </div>
 
+      {/* Hero Section */}
       <div className="hero-section">
         <Slider {...sliderSettings} className="full-width-slider">
-          {[3, 2, 1].map((slide) => (
-            <div key={slide} className="hero-slide">
-              <img
-                src={require(`./image/image${slide}.jpg`)}
-                alt={`Collection ${slide}`}
-              />
+          {sliderImages.map((image, index) => (
+            <div key={index} className="hero-slide">
+              <img src={require(`${image}`)} alt={`Collection ${index + 1}`} />
               <div className="slide-content">
-                <h1 className="hero-title">Shiv Collection</h1>
-                <p className="hero-slogon">
+                <div className="hero-title">Shiv Collection</div>
+                <div className="hero-slogan">
                   We Make Better Things In A Better Way
-                </p>
+                </div>
                 <button
                   className="cta-button"
                   onClick={() => navigate("/FrontPage")}
@@ -79,22 +91,71 @@ const Homepage = () => {
           ))}
         </Slider>
       </div>
+      <div className="categories-heading">
+        <h2>Our Categories</h2>
+        <div className="heading-divider"></div>
+      </div>
 
+      {/* Product Showcase Section */}
       <section className="Home-product-showcase">
         <div className="Home-product-card">
-          <img src={require("./image/image1.jpg")} alt="Product 1" />
-          <h3>Classic Style</h3>
-          <p>Timeless designs for everyday wear</p>
+          <img src={require("./image/image1.jpg")} />
+          <div className="product-card-content">
+            <h3>Classic Style</h3>
+            <p>Timeless designs for everyday wear</p>
+          </div>
+          <button
+            className="product-hover-button"
+            onClick={() => navigate("/FrontPage")}
+          >
+            Explore Now
+          </button>
         </div>
         <div className="Home-product-card">
-          <img src={require("./image/image1.jpg")} alt="Product 2" />
-          <h3>Premium Materials</h3>
-          <p>Ethically sourced fabrics</p>
+          <img src={require("./image/image1.jpg")} />
+          <div className="product-card-content">
+            <h3>Classic Styles</h3>
+            <p>Timeless designs for everyday wear</p>
+          </div>
+          <button
+            className="product-hover-button"
+            onClick={() => navigate("/FrontPage")}
+          >
+            Explore Now
+          </button>
         </div>
         <div className="Home-product-card">
-          <img src={require("./image/image1.jpg")} alt="Product 3" />
-          <h3>New Arrivals</h3>
-          <p>Latest collection pieces</p>
+          <img src={require("./image/image1.jpg")} />
+          <div className="product-card-content">
+            <h3>Classic Style</h3>
+            <p>Timeless designs for everyday wear</p>
+          </div>
+          <button
+            className="product-hover-button"
+            onClick={() => navigate("/FrontPage")}
+          >
+            Explore Now
+          </button>
+        </div>
+      </section>
+      <section className="about-section">
+        <div className="about-container">
+          <div className="about-logo">
+            <img
+              src={require("./image/ShivCollection-logo4.png")}
+              alt="Company Logo"
+            />
+          </div>
+          <div className="about-content">
+            <h2>About Shiv Collection</h2>
+            <p className="tagline">Crafting Excellence Since 2008</p>
+            <p className="description">
+              We are dedicated to creating premium quality products that blend
+              traditional craftsmanship with modern design. Our commitment to
+              quality and sustainability drives every aspect of our production
+              process.
+            </p>
+          </div>
         </div>
       </section>
 
