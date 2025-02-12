@@ -1,8 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { CartContext } from "./context/Cart";
-import Navbar from "./Navbar";
+import "./Cart.css"; // Create this CSS file
 
 export default function Cart() {
+  const navigate = useNavigate();
   const {
     cartItems,
     addToCart,
@@ -12,205 +14,148 @@ export default function Cart() {
     setQuantity,
   } = useContext(CartContext);
 
-  const [showOrderForm, setShowOrderForm] = useState(false);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-
   const handlePlaceOrder = () => {
-    if (!name || !phone) {
-      alert("Please enter your name and phone number.");
-      return;
-    }
-    // .map(
-    //   (item) =>
-    //     `${item.category}-${item.name} (Qty: ${item.quantity}) - ₹${
-    //       item.price * item.quantity
-    //     }`
-    // Generate the WhatsApp message
+    if (cartItems.length === 0) return;
+
     const orderDetails = cartItems
-      .map((item) => `${item.category}-${item.name} (Qty: ${item.quantity})`)
+      .map((item) => `${item.category} - ${item.name} (Qty: ${item.quantity})`)
       .join("\n");
 
     const totalAmount = getCartTotal();
-    // const message = `Order Details:\n${orderDetails}\n\nTotal: ₹${totalAmount}\n\nName: ${name}\nPhone: ${phone}`;
-    const message = `Order Details:\n${orderDetails}\n\nName: ${name}\nPhone: ${phone}`;
-
-    // Encode the message for the WhatsApp URL
+    const message = `Order Details:\n${orderDetails}\n\nTotal: ₹${totalAmount}`;
     const encodedMessage = encodeURIComponent(message);
+    const adminWhatsAppNumber = "919958660231"; // Replace with actual number
 
-    // Replace with your admin's WhatsApp number
-    const adminWhatsAppNumber = "919958660231"; // Example number
-
-    // Open WhatsApp with the order details
     window.open(
       `https://wa.me/${adminWhatsAppNumber}?text=${encodedMessage}`,
       "_blank"
     );
-
-    // Clear the cart and close the form
-    // clearCart();
-    setShowOrderForm(false);
+    clearCart();
   };
 
   return (
-    <>
-      <div className="cart-nav">
-        <Navbar></Navbar>
-      </div>
-      <div className="container py-5">
-        <h1 className="text-center mb-4">Your Shopping Cart</h1>
+    <div className="container py-5">
+      <button
+        className="btn btn-secondary back-button mb-4"
+        onClick={() => navigate(-1)}
+      >
+        &larr; Back to Shopping
+      </button>
 
-        <div className="table-responsive">
-          <table className="table table-striped table-bordered">
-            <thead>
-              <tr>
-                <th>Category</th>
-                <th>Image</th>
-                <th>Product Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cartItems.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.category}</td>
-                  <td>
-                    <img
-                      src={item.image_url}
-                      alt={item.title}
-                      className="img-fluid"
-                      style={{ maxWidth: "100px", height: "auto" }}
-                    />
-                  </td>
-                  <td>{item.name}</td>
-                  <td>₹{item.price}</td>
-                  <td>
-                    <div className="d-flex justify-content-between align-items-center">
-                      {/* <button
-                      className="btn btn-secondary btn-sm me-2"
-                      onClick={() => addToCart(item)}
-                    >
-                      +
-                    </button> */}
-                      {/* <span>{item.quantity}</span> */}
-                      <input
-                        type="number"
-                        value={item.quantity}
-                        // min="0"
-                        style={{ width: "60px", textAlign: "center" }}
-                        onChange={(e) => {
-                          const newQuantity = parseInt(e.target.value);
+      <h1 className="text-center mb-4">Your Shopping Cart</h1>
 
-                          setQuantity(item, newQuantity);
-
-                          // if (isNaN(newQuantity)) {
-                          //   removeFromCart(item, true);
-                          // }
-                        }}
-                      />
-                      {/* <button
-                      className="btn btn-secondary btn-sm ms-2"
-                      onClick={() => removeFromCart(item)}
-                    >
-                      -
-                    </button> */}
-                    </div>
-                  </td>
-                  <td>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => removeFromCart(item, true)}
-                    >
-                      Remove
-                    </button>
-                  </td>
+      {cartItems.length > 0 ? (
+        <>
+          <div className="table-responsive">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {cartItems.length > 0 ? (
-          <div className="text-center mt-4">
-            <h3>Total: ₹{getCartTotal()}</h3>
-            <button className="btn btn-danger mt-3" onClick={() => clearCart()}>
-              Clear Cart
-            </button>
-            <button
-              className="btn btn-success mt-3 ms-3"
-              onClick={() => setShowOrderForm(true)}
-            >
-              Place Order
-            </button>
+              </thead>
+              <tbody>
+                {cartItems.map((item) => (
+                  <tr key={item.id}>
+                    <td data-label="Product">
+                      <div className="d-flex align-items-center">
+                        <img
+                          src={item.image_url}
+                          alt={item.name}
+                          className="img-fluid me-3"
+                          style={{
+                            width: "80px",
+                            height: "80px",
+                            objectFit: "cover",
+                          }}
+                        />
+                        <div>
+                          <div className="fw-bold">{item.name}</div>
+                          <div className="text-muted">{item.category}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td data-label="Price">₹{item.price}</td>
+                    <td data-label="Quantity">
+                      <div className="quantity-control">
+                        <button
+                          className="btn btn-outline-secondary btn-sm"
+                          onClick={() => removeFromCart(item)}
+                        >
+                          -
+                        </button>
+                        <input
+                          type="number"
+                          value={item.quantity}
+                          min="1"
+                          onChange={(e) => {
+                            const newQuantity = parseInt(e.target.value);
+                            setQuantity(item, newQuantity);
+                          }}
+                        />
+                        <button
+                          className="btn btn-outline-secondary btn-sm"
+                          onClick={() => addToCart(item)}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </td>
+                    <td data-label="Total">
+                      ₹{(item.price * item.quantity).toFixed(2)}
+                    </td>
+                    <td data-label="Actions">
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => removeFromCart(item, true)}
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        ) : (
-          <h3 className="text-center mt-4">Your cart is empty</h3>
-        )}
 
-        {/* Order Form Modal */}
-        {showOrderForm && (
-          <div
-            className="modal-backdrop"
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <div
-              className="modal-content bg-white p-4 rounded"
-              style={{ width: "300px" }}
-            >
-              <h3 className="text-center mb-3">Place Order</h3>
-              <div className="mb-3">
-                <label htmlFor="name" className="form-label">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="phone" className="form-label">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  className="form-control"
-                  id="phone"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="d-flex justify-content-between">
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => setShowOrderForm(false)}
-                >
-                  Cancel
-                </button>
-                <button className="btn btn-success" onClick={handlePlaceOrder}>
-                  Submit
-                </button>
-              </div>
+          <div className="total-section">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <h3 className="m-0">Order Summary</h3>
+              <h3 className="m-0">₹{getCartTotal().toFixed(2)}</h3>
+            </div>
+            <div className="d-grid gap-3">
+              <button
+                className="btn btn-lg btn-success"
+                onClick={handlePlaceOrder}
+              >
+                Place Order via WhatsApp
+              </button>
+              <button
+                className="btn btn-lg btn-outline-danger"
+                onClick={clearCart}
+              >
+                Clear Cart
+              </button>
             </div>
           </div>
-        )}
-      </div>
-    </>
+        </>
+      ) : (
+        <div className="empty-cart-message">
+          <h3>Your Cart Feels Lonely</h3>
+          <p className="text-muted mt-3">
+            Add some products to your cart and they'll appear here!
+          </p>
+          <button
+            className="btn btn-primary mt-3"
+            onClick={() => navigate("/FrontPage")}
+          >
+            Continue Shopping
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
