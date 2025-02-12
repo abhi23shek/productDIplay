@@ -9,6 +9,7 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import { AuthProvider, useAuth } from "./components/AuthContext";
 import Login from "./components/Login";
 import FrontPage from "./components/FrontPage";
+import Homepage from "./components/Homepage";
 import AdminDashboard from "./components/AdminDashboard";
 import AdminUpdateProduct from "./components/AdminUpdateProduct";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -38,8 +39,9 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Homepage />} />
           <Route path="/downloads" element={<Downloads />} />
-          <Route path="/" element={<FrontPage />} />
+          <Route path="/FrontPage" element={<FrontPage />} />
           <Route path="/Contact-us" element={<ContactUsPage />} />
           <Route path="/Contact-success" element={<ContactusSuccess />} />
           <Route path="/Cart" element={<Cart />} />

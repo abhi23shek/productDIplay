@@ -10,7 +10,7 @@ function ContactUsPage() {
         <Navbar />
       </div>
 
-      <div className="hero-section text-center p-5 bg-primary text-white">
+      <div className="contact-hero-section text-center p-5 bg-primary text-white">
         <h1>Contact Us</h1>
         <p className="mt-3">
           Have questions or feedback? We're here to help! Get in touch with us.
@@ -109,9 +109,6 @@ function ContactUsPage() {
             <div className="social-icons mt-4">
               <a href="#" className="text-info me-3">
                 <i className="bi bi-facebook"></i>
-              </a>
-              <a href="#" className="text-info me-3">
-                <i className="bi bi-twitter"></i>
               </a>
               <a href="#" className="text-info">
                 <i className="bi bi-instagram"></i>
