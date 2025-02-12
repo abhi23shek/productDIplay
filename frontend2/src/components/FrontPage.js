@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import "./FrontPage.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./Navbar";
@@ -10,9 +11,11 @@ import ResponsiveSubcategoryFilter from "./ResponsiveSubcategoryFilter";
 import BarLoader from "react-spinners/BarLoader";
 import ProductModal from "./ProductModal";
 import CartButton from "./CartButton";
+import { useNavigate } from "react-router-dom";
 // import Cart from "./Cart";
 
 function FrontPage() {
+  const navigate = useNavigate();
   // const { cartItems, addToCart } = useContext(CartContext);
 
   const [products, setProducts] = useState([]);
@@ -32,6 +35,8 @@ function FrontPage() {
   const [touchStartX, setTouchStartX] = useState(0);
   const { cartItems, addToCart, removeFromCart, setQuantity, quantityInCart } =
     useContext(CartContext);
+  const [searchParams] = useSearchParams();
+  const urlCategory = searchParams.get("category");
 
   // Fetch initial data
   // useEffect(() => {
@@ -128,6 +133,15 @@ function FrontPage() {
             JSON.stringify(subcategoriesData)
           );
         }
+        if (urlCategory && categories.length > 0) {
+          const categoryId = parseInt(urlCategory);
+          const category = categories.find((cat) => cat.id === categoryId);
+
+          if (category) {
+            setSelectedCategory(categoryId);
+            filterProducts("", categoryId, "All", "", "");
+          }
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -136,7 +150,18 @@ function FrontPage() {
     };
 
     fetchData();
-  }, []);
+  }, [urlCategory]);
+  useEffect(() => {
+    if (categories.length > 0 && urlCategory) {
+      const categoryId = parseInt(urlCategory);
+      const categoryExists = categories.some((cat) => cat.id === categoryId);
+
+      if (categoryExists) {
+        setSelectedCategory(categoryId);
+        filterProducts("", categoryId, "All", "", "");
+      }
+    }
+  }, [categories, urlCategory]); // Run when categories or URL param changes
 
   // Close modal on outside click
   useEffect(() => {
@@ -170,6 +195,8 @@ function FrontPage() {
 
   // Category/subcategory handlers
   const handleCategoryChange = (categoryId) => {
+    // Use navigate instead of history.replaceState
+    navigate(`/FrontPage?category=${categoryId}`);
     setSelectedCategory(categoryId);
     setSelectedSubcategory("All");
     filterProducts(searchTerm, categoryId, "All", minPrice, maxPrice);

@@ -54,7 +54,9 @@ export default function Cart() {
 
   return (
     <>
-      <Navbar></Navbar>
+      <div className="cart-nav">
+        <Navbar></Navbar>
+      </div>
       <div className="container py-5">
         <h1 className="text-center mb-4">Your Shopping Cart</h1>
 

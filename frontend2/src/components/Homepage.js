@@ -99,40 +99,46 @@ const Homepage = () => {
       {/* Product Showcase Section */}
       <section className="Home-product-showcase">
         <div className="Home-product-card">
-          <img src={require("./image/image1.jpg")} />
-          <div className="product-card-content">
-            <h3>Classic Style</h3>
-            <p>Timeless designs for everyday wear</p>
-          </div>
+          <img src={require("./image/simple.jpg")} />
           <button
             className="product-hover-button"
-            onClick={() => navigate("/FrontPage")}
+            onClick={() => navigate("/FrontPage?category=1")} // Pass category ID
           >
             Explore Now
           </button>
         </div>
         <div className="Home-product-card">
-          <img src={require("./image/image1.jpg")} />
-          <div className="product-card-content">
-            <h3>Classic Styles</h3>
-            <p>Timeless designs for everyday wear</p>
-          </div>
+          <img src={require("./image/stone.jpg")} />
           <button
             className="product-hover-button"
-            onClick={() => navigate("/FrontPage")}
+            onClick={() => navigate("/FrontPage?category=2")}
           >
             Explore Now
           </button>
         </div>
         <div className="Home-product-card">
-          <img src={require("./image/image1.jpg")} />
-          <div className="product-card-content">
-            <h3>Classic Style</h3>
-            <p>Timeless designs for everyday wear</p>
-          </div>
+          <img src={require("./image/redium.jpg")} />
           <button
             className="product-hover-button"
-            onClick={() => navigate("/FrontPage")}
+            onClick={() => navigate("/FrontPage?category=3")}
+          >
+            Explore Now
+          </button>
+        </div>
+        <div className="Home-product-card">
+          <img src={require("./image/photo frame.jpg")} />
+          <button
+            className="product-hover-button"
+            onClick={() => navigate("/FrontPage?category=4")}
+          >
+            Explore Now
+          </button>
+        </div>
+        <div className="Home-product-card">
+          <img src={require("./image/toys.jpg")} />
+          <button
+            className="product-hover-button"
+            onClick={() => navigate("/FrontPage?category=5")}
           >
             Explore Now
           </button>
