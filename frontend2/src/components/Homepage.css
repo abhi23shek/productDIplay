@@ -223,16 +223,17 @@
 /* Slider Dots */
 .slick-dots {
   bottom: 30px !important;
+
 }
 
 .slick-dots li button:before {
-  color: #fff !important;
+  color: #0073ff !important;
   opacity: 0.6 !important;
   font-size: 10px !important;
 }
 
 .slick-dots li.slick-active button:before {
-  color: #fff !important;
+  color: #19054c !important;
   opacity: 1 !important;
 }
 

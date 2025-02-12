@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Homepage.css";
 import Navbar from "./Navbar";
@@ -36,32 +36,59 @@ const PrevArrow = ({ onClick }) => (
 const Homepage = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
+  const [sliderReady, setSliderReady] = useState(false);
+
+  // Preload images using useMemo
+  const sliderImages = useMemo(
+    () => ({
+      mobile: [
+        require("./image/image5.jpg"),
+        require("./image/image6.jpg"),
+        require("./image/image7.jpg"),
+      ],
+      desktop: [
+        require("./image/image1.jpg"),
+        require("./image/image2.jpg"),
+        require("./image/image3.jpg"),
+      ],
+    }),
+    []
+  );
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
+
+    // Initialize slider after short delay
+    const initTimer = setTimeout(() => setSliderReady(true), 500);
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(initTimer);
+    };
   }, []);
 
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 5000,
-    arrows: true,
-    fade: true,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-  };
-
-  const sliderImages = isMobile
-    ? ["./image/image5.jpg", "./image/image6.jpg", "./image/image7.jpg"]
-    : ["./image/image1.jpg", "./image/image2.jpg", "./image/image3.jpg"];
+  const sliderSettings = useMemo(
+    () => ({
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 5000,
+      arrows: true,
+      fade: true,
+      pauseOnHover: false,
+      pauseOnFocus: false,
+      adaptiveHeight: true,
+      nextArrow: <NextArrow />,
+      prevArrow: <PrevArrow />,
+    }),
+    []
+  );
 
   return (
     <div className="home-container">
@@ -71,79 +98,61 @@ const Homepage = () => {
 
       {/* Hero Section */}
       <div className="hero-section">
-        <Slider {...sliderSettings} className="full-width-slider">
-          {sliderImages.map((image, index) => (
-            <div key={index} className="hero-slide">
-              <img src={require(`${image}`)} alt={`Collection ${index + 1}`} />
-              <div className="slide-content">
-                <div className="hero-title">Shiv Collection</div>
-                <div className="hero-slogan">
-                  We Make Better Things In A Better Way
+        {sliderReady && (
+          <Slider
+            {...sliderSettings}
+            key={isMobile ? "mobile" : "desktop"}
+            className="full-width-slider"
+          >
+            {(isMobile ? sliderImages.mobile : sliderImages.desktop).map(
+              (image, index) => (
+                <div key={index} className="hero-slide">
+                  <img
+                    src={image}
+                    alt={`Collection ${index + 1}`}
+                    loading="eager"
+                  />
+                  <div className="slide-content">
+                    <div className="hero-title">Shiv Collection</div>
+                    <div className="hero-slogan">
+                      We Make Better Things In A Better Way
+                    </div>
+                    <button
+                      className="cta-button"
+                      onClick={() => navigate("/FrontPage")}
+                    >
+                      Explore Now
+                    </button>
+                  </div>
                 </div>
-                <button
-                  className="cta-button"
-                  onClick={() => navigate("/FrontPage")}
-                >
-                  Explore Now
-                </button>
-              </div>
-            </div>
-          ))}
-        </Slider>
+              )
+            )}
+          </Slider>
+        )}
       </div>
+
       <div className="categories-heading">
         <h2>Our Categories</h2>
         <div className="heading-divider"></div>
       </div>
 
-      {/* Product Showcase Section */}
       <section className="Home-product-showcase">
-        <div className="Home-product-card">
-          <img src={require("./image/simple.jpg")} />
-          <button
-            className="product-hover-button"
-            onClick={() => navigate("/FrontPage?category=1")} // Pass category ID
-          >
-            Explore Now
-          </button>
-        </div>
-        <div className="Home-product-card">
-          <img src={require("./image/stone.jpg")} />
-          <button
-            className="product-hover-button"
-            onClick={() => navigate("/FrontPage?category=2")}
-          >
-            Explore Now
-          </button>
-        </div>
-        <div className="Home-product-card">
-          <img src={require("./image/redium.jpg")} />
-          <button
-            className="product-hover-button"
-            onClick={() => navigate("/FrontPage?category=3")}
-          >
-            Explore Now
-          </button>
-        </div>
-        <div className="Home-product-card">
-          <img src={require("./image/photo frame.jpg")} />
-          <button
-            className="product-hover-button"
-            onClick={() => navigate("/FrontPage?category=4")}
-          >
-            Explore Now
-          </button>
-        </div>
-        <div className="Home-product-card">
-          <img src={require("./image/toys.jpg")} />
-          <button
-            className="product-hover-button"
-            onClick={() => navigate("/FrontPage?category=5")}
-          >
-            Explore Now
-          </button>
-        </div>
+        {[1, 2, 3, 4, 5].map((categoryId) => (
+          <div key={categoryId} className="Home-product-card">
+            <img
+              src={require(`./image/category-${categoryId}.jpg`)}
+              alt={`Category ${categoryId}`}
+            />
+            <button
+              className="product-hover-button"
+              onClick={() => navigate(`/FrontPage?category=${categoryId}`)}
+            >
+              Explore Now
+            </button>
+          </div>
+        ))}
       </section>
+
       <section className="about-section">
         <div className="about-container">
           <div className="about-logo">
