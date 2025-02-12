@@ -110,9 +110,6 @@ function ContactUsPage() {
               <a href="#" className="text-info me-3">
                 <i className="bi bi-facebook"></i>
               </a>
-              <a href="#" className="text-info me-3">
-                <i className="bi bi-twitter"></i>
-              </a>
               <a href="#" className="text-info">
                 <i className="bi bi-instagram"></i>
               </a>
