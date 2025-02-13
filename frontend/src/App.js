@@ -19,6 +19,7 @@ import AdminUploadCatalog from "./components/AdminUploadCatalog";
 import Downloads from "./components/Downloads";
 import ContactusSuccess from "./components/ContactusSuccess";
 import Cart from "./components/Cart";
+import HandlePrint from "./components/print/HandlePrint";
 
 const ProtectedRoute = ({ children }) => {
   const { auth } = useAuth();
@@ -45,6 +46,15 @@ function App() {
           <Route path="/Contact-us" element={<ContactUsPage />} />
           <Route path="/Contact-success" element={<ContactusSuccess />} />
           <Route path="/Cart" element={<Cart />} />
+          <Route
+            path="admin/printPreview"
+            element={
+              <ProtectedRoute>
+                <HandlePrint />
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/admin"
             element={

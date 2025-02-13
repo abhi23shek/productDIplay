@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import PrintCatNav from "./PrintCatNav";
 import HandlePrint from "./print/HandlePrint";
+import { useNavigate } from "react-router-dom";
 
 const PrintCatalog = () => {
+  const navigate = useNavigate();
   const [categoryName, setCategoryName] = useState("");
   const [categories, setCategories] = useState([]);
   const [companyName, setCompanyName] = useState("SHIV ENTERPRISES");
@@ -51,6 +53,25 @@ const PrintCatalog = () => {
 
     // Show the HandlePrint component
     setShowHandlePrint(true);
+  };
+
+  const handlePreview = () => {
+    if (categoryName == "") {
+      alert("Please select the category");
+      return;
+    }
+    const props = {
+      dateApplicable: dateApplicaple,
+      priceFlag: priceFlag,
+      priceAdjustment: priceAdjustment,
+      companyName: companyName,
+      phoneNumbers: mobileNumber,
+      hintText: hintText,
+      categoryId: categoryName,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+    };
+    navigate("/admin/printPreview", { state: props });
   };
 
   return (
@@ -221,7 +242,7 @@ const PrintCatalog = () => {
                 <button
                   type="button"
                   className="btn btn-primary"
-                  onClick={handlePrint}
+                  onClick={handlePreview}
                   disabled={isLoading}
                 >
                   Preview
@@ -238,7 +259,7 @@ const PrintCatalog = () => {
       </div>
 
       {/* Conditionally render HandlePrint component */}
-      {showHandlePrint && (
+      {/* {showHandlePrint && (
         <HandlePrint
           categoryId={categoryName}
           companyName={companyName}
@@ -250,7 +271,7 @@ const PrintCatalog = () => {
           maxPrice={maxPrice}
           hintText={hintText}
         />
-      )}
+      )} */}
     </div>
   );
 };
