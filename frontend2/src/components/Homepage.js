@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Homepage.css";
 import Navbar from "./Navbar";
@@ -6,6 +6,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Footer from "./Footer";
+import { CartContext } from "./context/Cart";
+import { useSearchParams } from "react-router-dom";
 
 const NextArrow = ({ onClick }) => (
   <div className="arrow next" onClick={onClick}>
@@ -37,6 +39,55 @@ const Homepage = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
   const [sliderReady, setSliderReady] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const storedProducts = sessionStorage.getItem("products");
+        const storedCategories = sessionStorage.getItem("categories");
+        const storedSubcategories = sessionStorage.getItem("subcategories");
+
+        if (!storedProducts || !storedCategories || !storedSubcategories) {
+          console.log("Fetching products in background...");
+
+          // Fetch data from the server
+          const productResponse = await fetch(
+            `${process.env.REACT_APP_SERVER_URL}/api/products`
+          );
+          const productsData = await productResponse.json();
+
+          const categoryResponse = await fetch(
+            `${process.env.REACT_APP_SERVER_URL}/api/categories`
+          );
+          const categoriesData = await categoryResponse.json();
+
+          const subcategoriesData = {};
+          for (const category of categoriesData) {
+            const response = await fetch(
+              `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${category.id}`
+            );
+            subcategoriesData[category.id] = await response.json();
+          }
+
+          // Store fetched data in sessionStorage
+          sessionStorage.setItem("products", JSON.stringify(productsData));
+          sessionStorage.setItem("categories", JSON.stringify(categoriesData));
+          sessionStorage.setItem(
+            "subcategories",
+            JSON.stringify(subcategoriesData)
+          );
+
+          console.log("Products preloaded successfully!");
+        } else {
+          console.log("Products already stored in sessionStorage.");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // Preload images using useMemo
   const sliderImages = useMemo(

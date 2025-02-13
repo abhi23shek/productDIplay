@@ -34,7 +34,7 @@ const Navbar = () => {
                 className={`nav-link ${isActive("/FrontPage") ? "active" : ""}`}
                 onClick={() => navigate("/FrontPage")}
               >
-                Product
+                Products
               </button>
               <button
                 className={`nav-link ${

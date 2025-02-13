@@ -38,118 +38,104 @@ function FrontPage() {
   const [searchParams] = useSearchParams();
   const urlCategory = searchParams.get("category");
 
-  // Fetch initial data
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
-  //       const productResponse = await fetch(
-  //         `${process.env.REACT_APP_SERVER_URL}/api/products`
-  //       );
-  //       const productsData = await productResponse.json();
+  //       const storedProducts = sessionStorage.getItem("products");
+  //       const storedCategories = sessionStorage.getItem("categories");
+  //       const storedSubcategories = sessionStorage.getItem("subcategories");
 
-  //       const categoryResponse = await fetch(
-  //         `${process.env.REACT_APP_SERVER_URL}/api/categories`
-  //       );
-  //       const categoriesData = await categoryResponse.json();
+  //       if (storedProducts && storedCategories && storedSubcategories) {
+  //         setLoading(false);
+  //         console.log("Yes Got it");
 
-  //       const subcategoriesData = {};
-  //       for (const category of categoriesData) {
-  //         const response = await fetch(
-  //           `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${category.id}`
+  //         // Retrieve data from sessionStorage
+  //         const productsData = JSON.parse(storedProducts);
+  //         const categoriesData = JSON.parse(storedCategories);
+  //         const subcategoriesData = JSON.parse(storedSubcategories);
+
+  //         setProducts(productsData);
+  //         setCategories(categoriesData);
+  //         setSubcategories(subcategoriesData);
+  //         setFilteredProducts(productsData); // Assuming you want the initial filter to be all products
+  //       } else {
+  //         console.log("NO Didn't get it");
+  //         // Fetch data from the server
+  //         const productResponse = await fetch(
+  //           `${process.env.REACT_APP_SERVER_URL}/api/products`
   //         );
-  //         subcategoriesData[category.id] = await response.json();
+  //         const productsData = await productResponse.json();
+
+  //         const categoryResponse = await fetch(
+  //           `${process.env.REACT_APP_SERVER_URL}/api/categories`
+  //         );
+  //         const categoriesData = await categoryResponse.json();
+
+  //         const subcategoriesData = {};
+  //         for (const category of categoriesData) {
+  //           const response = await fetch(
+  //             `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${category.id}`
+  //           );
+  //           subcategoriesData[category.id] = await response.json();
+  //         }
+
+  //         setProducts(productsData);
+  //         setCategories(Array.isArray(categoriesData) ? categoriesData : []);
+  //         setSubcategories(subcategoriesData);
+  //         setFilteredProducts(productsData);
+
+  //         // Store data in sessionStorage
+  //         sessionStorage.setItem("products", JSON.stringify(productsData));
+  //         sessionStorage.setItem("categories", JSON.stringify(categoriesData));
+  //         sessionStorage.setItem(
+  //           "subcategories",
+  //           JSON.stringify(subcategoriesData)
+  //         );
   //       }
+  //       if (urlCategory && categories.length > 0) {
+  //         const categoryId = parseInt(urlCategory);
+  //         const category = categories.find((cat) => cat.id === categoryId);
 
-  //       const sortedProducts = Array.isArray(productsData)
-  //         ? productsData.sort(
-  //             (a, b) => parseFloat(a.price) - parseFloat(b.price)
-  //           )
-  //         : [];
-
-  //       setProducts(sortedProducts);
-  //       setCategories(Array.isArray(categoriesData) ? categoriesData : []);
-  //       setSubcategories(subcategoriesData);
-  //       setFilteredProducts(sortedProducts);
+  //         if (category) {
+  //           setSelectedCategory(categoryId);
+  //           filterProducts("", categoryId, "All", "", "");
+  //         }
+  //       }
   //     } catch (error) {
   //       console.error("Error fetching data:", error);
   //     } finally {
   //       setLoading(false);
   //     }
   //   };
+
   //   fetchData();
-  // }, []);
+  // }, [urlCategory]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const storedProducts = sessionStorage.getItem("products");
-        const storedCategories = sessionStorage.getItem("categories");
-        const storedSubcategories = sessionStorage.getItem("subcategories");
+    const storedProducts = sessionStorage.getItem("products");
+    const storedCategories = sessionStorage.getItem("categories");
+    const storedSubcategories = sessionStorage.getItem("subcategories");
 
-        if (storedProducts && storedCategories && storedSubcategories) {
-          setLoading(false);
-          console.log("Yes Got it");
+    if (storedProducts && storedCategories && storedSubcategories) {
+      console.log("Loading products from sessionStorage...");
+      setLoading(false);
+      setProducts(JSON.parse(storedProducts));
+      setCategories(JSON.parse(storedCategories));
+      setSubcategories(JSON.parse(storedSubcategories));
+      setFilteredProducts(JSON.parse(storedProducts));
+    } else {
+      console.log("Products not found in sessionStorage, consider preloading.");
+    }
 
-          // Retrieve data from sessionStorage
-          const productsData = JSON.parse(storedProducts);
-          const categoriesData = JSON.parse(storedCategories);
-          const subcategoriesData = JSON.parse(storedSubcategories);
+    if (urlCategory) {
+      const categoryId = parseInt(urlCategory);
+      const category = categories.find((cat) => cat.id === categoryId);
 
-          setProducts(productsData);
-          setCategories(categoriesData);
-          setSubcategories(subcategoriesData);
-          setFilteredProducts(productsData); // Assuming you want the initial filter to be all products
-        } else {
-          console.log("NO Didn't get it");
-          // Fetch data from the server
-          const productResponse = await fetch(
-            `${process.env.REACT_APP_SERVER_URL}/api/products`
-          );
-          const productsData = await productResponse.json();
-
-          const categoryResponse = await fetch(
-            `${process.env.REACT_APP_SERVER_URL}/api/categories`
-          );
-          const categoriesData = await categoryResponse.json();
-
-          const subcategoriesData = {};
-          for (const category of categoriesData) {
-            const response = await fetch(
-              `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${category.id}`
-            );
-            subcategoriesData[category.id] = await response.json();
-          }
-
-          setProducts(productsData);
-          setCategories(Array.isArray(categoriesData) ? categoriesData : []);
-          setSubcategories(subcategoriesData);
-          setFilteredProducts(productsData);
-
-          // Store data in sessionStorage
-          sessionStorage.setItem("products", JSON.stringify(productsData));
-          sessionStorage.setItem("categories", JSON.stringify(categoriesData));
-          sessionStorage.setItem(
-            "subcategories",
-            JSON.stringify(subcategoriesData)
-          );
-        }
-        if (urlCategory && categories.length > 0) {
-          const categoryId = parseInt(urlCategory);
-          const category = categories.find((cat) => cat.id === categoryId);
-
-          if (category) {
-            setSelectedCategory(categoryId);
-            filterProducts("", categoryId, "All", "", "");
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
+      if (category) {
+        setSelectedCategory(categoryId);
+        filterProducts("", categoryId, "All", "", "");
       }
-    };
-
-    fetchData();
+    }
   }, [urlCategory]);
   useEffect(() => {
     if (categories.length > 0 && urlCategory) {
