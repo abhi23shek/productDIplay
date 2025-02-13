@@ -15,12 +15,12 @@ const MobileNavbar = () => {
         {/* Company Logo */}
         <div className="logo-container" onClick={() => navigate("/")}>
           <img
-            src={require("./image/ShivCollection-logo3.png")}
+            src={require("./image/ShivCollection-logo4.png")}
             alt="Company Logo"
             className="company-logo"
           />
         </div>
-        <div className="companyname">shiv collection</div>
+        <div className="companyname">Shiv Collection</div>
 
         {/* Hamburger Menu */}
         <div className="menu-toggle">
@@ -42,6 +42,16 @@ const MobileNavbar = () => {
                   onClick={() => navigate("/")}
                 >
                   Home
+                </button>
+              </li>
+              <li>
+                <button
+                  className={`M-nav-btn ${
+                    isActive("/FrontPage") ? "M-active" : "M-notactive"
+                  }`}
+                  onClick={() => navigate("/FrontPage")}
+                >
+                  Product
                 </button>
               </li>
               <li>
@@ -78,7 +88,7 @@ const MobileNavbar = () => {
                   <button
                     className={`M-nav-btn ${
                       isActive("/admin") ? "M-active" : "M-notactive"
-                    } login-btn`}
+                    } M-login-btn`}
                     onClick={() => navigate("/admin")}
                   >
                     Login

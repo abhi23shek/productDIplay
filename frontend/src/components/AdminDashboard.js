@@ -4,7 +4,7 @@ import AdminAddProduct from "./AdminAddProduct";
 import AdminAddSubcategories from "./AdminAddSubcategories";
 import AdminNavbar from "./AdminNavbar";
 import AdminDisplay from "./AdminDisplay";
-// import AdminProductList from "./AdminProductList";
+import AdminProductList from "./AdminProductList";
 import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
@@ -17,7 +17,7 @@ const AdminDashboard = () => {
   const fetchCategories = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/categories`
+        `${process.env.REACT_APP_SERVER_URL}/api/categoriesforadmin`
       );
       const data = await response.json();
       setCategories(data);

@@ -18,7 +18,12 @@ const ProductCards = ({
 
   return (
     <div className="product-card">
-      <img src={image_url} alt={name} className="product-image" />
+      <img
+        src={image_url}
+        alt={name}
+        className="product-image"
+        loading="lazy"
+      />
       <div className="product-details">
         <h5 className="product-name">{name}</h5>
         <p className="product-price">₹{Number(price).toFixed(2)}</p>
@@ -27,7 +32,6 @@ const ProductCards = ({
 
       {cartProduct ? (
         <div className="d-flex align-items-center justify-content-center gap-1">
-          Qty:
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -37,10 +41,11 @@ const ProductCards = ({
                 removeFromCart(product);
               }
             }}
-            className="btn btn-danger btn-sm"
+            className="quantity-btn-product"
           >
             -
           </button>
+
           <input
             onClick={(e) => e.stopPropagation()}
             type="number"
@@ -53,12 +58,19 @@ const ProductCards = ({
               setQuantity(cartProduct, newQuantity);
             }}
           />
+          {/* <button
+            className="btn btn-success btn-sm d-flex align-items-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <i className="bi bi-cart me-1"></i>
+            {cartProduct.quantity}
+          </button> */}
           <button
             onClick={(e) => {
               e.stopPropagation();
               addToCart(product);
             }}
-            className="btn btn-warning btn-sm"
+            className="quantity-btn-product"
           >
             +
           </button>

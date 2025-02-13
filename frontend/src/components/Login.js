@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "./AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Login.css";
 
 const Login = () => {
@@ -8,6 +8,9 @@ const Login = () => {
   // const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const isActive = (path) => location.pathname === path;
+  const location = useLocation();
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -17,12 +20,12 @@ const Login = () => {
   return (
     <div className="parentcontainer">
       <nav className="navbar navbar-expand-lg navbar-light bg-transparent">
-        <a
-          className="navbar-brand text-dark rounded-pill  px-4 border border-dark home-btn-login"
-          href="/"
+        <button
+          className={`nav-link ${isActive("/admin") ? "active" : ""}`}
+          onClick={() => navigate("/")}
         >
           Home
-        </a>
+        </button>
       </nav>
       <div className="container d-flex justify-content-center align-items-center min-vh-100">
         <div

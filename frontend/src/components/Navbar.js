@@ -9,75 +9,70 @@ const Navbar = () => {
   const location = useLocation();
   const { auth } = useAuth();
 
-  // Check if a path is active
   const isActive = (path) => location.pathname === path;
 
   return (
     <>
       <nav className="navbar navbar-expand-xs navbar-light bg-transparent">
-        <div className="container-fluid nav-bar-destop">
-          {/* Company Logo */}
-          {/* <div className="nav-bar-destop"> */}
+        <div className="container-fluid nav-bar-desktop">
           <div className="leftside_navbar">
-            <div className="navbar-logo mx-auto" onClick={() => navigate("/")}>
+            <div className="navbar-logo" onClick={() => navigate("/")}>
               <img
-                src={require("./image/ShivCollection-logo3.png")} // Update with your actual logo path
+                src={require("./image/ShivCollection-logo4.png")}
                 alt="Company Logo"
                 className="logo-img"
               />
             </div>
-            <button
-              className={`navbar-brand text-dark rounded-pill px-4 shiny-text ${
-                isActive("/") ? "NavBorder" : "NavBorderNotActive"
-              } home-btn`}
-              onClick={() => navigate("/")}
-            >
-              Home
-            </button>
-            <button
-              className={`nav-link navbar-brand text-dark rounded-pill px-4 shiny-text ${
-                isActive("/Contact-us") ? "NavBorder" : "NavBorderNotActive"
-              } about-btn`}
-              onClick={() => navigate("/Contact-us")}
-            >
-              Contact Us
-            </button>
-            <button
-              className={`navbar-brand text-dark rounded-pill px-4 shiny-text ${
-                isActive("/downloads") ? "NavBorder" : "NavBorderNotActive"
-              } about-btn`}
-              onClick={() => navigate("/downloads")}
-            >
-              Downloads
-            </button>
+            <div className="nav-links">
+              <button
+                className={`nav-link ${isActive("/") ? "active" : ""}`}
+                onClick={() => navigate("/")}
+              >
+                Home
+              </button>
+              <button
+                className={`nav-link ${isActive("/FrontPage") ? "active" : ""}`}
+                onClick={() => navigate("/FrontPage")}
+              >
+                Products
+              </button>
+              <button
+                className={`nav-link ${
+                  isActive("/Contact-us") ? "active" : ""
+                }`}
+                onClick={() => navigate("/Contact-us")}
+              >
+                Contact Us
+              </button>
+              <button
+                className={`nav-link ${isActive("/downloads") ? "active" : ""}`}
+                onClick={() => navigate("/downloads")}
+              >
+                Downloads
+              </button>
+            </div>
           </div>
+
           <div className="rightside_navbar">
-            <div className="d-flex">
-              {auth ? (
+            {auth ? (
+              <button className="admin-btn" onClick={() => navigate("/admin")}>
+                Admin
+              </button>
+            ) : (
+              <div className="auth-buttons">
                 <button
-                  className={`btn btn-success shiny-text text-dark rounded-pill px-4${
-                    isActive("/admin") ? "border border-dark" : ""
-                  }`}
-                  onClick={() => navigate("/admin")}
-                >
-                  Admin
-                </button>
-              ) : (
-                <button
-                  className={`nav-link navbar-brand text-dark rounded-pill px-4 shiny-text ${
-                    isActive("/admin") ? "border border-dark" : ""
-                  } login-btn`}
+                  className="login-btn"
                   onClick={() => navigate("/admin")}
                 >
                   Login
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
-          {/* </div> */}
         </div>
+
         <div className="mobilenav">
-          <MobileNavbar></MobileNavbar>
+          <MobileNavbar />
         </div>
       </nav>
     </>

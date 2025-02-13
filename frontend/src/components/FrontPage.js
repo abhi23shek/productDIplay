@@ -1,24 +1,21 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-  useRef,
-  Suspense,
-} from "react";
-
+import React, { useContext, useEffect, useState, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import "./FrontPage.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./Navbar";
-import HeroSection from "./HeroSection";
-
 import ProductCards from "./ProductCards";
 import Footer from "./Footer";
 import { CartContext } from "./context/Cart";
-// const ProductCards = React.lazy(() => import("./ProductCards"));
-// const Footer = React.lazy(() => import("./Footer"));
+import ResponsiveCategoryFilter from "./ResponsiveCategoryFilter";
+import ResponsiveSubcategoryFilter from "./ResponsiveSubcategoryFilter";
+import BarLoader from "react-spinners/BarLoader";
+import ProductModal from "./ProductModal";
+import CartButton from "./CartButton";
+import { useNavigate } from "react-router-dom";
 // import Cart from "./Cart";
 
 function FrontPage() {
+  const navigate = useNavigate();
   // const { cartItems, addToCart } = useContext(CartContext);
 
   const [products, setProducts] = useState([]);
@@ -35,123 +32,122 @@ function FrontPage() {
   const [modalProduct, setModalProduct] = useState(null);
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const modalRef = useRef(null);
-  const [isSubcategoryDropdownOpen, setIsSubcategoryDropdownOpen] =
-    useState(false);
   const [touchStartX, setTouchStartX] = useState(0);
-  const { cartItems, addToCart, removeFromCart, setQuantity } =
+  const { cartItems, addToCart, removeFromCart, setQuantity, quantityInCart } =
     useContext(CartContext);
+  const [searchParams] = useSearchParams();
+  const urlCategory = searchParams.get("category");
 
-  // Fetch initial data
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
-  //       const productResponse = await fetch(
-  //         `${process.env.REACT_APP_SERVER_URL}/api/products`
-  //       );
-  //       const productsData = await productResponse.json();
+  //       const storedProducts = sessionStorage.getItem("products");
+  //       const storedCategories = sessionStorage.getItem("categories");
+  //       const storedSubcategories = sessionStorage.getItem("subcategories");
 
-  //       const categoryResponse = await fetch(
-  //         `${process.env.REACT_APP_SERVER_URL}/api/categories`
-  //       );
-  //       const categoriesData = await categoryResponse.json();
+  //       if (storedProducts && storedCategories && storedSubcategories) {
+  //         setLoading(false);
+  //         console.log("Yes Got it");
 
-  //       const subcategoriesData = {};
-  //       for (const category of categoriesData) {
-  //         const response = await fetch(
-  //           `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${category.id}`
+  //         // Retrieve data from sessionStorage
+  //         const productsData = JSON.parse(storedProducts);
+  //         const categoriesData = JSON.parse(storedCategories);
+  //         const subcategoriesData = JSON.parse(storedSubcategories);
+
+  //         setProducts(productsData);
+  //         setCategories(categoriesData);
+  //         setSubcategories(subcategoriesData);
+  //         setFilteredProducts(productsData); // Assuming you want the initial filter to be all products
+  //       } else {
+  //         console.log("NO Didn't get it");
+  //         // Fetch data from the server
+  //         const productResponse = await fetch(
+  //           `${process.env.REACT_APP_SERVER_URL}/api/products`
   //         );
-  //         subcategoriesData[category.id] = await response.json();
+  //         const productsData = await productResponse.json();
+
+  //         const categoryResponse = await fetch(
+  //           `${process.env.REACT_APP_SERVER_URL}/api/categories`
+  //         );
+  //         const categoriesData = await categoryResponse.json();
+
+  //         const subcategoriesData = {};
+  //         for (const category of categoriesData) {
+  //           const response = await fetch(
+  //             `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${category.id}`
+  //           );
+  //           subcategoriesData[category.id] = await response.json();
+  //         }
+
+  //         setProducts(productsData);
+  //         setCategories(Array.isArray(categoriesData) ? categoriesData : []);
+  //         setSubcategories(subcategoriesData);
+  //         setFilteredProducts(productsData);
+
+  //         // Store data in sessionStorage
+  //         sessionStorage.setItem("products", JSON.stringify(productsData));
+  //         sessionStorage.setItem("categories", JSON.stringify(categoriesData));
+  //         sessionStorage.setItem(
+  //           "subcategories",
+  //           JSON.stringify(subcategoriesData)
+  //         );
   //       }
+  //       if (urlCategory && categories.length > 0) {
+  //         const categoryId = parseInt(urlCategory);
+  //         const category = categories.find((cat) => cat.id === categoryId);
 
-  //       const sortedProducts = Array.isArray(productsData)
-  //         ? productsData.sort(
-  //             (a, b) => parseFloat(a.price) - parseFloat(b.price)
-  //           )
-  //         : [];
-
-  //       setProducts(sortedProducts);
-  //       setCategories(Array.isArray(categoriesData) ? categoriesData : []);
-  //       setSubcategories(subcategoriesData);
-  //       setFilteredProducts(sortedProducts);
+  //         if (category) {
+  //           setSelectedCategory(categoryId);
+  //           filterProducts("", categoryId, "All", "", "");
+  //         }
+  //       }
   //     } catch (error) {
   //       console.error("Error fetching data:", error);
   //     } finally {
   //       setLoading(false);
   //     }
   //   };
-  //   fetchData();
-  // }, []);
 
-  // import { useEffect, useState } from "react";
+  //   fetchData();
+  // }, [urlCategory]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const storedProducts = sessionStorage.getItem("products");
-        const storedCategories = sessionStorage.getItem("categories");
-        const storedSubcategories = sessionStorage.getItem("subcategories");
+    const storedProducts = sessionStorage.getItem("products");
+    const storedCategories = sessionStorage.getItem("categories");
+    const storedSubcategories = sessionStorage.getItem("subcategories");
 
-        if (storedProducts && storedCategories && storedSubcategories) {
-          setLoading(false);
-          console.log("Yes Got it");
-          // Retrieve data from sessionStorage
-          const productsData = JSON.parse(storedProducts);
-          const categoriesData = JSON.parse(storedCategories);
-          const subcategoriesData = JSON.parse(storedSubcategories);
+    if (storedProducts && storedCategories && storedSubcategories) {
+      console.log("Loading products from sessionStorage...");
+      setLoading(false);
+      setProducts(JSON.parse(storedProducts));
+      setCategories(JSON.parse(storedCategories));
+      setSubcategories(JSON.parse(storedSubcategories));
+      setFilteredProducts(JSON.parse(storedProducts));
+    } else {
+      console.log("Products not found in sessionStorage, consider preloading.");
+    }
 
-          setProducts(productsData);
-          setCategories(categoriesData);
-          setSubcategories(subcategoriesData);
-          setFilteredProducts(productsData); // Assuming you want the initial filter to be all products
-        } else {
-          console.log("NO Didn't get it");
-          // Fetch data from the server
-          const productResponse = await fetch(
-            `${process.env.REACT_APP_SERVER_URL}/api/products`
-          );
-          const productsData = await productResponse.json();
+    if (urlCategory) {
+      const categoryId = parseInt(urlCategory);
+      const category = categories.find((cat) => cat.id === categoryId);
 
-          const categoryResponse = await fetch(
-            `${process.env.REACT_APP_SERVER_URL}/api/categories`
-          );
-          const categoriesData = await categoryResponse.json();
-
-          const subcategoriesData = {};
-          for (const category of categoriesData) {
-            const response = await fetch(
-              `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${category.id}`
-            );
-            subcategoriesData[category.id] = await response.json();
-          }
-
-          const sortedProducts = Array.isArray(productsData)
-            ? productsData.sort(
-                (a, b) => parseFloat(a.price) - parseFloat(b.price)
-              )
-            : [];
-
-          setProducts(sortedProducts);
-          setCategories(Array.isArray(categoriesData) ? categoriesData : []);
-          setSubcategories(subcategoriesData);
-          setFilteredProducts(sortedProducts);
-
-          // Store data in sessionStorage
-          sessionStorage.setItem("products", JSON.stringify(sortedProducts));
-          sessionStorage.setItem("categories", JSON.stringify(categoriesData));
-          sessionStorage.setItem(
-            "subcategories",
-            JSON.stringify(subcategoriesData)
-          );
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
+      if (category) {
+        setSelectedCategory(categoryId);
+        filterProducts("", categoryId, "All", "", "");
       }
-    };
+    }
+  }, [urlCategory]);
+  useEffect(() => {
+    if (categories.length > 0 && urlCategory) {
+      const categoryId = parseInt(urlCategory);
+      const categoryExists = categories.some((cat) => cat.id === categoryId);
 
-    fetchData();
-  }, []);
+      if (categoryExists) {
+        setSelectedCategory(categoryId);
+        filterProducts("", categoryId, "All", "", "");
+      }
+    }
+  }, [categories, urlCategory]); // Run when categories or URL param changes
 
   // Close modal on outside click
   useEffect(() => {
@@ -185,6 +181,8 @@ function FrontPage() {
 
   // Category/subcategory handlers
   const handleCategoryChange = (categoryId) => {
+    // Use navigate instead of history.replaceState
+    navigate(`/FrontPage?category=${categoryId}`);
     setSelectedCategory(categoryId);
     setSelectedSubcategory("All");
     filterProducts(searchTerm, categoryId, "All", minPrice, maxPrice);
@@ -259,6 +257,15 @@ function FrontPage() {
     setFilteredProducts(filtered);
   };
 
+  const resetFilters = () => {
+    setMinPrice("");
+    setMaxPrice("");
+    setSearchTerm("");
+    setSelectedCategory("All");
+    setSelectedSubcategory("All");
+    setFilteredProducts(products); // Important: Reset to the original product list
+  };
+
   // Group products and build display order
   const groupProducts = () => {
     const grouped = {};
@@ -278,6 +285,19 @@ function FrontPage() {
     });
     return grouped;
   };
+  if (loading) {
+    return (
+      <div className="loader">
+        <p> product loading...</p>
+        <BarLoader
+          cssOverride={{}}
+          height={10}
+          speedMultiplier={1}
+          width={300}
+        />
+      </div>
+    );
+  }
 
   // Modal navigation
   const openModal = (product, category) => {
@@ -337,331 +357,88 @@ function FrontPage() {
         <div className="frontnavbar">
           <Navbar />
         </div>
-        <div className="fronthero">
-          <HeroSection />
-        </div>
 
         {/* Category Selection */}
-        <div className="category-section my-4 category-text text-dark">
-          <h2>Categories</h2>
-          <div className="row row-cols-auto">
-            <div className="btn-group flex-wrap" role="group">
-              <div className="d-flex align-items-center mb-2">
-                <button
-                  className={`btn btn-outline-primary ${
-                    selectedCategory === "All" ? "active" : ""
-                  }`}
-                  onClick={() => handleCategoryChange("All")}
-                >
-                  All
-                </button>
-                {selectedCategory === "All" && (
-                  <span className="badge">{products.length}</span>
-                )}
-              </div>
-              {categories.map((category) => (
-                <div
-                  key={category.id}
-                  className="d-flex align-items-center mb-2"
-                >
-                  <button
-                    className={`btn btn-outline-primary ${
-                      category.id === selectedCategory ? "active" : ""
-                    }`}
-                    onClick={() => handleCategoryChange(category.id)}
-                  >
-                    {category.name}
-                  </button>
-                  {category.id === selectedCategory && (
-                    <span className="badge">
-                      {
-                        products.filter((p) => p.category_id === category.id)
-                          .length
-                      }
-                    </span>
+        <div className="Category-section-frontpage">
+          <ResponsiveCategoryFilter
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onCategoryChange={handleCategoryChange}
+            searchTerm={searchTerm}
+            handleSearch={handleSearch}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+            handlePriceFilter={handlePriceFilter}
+            setMinPrice={setMinPrice}
+            setMaxPrice={setMaxPrice}
+            resetFilters={resetFilters}
+          />
+        </div>
+
+        <div className="frontpage-content">
+          {/* Subcategory Selection */}
+          <ResponsiveSubcategoryFilter
+            subcategories={subcategories}
+            selectedCategory={selectedCategory}
+            selectedSubcategory={selectedSubcategory}
+            onSubcategoryChange={handleSubcategoryChange}
+          />
+          {/* Product Grid */}
+          <div className="product-grid">
+            {Object.entries(groupedProducts).map(
+              ([categoryName, subcategories]) => (
+                <div key={categoryName} className="category-group">
+                  <div className="frontpage-ctg-heading">{categoryName}</div>
+                  {Object.entries(subcategories).map(
+                    ([subcategoryName, products]) => (
+                      <div key={subcategoryName} className="subcategory-group">
+                        <div className="frontpage-sub-heading">
+                          {subcategoryName}
+                        </div>
+                        <div className="product-cards">
+                          {products.map((product) => (
+                            <div
+                              key={product.id}
+                              onClick={() => openModal(product, categoryName)}
+                            >
+                              <ProductCards
+                                id={product.id}
+                                category={categoryName}
+                                image_url={product.image_url}
+                                name={product.name}
+                                price={product.price}
+                                description={product.details}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )
                   )}
                 </div>
-              ))}
-            </div>
+              )
+            )}
           </div>
-        </div>
-
-        {/* Subcategory Selection */}
-        {subcategories[selectedCategory]?.length > 0 && (
-          <div className="subcategory-section my-4 subcategory-text text-dark">
-            <h3>Subcategories</h3>
-            {/* Mobile Dropdown */}
-            <div className="d-md-none">
-              <button
-                className="btn btn-secondary dropdown-toggle"
-                onClick={() =>
-                  setIsSubcategoryDropdownOpen(!isSubcategoryDropdownOpen)
-                }
-              >
-                {isSubcategoryDropdownOpen
-                  ? "Hide Subcategories"
-                  : "Show Subcategories"}
-              </button>
-              {isSubcategoryDropdownOpen && (
-                <div className="dropdown-menu show">
-                  {subcategories[selectedCategory].map((sub) => (
-                    <button
-                      key={sub.id}
-                      className={`dropdown-item ${
-                        sub.id === selectedSubcategory ? "active" : ""
-                      }`}
-                      onClick={() => handleSubcategoryChange(sub.id)}
-                    >
-                      {sub.name}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-            {/* Desktop Buttons */}
-            <div className="d-none d-md-block">
-              <div className="row row-cols-auto">
-                <div className="btn-group flex-wrap" role="group">
-                  <div className="d-flex align-items-center mb-2">
-                    <button
-                      className={`btn btn-outline-secondary ${
-                        selectedSubcategory === "All" ? "active" : ""
-                      }`}
-                      onClick={() => handleSubcategoryChange("All")}
-                    >
-                      All
-                    </button>
-                  </div>
-                  {subcategories[selectedCategory].map((sub) => (
-                    <div
-                      key={sub.id}
-                      className="d-flex align-items-center mb-2"
-                    >
-                      <button
-                        className={`btn btn-outline-secondary ${
-                          sub.id === selectedSubcategory ? "active" : ""
-                        }`}
-                        onClick={() => handleSubcategoryChange(sub.id)}
-                      >
-                        {sub.name}
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Filters */}
-        <div className="filter-tab text-dark">
-          <div className="search-bar">
-            <input
-              type="text"
-              placeholder="Search for products..."
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-          </div>
-          <div className="price-filter">
-            <div className="Price-filter-input">
-              <label>
-                <input
-                  type="number"
-                  value={minPrice}
-                  placeholder="Min price"
-                  onChange={(e) => setMinPrice(e.target.value)}
-                />
-              </label>
-              <label>
-                <input
-                  type="number"
-                  value={maxPrice}
-                  placeholder="Max price"
-                  onChange={(e) => setMaxPrice(e.target.value)}
-                />
-              </label>
-            </div>
-            <div className="price-filter-button">
-              <button className="btn btn-primary" onClick={handlePriceFilter}>
-                Apply
-              </button>
-              <button
-                className="btn btn-secondary reset-btn"
-                onClick={() => {
-                  setMinPrice("");
-                  setMaxPrice("");
-                  setSearchTerm("");
-                  setSelectedCategory("All");
-                  setSelectedSubcategory("All");
-                  setFilteredProducts(products);
-                }}
-              >
-                Reset
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Product Grid */}
-        <div className="product-grid">
-          {/* <Suspense fallback={<div>Loading Products...</div>}> */}
-          {Object.entries(groupedProducts).map(
-            ([categoryName, subcategories]) => (
-              <div key={categoryName} className="category-group">
-                <h3>
-                  {categoryName} ({Object.values(subcategories).flat().length})
-                </h3>
-                {Object.entries(subcategories).map(
-                  ([subcategoryName, products]) => (
-                    <div key={subcategoryName} className="subcategory-group">
-                      <h3>
-                        {subcategoryName} ({products.length})
-                      </h3>
-                      <div className="product-cards">
-                        {products.map((product) => (
-                          <div
-                            key={product.id}
-                            onClick={() => openModal(product, categoryName)}
-                          >
-                            <ProductCards
-                              id={product.id}
-                              category={categoryName}
-                              image_url={product.image_url}
-                              name={product.name}
-                              price={product.price}
-                              description={product.details}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )
-                )}
-              </div>
-            )
-          )}
-          {/* </Suspense> */}
         </div>
       </div>
-      <a
-        href="/cart"
-        className="btn btn-primary position-fixed bottom-0 end-0 m-3"
-        style={{ zIndex: 9999 }}
-      >
-        MY CART
-      </a>
+      <CartButton itemCount={quantityInCart()}></CartButton>
 
       <Footer />
 
       {/* Product Modal */}
       {modalProduct && (
-        <div
-          className="modal show"
-          style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
-        >
-          <div className="modal-dialog modal-lg">
-            <div
-              className="modal-content"
-              ref={modalRef}
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleTouchEnd}
-            >
-              <div className="modal-header">
-                <h3 className="modal-title">{modalProduct.name}</h3>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={closeModal}
-                ></button>
-              </div>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="Model-image col-md-auto">
-                    <img
-                      src={modalProduct.image_url}
-                      alt={modalProduct.name}
-                      className="img-fluid"
-                    />
-                  </div>
-                  <div className="col-md-auto">
-                    <div className="Model-price">
-                      <h5>Price:</h5>
-                      <div className="Model-price-value">
-                        ₹{modalProduct.price}
-                      </div>
-                    </div>
-                    <div className="Model-description">
-                      <h5>{modalProduct.details}</h5>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="modal-footer">
-                {/* Add to Cart Section */}
-                {cartProduct ? (
-                  <div className="d-flex align-items-center gap-1 mt-3">
-                    <button
-                      onClick={() => {
-                        if (cartProduct.quantity === 1) {
-                          handleRemoveFromCart(modalProduct, true);
-                        } else {
-                          handleRemoveFromCart(modalProduct);
-                        }
-                      }}
-                      className="btn btn-danger btn-sm"
-                    >
-                      -
-                    </button>
-                    {/* <button
-                      className="btn btn-success btn-sm d-flex align-items-center"
-                      disabled
-                    > */}
-                    {/* <i className="bi bi-cart me-1"></i>
-                      {cartProduct.quantity} */}
-
-                    <input
-                      onClick={(e) => e.stopPropagation()}
-                      type="number"
-                      value={cartProduct.quantity}
-                      // min="0"
-                      style={{ width: "60px", textAlign: "center" }}
-                      onChange={(e) => {
-                        const newQuantity = parseInt(e.target.value);
-
-                        setQuantity(cartProduct, newQuantity);
-                      }}
-                    />
-                    {/* </button> */}
-                    <button
-                      onClick={() => handleAddToCart(modalProduct)}
-                      className="btn btn-warning btn-sm"
-                    >
-                      +
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => handleAddToCart(modalProduct)}
-                    className="btn btn-warning btn-sm mt-3"
-                  >
-                    Add to Cart
-                  </button>
-                )}
-                <button
-                  className="btn btn-secondary me-2"
-                  onClick={handlePreviousProduct}
-                >
-                  Previous
-                </button>
-                <button className="btn btn-primary" onClick={handleNextProduct}>
-                  Next
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ProductModal
+          modalProduct={modalProduct}
+          closeModal={closeModal}
+          handleAddToCart={handleAddToCart}
+          handleRemoveFromCart={handleRemoveFromCart}
+          cartItems={cartItems}
+          handlePreviousProduct={handlePreviousProduct}
+          handleNextProduct={handleNextProduct}
+          handleTouchStart={handleTouchStart}
+          handleTouchEnd={handleTouchEnd}
+          setQuantity={setQuantity}
+        />
       )}
     </div>
   );

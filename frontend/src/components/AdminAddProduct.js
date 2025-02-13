@@ -127,7 +127,7 @@ const AdminAddProduct = ({ categories }) => {
           setMessage("");
         }, 3000);
       }
-      // console.log("Product Data:", productData);
+      console.log("Product Data:", productData);
       setName("");
       setPrice("");
       setDetails("Size-");
@@ -142,7 +142,7 @@ const AdminAddProduct = ({ categories }) => {
 
   return (
     <div className="container my-4">
-      <div className="card shadow-sm">
+      <div className="Admin-card shadow-sm">
         <div className="card-body">
           <h2 className="card-title text-center mb-4">Add New Product</h2>
           {error && <p className="alert alert-danger">{error}</p>}

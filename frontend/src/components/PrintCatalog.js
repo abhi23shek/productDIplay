@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { PDFDocument } from "pdf-lib";
+// import { PDFDocument } from "pdf-lib";
 import axios from "axios";
 import PrintCatNav from "./PrintCatNav";
+import HandlePrint from "./print/HandlePrint";
 
 const PrintCatalog = () => {
   const [categoryName, setCategoryName] = useState("");
@@ -18,6 +19,7 @@ const PrintCatalog = () => {
   const [hintText, setHintText] = useState("Trademark:-Vidhata");
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const [successMessage, setSuccessMessage] = useState(""); // Success message
+  const [showHandlePrint, setShowHandlePrint] = useState(false); // State to control HandlePrint visibility
 
   useEffect(() => {
     fetchCategories();
@@ -39,65 +41,16 @@ const PrintCatalog = () => {
       alert("Please select a category.");
       return;
     }
+
     const selectedCategory = categories.find(
       (cat) => String(cat.id) === String(categoryName)
     );
 
-    setIsLoading(true);
-    setSuccessMessage(""); // Clear previous success message
+    // setIsLoading(true);
+    setSuccessMessage("Scroll below for preview"); // Clear previous success message
 
-    axios
-      .post(
-        `${process.env.REACT_APP_SERVER_URL}/api/print-catalog`,
-        {
-          categoryId: categoryName,
-          companyName,
-          mobileNumber,
-          dateApplicaple,
-          priceFlag,
-          priceAdjustment, // Send price adjustment value to backend
-          minPrice, // Include min price
-          maxPrice, // Include max price
-          hintText,
-        },
-        { responseType: "blob" }
-      )
-      .then(async (res) => {
-        try {
-          const arrayBuffer = await res.data.arrayBuffer();
-
-          const pdfDoc = await PDFDocument.load(arrayBuffer);
-
-          pdfDoc.removePage(0);
-
-          const modifiedPdfBytes = await pdfDoc.save();
-
-          const url = URL.createObjectURL(
-            new Blob([modifiedPdfBytes], { type: "application/pdf" })
-          );
-
-          const link = document.createElement("a");
-          link.href = url;
-          const fileName = `${selectedCategory.name}-catalog.pdf`;
-
-          link.setAttribute("download", fileName);
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-
-          setSuccessMessage("Catalog downloaded successfully!");
-        } catch (error) {
-          console.error("Error processing PDF:", error);
-          alert("Failed to modify the catalog PDF.");
-        }
-      })
-      .catch((err) => {
-        console.error("Error generating catalog:", err);
-        alert("Failed to generate catalog.");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    // Show the HandlePrint component
+    setShowHandlePrint(true);
   };
 
   return (
@@ -271,7 +224,7 @@ const PrintCatalog = () => {
                   onClick={handlePrint}
                   disabled={isLoading}
                 >
-                  Print Catalog
+                  Preview
                 </button>
               </div>
             </form>
@@ -283,6 +236,21 @@ const PrintCatalog = () => {
           </div>
         </div>
       </div>
+
+      {/* Conditionally render HandlePrint component */}
+      {showHandlePrint && (
+        <HandlePrint
+          categoryId={categoryName}
+          companyName={companyName}
+          phoneNumbers={mobileNumber}
+          dateApplicable={dateApplicaple}
+          priceFlag={priceFlag}
+          priceAdjustment={priceAdjustment}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          hintText={hintText}
+        />
+      )}
     </div>
   );
 };
