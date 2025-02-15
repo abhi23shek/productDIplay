@@ -120,6 +120,41 @@ const Page = ({
 }) => {
   const productNameRefs = useRef([]);
 
+  // useEffect(() => {
+  //   const resizeObserver = new ResizeObserver((entries) => {
+  //     entries.forEach((entry) => {
+  //       const ref = entry.target;
+  //       const maxWidth = 240.6; // Cell width in pixels
+  //       let fontSize = 18; // Initial font size
+
+  //       // Reduce font size until the text fits within the cell width
+  //       while (ref.scrollWidth > maxWidth && fontSize > 6) {
+  //         fontSize -= 0.5;
+  //         ref.style.fontSize = `${fontSize}px`;
+  //       }
+
+  //       // Ensure the text does not wrap
+  //       ref.style.whiteSpace = "nowrap";
+  //       ref.style.overflow = "hidden";
+  //       ref.style.textOverflow = "ellipsis";
+  //     });
+  //   });
+
+  //   productNameRefs.current.forEach((ref) => {
+  //     if (ref) {
+  //       resizeObserver.observe(ref);
+  //     }
+  //   });
+
+  //   return () => {
+  //     productNameRefs.current.forEach((ref) => {
+  //       if (ref) {
+  //         resizeObserver.unobserve(ref);
+  //       }
+  //     });
+  //   };
+  // }, [productsOnPage]);
+
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       entries.forEach((entry) => {
@@ -129,7 +164,7 @@ const Page = ({
 
         // Reduce font size until the text fits within the cell width
         while (ref.scrollWidth > maxWidth && fontSize > 6) {
-          fontSize -= 0.5;
+          fontSize -= 1;
           ref.style.fontSize = `${fontSize}px`;
         }
 
@@ -140,9 +175,27 @@ const Page = ({
       });
     });
 
-    productNameRefs.current.forEach((ref) => {
-      if (ref) {
-        resizeObserver.observe(ref);
+    // Wait for all images to load before observing
+    const images = document.querySelectorAll(".productimagetoprint");
+    let imagesLoaded = 0;
+
+    const handleImageLoad = () => {
+      imagesLoaded++;
+      if (imagesLoaded === images.length) {
+        // All images are loaded, now observe the product names
+        productNameRefs.current.forEach((ref) => {
+          if (ref) {
+            resizeObserver.observe(ref);
+          }
+        });
+      }
+    };
+
+    images.forEach((img) => {
+      if (img.complete) {
+        handleImageLoad();
+      } else {
+        img.addEventListener("load", handleImageLoad);
       }
     });
 
@@ -151,6 +204,9 @@ const Page = ({
         if (ref) {
           resizeObserver.unobserve(ref);
         }
+      });
+      images.forEach((img) => {
+        img.removeEventListener("load", handleImageLoad);
       });
     };
   }, [productsOnPage]);
