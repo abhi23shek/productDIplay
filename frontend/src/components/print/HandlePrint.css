@@ -19,3 +19,10 @@
   transition: background-color 0.3s ease;
   margin-bottom: 10px;
 }
+
+@media screen and (max-width: 768px) {
+  .parent-container {
+    overflow-y: scroll;
+    max-height: 100vh;
+  }
+}
