@@ -39,6 +39,7 @@ const Homepage = () => {
   const navigate = useNavigate();
   const [sliderReady, setSliderReady] = useState(false);
   const [loading, setLoading] = useState(true); // Track loading state
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,6 +91,17 @@ const Homepage = () => {
 
     fetchData();
   }, []);
+  useEffect(() => {
+    // if (!loading) {
+    const storedCategories =
+      JSON.parse(sessionStorage.getItem("categories")) || [];
+    // Filter categories that should be shown and have an image
+    // const visibleCategories = storedCategories.filter(
+    //   (cat) => cat.show && cat.img_url
+    // );
+    setCategories(storedCategories);
+    // }
+  }, [loading]);
 
   // Preload images using useMemo
   const sliderImages = useMemo(
@@ -191,18 +203,23 @@ const Homepage = () => {
       </div>
 
       <section className="Home-product-showcase">
-        {[1, 2, 3, 4, 5].map((categoryId) => (
-          <div key={categoryId} className="Home-product-card">
+        {categories.map((category) => (
+          <div key={category.id} className="Home-product-card">
             <img
-              src={require(`./image/category-${categoryId}.jpg`)}
-              alt={`Category ${categoryId}`}
+              src={category.img_url}
+              alt={category.name}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = require("./image/image1.jpg"); // Add a fallback image
+              }}
             />
             <button
               className="product-hover-button"
-              onClick={() => navigate(`/FrontPage?category=${categoryId}`)}
-              disabled={loading} // Disable button until loading is complete
+              onClick={() => navigate(`/FrontPage?category=${category.id}`)}
+              disabled={loading}
             >
-              Explore Now
+              {/* Explore Now */}
+              {category.name}
             </button>
           </div>
         ))}
