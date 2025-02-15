@@ -59,7 +59,7 @@ const Page = ({
               <div
                 ref={(el) => (productNameRefs.current[index] = el)}
                 className="productnametoprint"
-                style={{ fontSize: "18px", whiteSpace: "nowrap" }} // Initial styles
+                // style={{ fontSize: "18px", whiteSpace: "nowrap" }} // Initial styles
               >
                 {product.name}
               </div>
