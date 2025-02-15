@@ -164,4 +164,7 @@
     color: #000000;
     font-display: swap;
   }
+  .custom-navbar.homepage .companyname {
+   padding-right: 14vw;
+  }
   
