@@ -8,9 +8,10 @@ const MobileNavbar = () => {
   const location = useLocation();
   const { auth } = useAuth();
   const isActive = (path) => location.pathname === path;
+  const isHomepage = location.pathname === "/";
 
   return (
-    <nav className="custom-navbar">
+    <nav className={`custom-navbar ${isHomepage ? "homepage" : ""}`}>
       <div className="navbar-container">
         {/* Company Logo */}
         <div className="logo-container" onClick={() => navigate("/")}>
@@ -23,81 +24,83 @@ const MobileNavbar = () => {
         <div className="companyname">Shiv Collection</div>
 
         {/* Hamburger Menu */}
-        <div className="menu-toggle">
-          <input type="checkbox" id="menu-checkbox" />
-          <label htmlFor="menu-checkbox" className="menu-icon">
-            <span></span>
-            <span></span>
-            <span></span>
-          </label>
+        {!isHomepage && (
+          <div className="menu-toggle">
+            <input type="checkbox" id="menu-checkbox" />
+            <label htmlFor="menu-checkbox" className="menu-icon">
+              <span></span>
+              <span></span>
+              <span></span>
+            </label>
 
-          {/* Dropdown Menu */}
-          <div className="menu-dropdown">
-            <ul>
-              <li>
-                <button
-                  className={`M-nav-btn ${
-                    isActive("/") ? "M-active" : "M-notactive"
-                  }`}
-                  onClick={() => navigate("/")}
-                >
-                  Home
-                </button>
-              </li>
-              <li>
-                <button
-                  className={`M-nav-btn ${
-                    isActive("/FrontPage") ? "M-active" : "M-notactive"
-                  }`}
-                  onClick={() => navigate("/FrontPage")}
-                >
-                  Product
-                </button>
-              </li>
-              <li>
-                <button
-                  className={`M-nav-btn ${
-                    isActive("/Contact-us") ? "M-active" : "M-notactive"
-                  }`}
-                  onClick={() => navigate("/Contact-us")}
-                >
-                  Contact Us
-                </button>
-              </li>
-              <li>
-                <button
-                  className={`M-nav-btn ${
-                    isActive("/downloads") ? "M-active" : "M-notactive"
-                  }`}
-                  onClick={() => navigate("/downloads")}
-                >
-                  Downloads
-                </button>
-              </li>
-              <li>
-                {auth ? (
-                  <button
-                    className={`M-nav-btn btn-success M-admin${
-                      isActive("/admin") ? "" : ""
-                    }`}
-                    onClick={() => navigate("/admin")}
-                  >
-                    Admin
-                  </button>
-                ) : (
+            {/* Dropdown Menu */}
+            <div className="menu-dropdown">
+              <ul>
+                <li>
                   <button
                     className={`M-nav-btn ${
-                      isActive("/admin") ? "M-active" : "M-notactive"
-                    } M-login-btn`}
-                    onClick={() => navigate("/admin")}
+                      isActive("/") ? "M-active" : "M-notactive"
+                    }`}
+                    onClick={() => navigate("/")}
                   >
-                    Login
+                    Home
                   </button>
-                )}
-              </li>
-            </ul>
+                </li>
+                <li>
+                  <button
+                    className={`M-nav-btn ${
+                      isActive("/FrontPage") ? "M-active" : "M-notactive"
+                    }`}
+                    onClick={() => navigate("/FrontPage")}
+                  >
+                    Product
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={`M-nav-btn ${
+                      isActive("/Contact-us") ? "M-active" : "M-notactive"
+                    }`}
+                    onClick={() => navigate("/Contact-us")}
+                  >
+                    Contact Us
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={`M-nav-btn ${
+                      isActive("/downloads") ? "M-active" : "M-notactive"
+                    }`}
+                    onClick={() => navigate("/downloads")}
+                  >
+                    Downloads
+                  </button>
+                </li>
+                <li>
+                  {auth ? (
+                    <button
+                      className={`M-nav-btn btn-success M-admin${
+                        isActive("/admin") ? "" : ""
+                      }`}
+                      onClick={() => navigate("/admin")}
+                    >
+                      Admin
+                    </button>
+                  ) : (
+                    <button
+                      className={`M-nav-btn ${
+                        isActive("/admin") ? "M-active" : "M-notactive"
+                      } M-login-btn`}
+                      onClick={() => navigate("/admin")}
+                    >
+                      Login
+                    </button>
+                  )}
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </nav>
   );

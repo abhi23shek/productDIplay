@@ -16,6 +16,7 @@ const StyledCartButton = styled.a`
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   text-decoration: none;
+  z-index: 2000;
 
   &:hover {
     transform: translateY(-2px);
