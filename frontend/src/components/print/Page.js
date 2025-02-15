@@ -22,8 +22,8 @@ const Page = ({
         const maxWidth = 240.6; // Cell width in pixels
         let fontSize = 18; // Initial font size
 
-        // Temporarily set the font size to measure the width
-        ref.style.fontSize = `${fontSize}px`;
+        // // Temporarily set the font size to measure the width
+        // ref.style.fontSize = `${fontSize}px`;
 
         // Reduce font size until the text fits within the cell width
         while (ref.scrollWidth > maxWidth && fontSize > 6) {

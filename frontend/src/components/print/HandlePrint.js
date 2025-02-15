@@ -85,7 +85,7 @@ const HandlePrint = () => {
   const handlePrint = useReactToPrint({
     contentRef: printRef,
     documentTitle: "Product Catalog",
-    onAfterPrint: () => console.log("Printing finished"),
+    // onAfterPrint: () => console.log("Printing finished"),
   });
 
   if (isLoading) {
