@@ -13,7 +13,7 @@ export const generatePDF = async (
   const pdfDoc = await PDFDocument.create();
   pdfDoc.registerFontkit(fontkit);
 
-  const fontNB = await pdfDoc.embedFont(StandardFonts.TimesRoman);
+  // const fontNB = await pdfDoc.embedFont(StandardFonts.TimesRoman);
   const fontB = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
   const pageWidth = 595;
@@ -56,11 +56,11 @@ export const generatePDF = async (
         (pageWidth -
           fontB.widthOfTextAtSize(
             `Rates List applicable from ${dateApplicable}`,
-            13
+            10
           )) /
         2,
       y: 822,
-      size: 13,
+      size: 10,
       font: fontB,
       color: rgb(1, 0, 0),
     });

@@ -44,3 +44,10 @@
 .download-btn:hover {
   background-color: #0056b3;
 }
+
+.catalogs-heading {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 20px 0;
+}

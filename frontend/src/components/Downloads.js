@@ -163,6 +163,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { generatePDF } from "./print/GeneratePDF"; // Import the PDF function
 import "./Downloads.css";
+import Navbar from "./Navbar";
 
 const CategoryCards = () => {
   const [categories, setCategories] = useState([]);
@@ -246,25 +247,31 @@ const CategoryCards = () => {
   };
 
   return (
-    <div className="grid-container">
-      {categories.map((category) => (
-        <div key={category.id} className="card">
-          <img
-            src={category.img_url}
-            alt={category.name}
-            className="card-img"
-          />
-          <h3 className="card-title">{category.name}</h3>
-          <button
-            className="download-btn"
-            onClick={() => handleDownloadPDF(category.id, category.name)}
-            disabled={loading === category.id}
-          >
-            {loading === category.id ? "Downloading..." : "Download"}
-          </button>
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="ContactNavbar">
+        <Navbar />
+      </div>
+      <h2 className="catalogs-heading">Catalogs</h2>
+      <div className="grid-container">
+        {categories.map((category) => (
+          <div key={category.id} className="card">
+            <img
+              src={category.img_url}
+              alt={category.name}
+              className="card-img"
+            />
+            <h3 className="card-title">{category.name}</h3>
+            <button
+              className="download-btn"
+              onClick={() => handleDownloadPDF(category.id, category.name)}
+              disabled={loading === category.id}
+            >
+              {loading === category.id ? "Downloading..." : "Download"}
+            </button>
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 
