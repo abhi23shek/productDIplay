@@ -254,7 +254,7 @@ const CategoryCards = () => {
       <h2 className="catalogs-heading">Catalogs</h2>
       <div className="grid-container">
         {categories.map((category) => (
-          <div key={category.id} className="card">
+          <div key={category.id} className="D-card">
             <img
               src={category.img_url}
               alt={category.name}

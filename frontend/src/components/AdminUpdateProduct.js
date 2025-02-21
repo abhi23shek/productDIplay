@@ -187,7 +187,7 @@ const AdminUpdate = () => {
   };
 
   return (
-    <div className="container my-5">
+    <div className="container">
       <div className="card shadow-lg">
         <div className="card-header text-center">
           <h2>Update Product</h2>

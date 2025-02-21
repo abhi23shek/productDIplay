@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Trash, Edit, Trash2, Edit2 } from "lucide-react";
 
 const AdminAddCategory = () => {
   const [categoryName, setCategoryName] = useState("");
@@ -194,23 +195,23 @@ const AdminAddCategory = () => {
                   // Show category name when not editing
                   <>
                     <span className="fw-bold">{category.name}</span>
-                    <div>
-                      <button
-                        className="btn btn-warning btn-sm me-2"
+                    <div className="btn-category-admin">
+                      <Edit2
+                        className="text-primary"
+                        size={20}
+                        style={{ cursor: "pointer" }}
                         onClick={() => {
                           setEditCategoryId(category.id);
                           setEditCategoryName(category.name);
                           setEditCategoryShow(category.show);
                         }}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn btn-danger btn-sm"
+                      ></Edit2>
+                      <Trash2
+                        className="text-danger"
+                        size={20}
+                        style={{ cursor: "pointer" }}
                         onClick={() => deleteCategory(category.id)}
-                      >
-                        Delete
-                      </button>
+                      ></Trash2>
                     </div>
                   </>
                 )}
