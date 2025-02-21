@@ -133,6 +133,7 @@ const HandlePrint = () => {
   const {
     dateApplicable,
     priceFlag,
+    imgFlag,
     priceAdjustment,
     companyName,
     phoneNumbers,
@@ -173,7 +174,7 @@ const HandlePrint = () => {
       for (const subcat of subcategories) {
         try {
           const response = await fetch(
-            `${process.env.REACT_APP_SERVER_URL}/api/products/productfilter?subCategoryId=${subcat.id}&minPrice=${minPrice}&maxPrice=${maxPrice}`
+            `${process.env.REACT_APP_SERVER_URL}/api/products/productfilter?subCategoryId=${subcat.id}&minPrice=${minPrice}&maxPrice=${maxPrice}&imgFlag=${imgFlag}`
           );
           if (!response.ok) throw new Error("Failed to fetch products");
 
