@@ -26,7 +26,7 @@ router.get("/:categoryId", async (req, res) => {
 
   try {
     const result = await pool`
-      SELECT * FROM subcategories WHERE category_id = ${categoryId};
+      SELECT * FROM subcategories WHERE category_id = ${categoryId} ORDER BY id;
     `;
     if (result.length === 0) {
       return res.status(404).json({ message: "No subcategories found" });
