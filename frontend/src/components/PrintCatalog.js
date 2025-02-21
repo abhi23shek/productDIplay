@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 // import { PDFDocument } from "pdf-lib";
 import axios from "axios";
 import PrintCatNav from "./PrintCatNav";
-import HandlePrint from "./print/HandlePrint";
+// import HandlePrint from "./print/HandlePrint";
 import { useNavigate } from "react-router-dom";
 
 const PrintCatalog = () => {
@@ -15,6 +15,7 @@ const PrintCatalog = () => {
   );
   const [dateApplicaple, setDateApplicaple] = useState("1st April 2024");
   const [priceFlag, setPriceFlag] = useState(true); // Whether to show prices
+  const [imgFlag, setImgFlag] = useState(true);
   const [priceAdjustment, setPriceAdjustment] = useState(0); // Percentage adjustment
   const [minPrice, setMinPrice] = useState(0); // Minimum price
   const [maxPrice, setMaxPrice] = useState(1000); // Maximum price
@@ -63,6 +64,7 @@ const PrintCatalog = () => {
     const props = {
       dateApplicable: dateApplicaple,
       priceFlag: priceFlag,
+      imgFlag: imgFlag,
       priceAdjustment: priceAdjustment,
       companyName: companyName,
       phoneNumbers: mobileNumber,
@@ -187,6 +189,19 @@ const PrintCatalog = () => {
                     />
                     <label className="form-check-label" htmlFor="priceFlag">
                       Show Prices
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="priceFlag"
+                      checked={imgFlag}
+                      onChange={(e) => setImgFlag(e.target.checked)}
+                      disabled={isLoading}
+                    />
+                    <label className="form-check-label" htmlFor="priceFlag">
+                      Show image-less products
                     </label>
                   </div>
                 </div>

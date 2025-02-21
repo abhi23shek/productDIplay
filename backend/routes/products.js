@@ -20,19 +20,44 @@ router.get("/productcount", async (req, res) => {
 });
 
 router.get("/productfilter", async (req, res) => {
-  const { subCategoryId, minPrice, maxPrice } = req.query;
-
-  try {
-    const result = await pool`
+  const { subCategoryId, minPrice, maxPrice, imgFlag } = req.query;
+  // console.log(imgFlag);
+  if (imgFlag !== "false") {
+    // console.log("Failed");
+    try {
+      const result = await pool`
               SELECT name, price, details, image_url
         FROM products
         WHERE subcategory_id = ${subCategoryId}
         AND price BETWEEN ${minPrice} AND ${maxPrice}
         ORDER BY price ASC, name ASC`;
-    res.json(result);
-  } catch (err) {
-    console.error("Error fetching products:", err);
-    res.status(500).json({ error: "Error fetching products" });
+      res.json(result);
+    } catch (err) {
+      console.error("Error fetching products:", err);
+      res.status(500).json({ error: "Error fetching products" });
+    }
+  } else {
+    try {
+      // const result = await pool`
+      //         SELECT name, price, details, image_url
+      //   FROM products
+      //   WHERE subcategory_id = ${subCategoryId}
+      //   AND price BETWEEN ${minPrice} AND ${maxPrice}
+      //   ORDER BY price ASC, name ASC`;
+      // console.log("Passed");
+      const result = await pool`
+    SELECT name, price, details, image_url
+    FROM products
+    WHERE subcategory_id = ${subCategoryId}
+    AND price BETWEEN ${minPrice} AND ${maxPrice}
+    AND image_url != 'https://i.ibb.co/p0nQhDT/image.png'
+    ORDER BY price ASC, name ASC`;
+      // console.log(result);
+      res.json(result);
+    } catch (err) {
+      console.error("Error fetching products:", err);
+      res.status(500).json({ error: "Error fetching products" });
+    }
   }
 });
 
