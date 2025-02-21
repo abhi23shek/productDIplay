@@ -7,9 +7,9 @@ const AdminProductCards = ({ image, name, price, description, id }) => {
     <div>
       <img src={image} alt={name} className="product-image" />
       <div className="product-details">
-        <h5 className="product-name">{name}</h5>
+        <h5 className="Admin-product-name">{name}</h5>
         <p className="product-price">₹{Number(price).toFixed(2)}</p>
-        <p className="product-description">{description}</p>
+        <p className="Admin-product-description">{description}</p>
       </div>
     </div>
   );
