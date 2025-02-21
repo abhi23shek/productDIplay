@@ -5,6 +5,7 @@ import "./AdminDisplay.css";
 import BarLoader from "react-spinners/BarLoader";
 import ResponsiveCategoryFilter from "./ResponsiveCategoryFilter";
 import ResponsiveSubcategoryFilter from "./ResponsiveSubcategoryFilter";
+import { Trash, Edit, Trash2 } from "lucide-react";
 
 function AdminDisplay() {
   const [products, setProducts] = useState([]);
@@ -288,18 +289,15 @@ function AdminDisplay() {
                                   price={product.price}
                                   description={product.details}
                                 />
-                                <div className="d-flex justify-content-between">
-                                  <button
-                                    className="btn btn-danger btn-sm"
+                                <div className="admin-product-card-btn">
+                                  <Trash2
+                                    className="text-danger"
+                                    size={20}
+                                    style={{ cursor: "pointer" }}
                                     onClick={() => handleDelete(product.id)}
-                                  >
-                                    Delete
-                                  </button>
-                                  <a
-                                    href={`/admin/update/${product.id}`}
-                                    className="btn btn-primary btn-sm"
-                                  >
-                                    Edit
+                                  />
+                                  <a href={`/admin/update/${product.id}`}>
+                                    <Edit className="text-primary" size={20} />
                                   </a>
                                 </div>
                               </div>

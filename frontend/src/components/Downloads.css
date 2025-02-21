@@ -5,7 +5,7 @@
   padding: 20px;
 }
 
-.card {
+.D-card {
   background: #fff;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -14,7 +14,7 @@
   transition: transform 0.2s ease-in-out;
 }
 
-.card:hover {
+.D-card:hover {
   transform: scale(1.05);
 }
 

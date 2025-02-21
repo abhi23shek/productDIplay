@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Trash, Edit, Trash2, Edit2 } from "lucide-react";
 
 const AdminAddSubcategories = ({ categories }) => {
   const [categoryId, setCategoryId] = useState(""); // Selected category ID
@@ -205,23 +206,25 @@ const AdminAddSubcategories = ({ categories }) => {
                           Save
                         </button>
                       ) : (
-                        <button
-                          className="btn btn-warning btn-sm me-2"
+                        <Edit2
+                          className="text-primary"
+                          size={20}
+                          style={{ cursor: "pointer" }}
                           onClick={() => {
                             setEditingSubcategory(subcategory.id);
                             setUpdatedSubcategoryName(subcategory.name);
                           }}
-                        >
-                          Edit
-                        </button>
+                        ></Edit2>
                       )}
 
-                      <button
-                        className="btn btn-danger btn-sm"
+                      <Trash2
+                        className="text-danger"
+                        size={20}
+                        style={{ cursor: "pointer" }}
                         onClick={() => handleDeleteSubcategory(subcategory.id)}
                       >
                         Delete
-                      </button>
+                      </Trash2>
                     </div>
                   </li>
                 ))}

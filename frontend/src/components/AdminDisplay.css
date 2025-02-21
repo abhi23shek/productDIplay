@@ -2,8 +2,6 @@
     display: flex;
     flex-wrap: wrap; /* Prevent wrapping */
     gap: 20px;
-    overflow-x: auto; /* Add horizontal scrolling */
-  
     flex-direction: column;
     background:  #d9dfe4a8;
     margin: 20px 20px;
@@ -140,4 +138,10 @@
   /* Example 7: Responsive Font Size */
   .Adminpage-sub-heading.responsive {
     font-size: 1.6em; /* Larger on larger screens */
+  }
+  .admin-product-card-btn{
+    padding: 0px 20px;
+    gap: 10px;
+    display: flex;
+    justify-content: space-between;
   }
