@@ -7,6 +7,10 @@ const AdminAddCategory = () => {
   const [editCategoryId, setEditCategoryId] = useState(null);
   const [editCategoryName, setEditCategoryName] = useState("");
   const [editCategoryShow, setEditCategoryShow] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const [confirmText, setConfirmText] = useState("");
+  const confirmationText = process.env.REACT_APP_DELETE_CONFIRM_TEXT;
 
   useEffect(() => {
     fetchCategories();
@@ -24,10 +28,11 @@ const AdminAddCategory = () => {
     }
   };
 
-  const deleteCategory = async (id) => {
+  const deleteCategory = async () => {
+    // console.log(id);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/categoriesforadmin/${id}`,
+        `${process.env.REACT_APP_SERVER_URL}/api/categoriesforadmin/${deleteId}`,
         {
           method: "DELETE",
         }
@@ -42,6 +47,9 @@ const AdminAddCategory = () => {
     } catch (error) {
       console.error("Error deleting category:", error);
     }
+    setOpen(false); // Close modal
+    setDeleteId(null);
+    setConfirmText("");
   };
 
   const updateCategory = async (id) => {
@@ -210,7 +218,11 @@ const AdminAddCategory = () => {
                         className="text-danger"
                         size={20}
                         style={{ cursor: "pointer" }}
-                        onClick={() => deleteCategory(category.id)}
+                        onClick={() => {
+                          setDeleteId(category.id);
+                          setOpen(true);
+                        }}
+                        // onClick={() => deleteCategory(category.id)}
                       ></Trash2>
                     </div>
                   </>
@@ -220,6 +232,80 @@ const AdminAddCategory = () => {
           </ul>
         </div>
       </div>
+
+      {open && (
+        <div
+          style={{
+            position: "fixed",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "5px",
+              textAlign: "center",
+            }}
+          >
+            <p>Enter the password to delete:</p>
+            <input
+              type="text"
+              value={confirmText}
+              onChange={(e) => setConfirmText(e.target.value)}
+              style={{
+                padding: "5px",
+                marginTop: "10px",
+                border: "1px solid gray",
+                borderRadius: "3px",
+                textAlign: "center",
+              }}
+            />
+            <div style={{ marginTop: "10px" }}>
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  setConfirmText("");
+                }}
+                style={{
+                  marginRight: "10px",
+                  padding: "5px 10px",
+                  backgroundColor: "gray",
+                  color: "white",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={deleteCategory}
+                disabled={confirmText !== confirmationText} // Compare input with env variable
+                style={{
+                  padding: "5px 10px",
+                  backgroundColor:
+                    confirmText === confirmationText ? "red" : "gray",
+                  color: "white",
+                  border: "none",
+                  cursor:
+                    confirmText === confirmationText
+                      ? "pointer"
+                      : "not-allowed",
+                }}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

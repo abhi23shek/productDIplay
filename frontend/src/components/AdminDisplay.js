@@ -6,6 +6,15 @@ import BarLoader from "react-spinners/BarLoader";
 import ResponsiveCategoryFilter from "./ResponsiveCategoryFilter";
 import ResponsiveSubcategoryFilter from "./ResponsiveSubcategoryFilter";
 import { Trash, Edit, Trash2 } from "lucide-react";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogHeader,
+//   DialogFooter,
+//   DialogTitle,
+//   DialogDescription,
+// } from "@/components/ui/dialog";
+// import { Button } from "@/components/ui/button";
 
 function AdminDisplay() {
   const [products, setProducts] = useState([]);
@@ -18,6 +27,12 @@ function AdminDisplay() {
   const [loading, setLoading] = useState(true);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [open, setOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const [confirmText, setConfirmText] = useState("");
+
+  const confirmationText = process.env.REACT_APP_DELETE_CONFIRM_TEXT;
+  // console.log(confirmationText);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -208,29 +223,55 @@ function AdminDisplay() {
   //   }
   // };
 
-  const handleDelete = async (id) => {
+  // const handleDelete = async (id) => {
+  //   try {
+  //     // Send a DELETE request to the backend
+  //     const response = await fetch(
+  //       `${process.env.REACT_APP_SERVER_URL}/api/products/${id}`,
+  //       {
+  //         method: "DELETE",
+  //       }
+  //     );
+
+  //     if (response.ok) {
+  //       // Update both `products` and `filteredProducts` states
+  //       setProducts((prevProducts) =>
+  //         prevProducts.filter((product) => product.id !== id)
+  //       );
+  //       setFilteredProducts((prevFilteredProducts) =>
+  //         prevFilteredProducts.filter((product) => product.id !== id)
+  //       );
+  //     } else {
+  //       console.error("Error deleting product:", response.statusText);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting product:", error);
+  //   }
+  // };
+
+  const handleDelete = async () => {
     try {
-      // Send a DELETE request to the backend
       const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/products/${id}`,
-        {
-          method: "DELETE",
-        }
+        `${process.env.REACT_APP_SERVER_URL}/api/products/${deleteId}`,
+        { method: "DELETE" }
       );
 
       if (response.ok) {
-        // Update both `products` and `filteredProducts` states
         setProducts((prevProducts) =>
-          prevProducts.filter((product) => product.id !== id)
+          prevProducts.filter((product) => product.id !== deleteId)
         );
         setFilteredProducts((prevFilteredProducts) =>
-          prevFilteredProducts.filter((product) => product.id !== id)
+          prevFilteredProducts.filter((product) => product.id !== deleteId)
         );
       } else {
         console.error("Error deleting product:", response.statusText);
       }
     } catch (error) {
       console.error("Error deleting product:", error);
+    } finally {
+      setOpen(false); // Close modal
+      setDeleteId(null);
+      setConfirmText("");
     }
   };
 
@@ -294,7 +335,10 @@ function AdminDisplay() {
                                     className="text-danger"
                                     size={20}
                                     style={{ cursor: "pointer" }}
-                                    onClick={() => handleDelete(product.id)}
+                                    onClick={() => {
+                                      setDeleteId(product.id);
+                                      setOpen(true);
+                                    }}
                                   />
                                   <a href={`/admin/update/${product.id}`}>
                                     <Edit className="text-primary" size={20} />
@@ -312,8 +356,134 @@ function AdminDisplay() {
             )}
           </div>
         </div>
-        {/* <Footer /> */}
       </div>
+      {/* {open && (
+        <div
+          style={{
+            position: "fixed",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "5px",
+              textAlign: "center",
+            }}
+          >
+            <p>Are you sure you want to delete this product?</p>
+            <div style={{ marginTop: "10px" }}>
+              <button
+                onClick={() => setOpen(false)}
+                style={{
+                  marginRight: "10px",
+                  padding: "5px 10px",
+                  backgroundColor: "gray",
+                  color: "white",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                style={{
+                  padding: "5px 10px",
+                  backgroundColor: "red",
+                  color: "white",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )} */}
+
+      {open && (
+        <div
+          style={{
+            position: "fixed",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "5px",
+              textAlign: "center",
+            }}
+          >
+            <p>Enter the password to delete:</p>
+            <input
+              type="text"
+              value={confirmText}
+              onChange={(e) => setConfirmText(e.target.value)}
+              style={{
+                padding: "5px",
+                marginTop: "10px",
+                border: "1px solid gray",
+                borderRadius: "3px",
+                textAlign: "center",
+              }}
+            />
+            <div style={{ marginTop: "10px" }}>
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  setConfirmText("");
+                }}
+                style={{
+                  marginRight: "10px",
+                  padding: "5px 10px",
+                  backgroundColor: "gray",
+                  color: "white",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={confirmText !== confirmationText} // Compare input with env variable
+                style={{
+                  padding: "5px 10px",
+                  backgroundColor:
+                    confirmText === confirmationText ? "red" : "gray",
+                  color: "white",
+                  border: "none",
+                  cursor:
+                    confirmText === confirmationText
+                      ? "pointer"
+                      : "not-allowed",
+                }}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

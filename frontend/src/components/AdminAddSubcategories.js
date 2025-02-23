@@ -9,6 +9,10 @@ const AdminAddSubcategories = ({ categories }) => {
   const [updatedSubcategoryName, setUpdatedSubcategoryName] = useState(""); // Updated name for subcategory
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(""); // Error message
+  const [open, setOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const [confirmText, setConfirmText] = useState("");
+  const confirmationText = process.env.REACT_APP_DELETE_CONFIRM_TEXT;
 
   // Fetch subcategories when category changes
   useEffect(() => {
@@ -105,10 +109,10 @@ const AdminAddSubcategories = ({ categories }) => {
   };
 
   // Delete a subcategory
-  const handleDeleteSubcategory = async (subcategoryId) => {
+  const handleDeleteSubcategory = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${subcategoryId}`,
+        `${process.env.REACT_APP_SERVER_URL}/api/subcategories/${deleteId}`,
         { method: "DELETE" }
       );
 
@@ -120,6 +124,9 @@ const AdminAddSubcategories = ({ categories }) => {
     } catch (error) {
       alert("Error deleting subcategory. Please try again.");
     }
+    setOpen(false); // Close modal
+    setDeleteId(null);
+    setConfirmText("");
   };
 
   return (
@@ -221,7 +228,11 @@ const AdminAddSubcategories = ({ categories }) => {
                         className="text-danger"
                         size={20}
                         style={{ cursor: "pointer" }}
-                        onClick={() => handleDeleteSubcategory(subcategory.id)}
+                        onClick={() => {
+                          setDeleteId(subcategory.id);
+                          setOpen(true);
+                        }}
+                        // onClick={() => handleDeleteSubcategory(subcategory.id)}
                       >
                         Delete
                       </Trash2>
@@ -236,6 +247,79 @@ const AdminAddSubcategories = ({ categories }) => {
                 </p>
               )
             )}
+          </div>
+        </div>
+      )}
+      {open && (
+        <div
+          style={{
+            position: "fixed",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "5px",
+              textAlign: "center",
+            }}
+          >
+            <p>Enter the password to delete:</p>
+            <input
+              type="text"
+              value={confirmText}
+              onChange={(e) => setConfirmText(e.target.value)}
+              style={{
+                padding: "5px",
+                marginTop: "10px",
+                border: "1px solid gray",
+                borderRadius: "3px",
+                textAlign: "center",
+              }}
+            />
+            <div style={{ marginTop: "10px" }}>
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  setConfirmText("");
+                }}
+                style={{
+                  marginRight: "10px",
+                  padding: "5px 10px",
+                  backgroundColor: "gray",
+                  color: "white",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteSubcategory}
+                disabled={confirmText !== confirmationText} // Compare input with env variable
+                style={{
+                  padding: "5px 10px",
+                  backgroundColor:
+                    confirmText === confirmationText ? "red" : "gray",
+                  color: "white",
+                  border: "none",
+                  cursor:
+                    confirmText === confirmationText
+                      ? "pointer"
+                      : "not-allowed",
+                }}
+              >
+                Confirm
+              </button>
+            </div>
           </div>
         </div>
       )}
