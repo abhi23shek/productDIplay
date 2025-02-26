@@ -212,10 +212,13 @@ export const generatePDF = async (
 
         var revisedPrice = originalPrice;
 
-        revisedPrice = originalPrice + (originalPrice * priceAdjustment) / 100;
+        if (priceAdjustment !== 0) {
+          revisedPrice =
+            originalPrice + (originalPrice * priceAdjustment) / 100;
 
-        // Round off to the nearest integer
-        revisedPrice = Math.round(revisedPrice);
+          // Round off to the nearest integer
+          revisedPrice = Math.round(revisedPrice);
+        }
 
         // Draw the adjusted price (left-aligned in its section)
         pdfPage.drawText(`Rs. ${revisedPrice}`, {
