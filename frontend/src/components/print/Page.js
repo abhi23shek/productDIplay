@@ -96,11 +96,16 @@ const Page = ({
                     ? (() => {
                         const basePrice = parseFloat(product.price);
                         if (priceAdjustment === 0) {
-                          return basePrice;
+                          var newBase;
+                          if (basePrice % 1 !== 0) {
+                            newBase = basePrice.toFixed(2);
+                          }
+                          return newBase;
                         }
                         const adjustment = basePrice * (priceAdjustment / 100);
                         const adjustedPrice = basePrice + adjustment;
                         const roundedPrice = Math.round(adjustedPrice);
+
                         return roundedPrice;
                       })()
                     : ""}

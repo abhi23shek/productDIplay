@@ -220,6 +220,11 @@ export const generatePDF = async (
           revisedPrice = Math.round(revisedPrice);
         }
 
+        if (revisedPrice % 1 !== 0) {
+          // revisedPrice = revisedPrice + 0.01;
+          // revisedPrice = revisedPrice - 0.01;
+          revisedPrice = revisedPrice.toFixed(2);
+        }
         // Draw the adjusted price (left-aligned in its section)
         pdfPage.drawText(`Rs. ${revisedPrice}`, {
           x: priceX,
