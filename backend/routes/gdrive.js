@@ -37,7 +37,8 @@ router.post("/", upload.single("catalogs"), async (req, res) => {
     }
 
     const fileName = req.file.originalname;
-    const folderId = "1aaLCO1JxGhgTNwjvHwOcsIJ7EaW8eW6D"; // Replace with your Drive folder ID
+    // const folderId = "1aaLCO1JxGhgTNwjvHwOcsIJ7EaW8eW6D"; // Replace with your Drive folder ID
+    const folderId = "1b75V5BG5ruuDQAj73s-_Q-Gov_GoYPR2";
     const authClient = await authorize();
 
     // ✅ Ensure file buffer is correctly passed
@@ -83,65 +84,6 @@ async function uploadFile(authClient, fileBuffer, fileName, folderId) {
     },
   });
 }
-
-// GET route to fetch the list of catalogs from Google Drive
-// router.get("/", async (req, res) => {
-//   const folderId = "1aaLCO1JxGhgTNwjvHwOcsIJ7EaW8eW6D"; // Replace with your folder ID
-
-//   try {
-//     const authClient = await authorize();
-//     const files = await listFiles(authClient, folderId);
-
-//     res.status(200).json(files); // Return the list of files (catalogs)
-//   } catch (error) {
-//     console.error("Error fetching files:", error);
-//     res.status(500).json({ error: "Failed to fetch files" });
-//   }
-// });
-
-// router.get("/download/:filename", async (req, res) => {
-//   const fileName = req.params.filename;
-//   const folderId = "1aaLCO1JxGhgTNwjvHwOcsIJ7EaW8eW6D"; // Replace with your folder ID
-
-//   try {
-//     const authClient = await authorize();
-//     const drive = google.drive({ version: "v3", auth: authClient });
-
-//     // Find file by name in the folder
-//     const response = await drive.files.list({
-//       q: `'${folderId}' in parents and name = '${fileName}'`,
-//       fields: "files(id, name)",
-//     });
-
-//     // console.log("Google Drive response:", response.data); // Log the response for debugging
-
-//     if (response.data.files.length === 0) {
-//       return res.status(404).json({ error: "File not found" });
-//     }
-
-//     const fileId = response.data.files[0].id;
-
-//     // Get the file content
-//     const fileStream = await drive.files.get(
-//       { fileId, alt: "media" },
-//       { responseType: "stream" }
-//     );
-
-//     // console.log("File Stream Data:", fileStream.data); // Log the file stream for debugging
-
-//     if (!fileStream || !fileStream.data) {
-//       return res.status(500).json({ error: "File stream is undefined" });
-//     }
-
-//     res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
-//     res.setHeader("Content-Type", "application/pdf");
-
-//     fileStream.data.pipe(res);
-//   } catch (error) {
-//     console.error("Error downloading file:", error);
-//     res.status(500).json({ error: "Failed to download file" });
-//   }
-// });
 
 async function deleteFile(auth, fileId) {
   const drive = google.drive({ version: "v3", auth });

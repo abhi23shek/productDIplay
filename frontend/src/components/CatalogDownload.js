@@ -20,35 +20,6 @@ const CatalogDownload = () => {
     fetchCategories();
   }, []);
 
-  //   const handleDownload = async (catalogId) => {
-  //     if (!catalogId) {
-  //       alert("No catalog available for this category.");
-  //       return;
-  //     }
-
-  //     try {
-  //       setLoading(true);
-  //       const response = await axios.get(
-  //         `${process.env.REACT_APP_SERVER_URL}/api/gdrive/download/${catalogId}`,
-  //         { responseType: "blob" } // Ensure it's treated as a file
-  //       );
-
-  //       // Create a download link for the user
-  //       const url = window.URL.createObjectURL(new Blob([response.data]));
-  //       const link = document.createElement("a");
-  //       link.href = url;
-  //       link.setAttribute("download", `Catalog_${catalogId}.pdf`);
-  //       document.body.appendChild(link);
-  //       link.click();
-  //       link.remove();
-  //     } catch (error) {
-  //       console.error("Error downloading catalog:", error);
-  //       alert("Failed to download the catalog.");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
   const handleDownload = (fileId) => {
     if (!fileId) {
       alert("No catalog available for this category.");
