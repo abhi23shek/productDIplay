@@ -110,4 +110,51 @@ router.patch("/:id/toggle-show", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool`
+      SELECT catalog_id FROM categories WHERE id = ${id};
+    `;
+
+    if (result.length === 0) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+
+    res.json(result[0]);
+  } catch (err) {
+    console.error("Error fetching category catalog_id:", err);
+    res.status(500).json({ error: "Error fetching catalog_id" });
+  }
+});
+
+// Update catalog_id for a category
+router.put("/:id/update-catalog", async (req, res) => {
+  const { id } = req.params;
+  const { catalog_id } = req.body; // New file ID
+
+  if (!catalog_id) {
+    return res.status(400).json({ error: "New catalog_id is required" });
+  }
+
+  try {
+    const result = await pool`
+      UPDATE categories 
+      SET catalog_id = ${catalog_id} 
+      WHERE id = ${id} 
+      RETURNING *;
+    `;
+
+    if (result.length === 0) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+
+    res.json(result[0]);
+  } catch (err) {
+    console.error("Error updating catalog_id:", err);
+    res.status(500).json({ error: "Error updating catalog_id" });
+  }
+});
+
 module.exports = router;

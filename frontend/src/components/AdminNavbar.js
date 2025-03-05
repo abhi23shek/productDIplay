@@ -27,7 +27,7 @@ const AdminNavbar = () => {
             <div className="nav-links">
               <button
                 className={`nav-link ${isActive("/admin") ? "active" : ""}`}
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/admin")}
               >
                 Home
               </button>
