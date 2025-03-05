@@ -14,7 +14,7 @@ const AdminUploadCatalog = () => {
       .get(`${process.env.REACT_APP_SERVER_URL}/api/gdrive`)
 
       .then((response) => {
-        setCatalogs(response.data);
+        // setCatalogs(response.data);
         setCatalogs(response.data);
       })
 
@@ -41,7 +41,7 @@ const AdminUploadCatalog = () => {
     setMessage("");
 
     try {
-      await axios.post(
+      const response = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/api/gdrive`,
         formData,
         {
@@ -50,6 +50,7 @@ const AdminUploadCatalog = () => {
           },
         }
       );
+      console.log("Upload response:", response.data);
 
       setMessage("Catalogs uploaded successfully!");
       setFiles([]);

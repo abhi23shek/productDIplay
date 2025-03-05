@@ -199,7 +199,7 @@ const CategoryCards = () => {
       // Fetch products for each subcategory
       for (const subcat of subcategories) {
         const productResponse = await axios.get(
-          `${process.env.REACT_APP_SERVER_URL}/api/products/productfilter?subCategoryId=${subcat.id}&minPrice=0&maxPrice=999999`
+          `${process.env.REACT_APP_SERVER_URL}/api/products/productfilter?subCategoryId=${subcat.id}&minPrice=0&maxPrice=999999&imgFlag=false`
         );
         const products = productResponse.data;
 

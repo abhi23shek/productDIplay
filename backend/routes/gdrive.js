@@ -93,7 +93,7 @@ router.post("/", upload.single("catalogs"), async (req, res) => {
 
     // Optionally, delete the local file after uploading it to Google Drive
     fs.unlinkSync(localFilePath);
-
+    console.log(fileResponse.data.id);
     res.status(200).json({
       message: "File uploaded successfully",
       fileId: fileResponse.data.id,

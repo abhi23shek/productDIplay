@@ -47,6 +47,15 @@ const AdminNavbar = () => {
               >
                 Upload Catalog
               </button>
+
+              <button
+                className={`nav-link ${
+                  isActive("/admin/uploadcatalog") ? "active" : ""
+                }`}
+                onClick={() => navigate("/updatecatalog")}
+              >
+                Update Catalog
+              </button>
             </div>
           </div>
           <div className="rightside_navbar">

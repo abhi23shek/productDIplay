@@ -20,6 +20,7 @@ import Downloads from "./components/Downloads";
 import ContactusSuccess from "./components/ContactusSuccess";
 import Cart from "./components/Cart";
 import HandlePrint from "./components/print/HandlePrint";
+import AdminUpdateCatalog from "./components/AdminUpdateCatalog";
 
 const ProtectedRoute = ({ children }) => {
   const { auth } = useAuth();
@@ -80,10 +81,19 @@ function App() {
             }
           />
           <Route
-            path="/uploadCatalog"
+            path="/uploadcatalog"
             element={
               <ProtectedRoute>
                 <AdminUploadCatalog />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/updatecatalog"
+            element={
+              <ProtectedRoute>
+                <AdminUpdateCatalog />
               </ProtectedRoute>
             }
           />
