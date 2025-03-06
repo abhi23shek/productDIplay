@@ -51,6 +51,14 @@ const MobileAdminNavbar = () => {
             Upload Catalog
           </button>
           <button
+            className={`nav-link ${
+              isActive("/admin/uploadcatalog") ? "active" : ""
+            }`}
+            onClick={() => navigate("/updatecatalog")}
+          >
+            Update Catalog
+          </button>
+          <button
             onClick={() => {
               logout();
               setIsOpen(false);
