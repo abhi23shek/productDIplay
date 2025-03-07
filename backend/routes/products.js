@@ -61,6 +61,17 @@ router.get("/productfilter", async (req, res) => {
   }
 });
 
+router.get("/frontpage", async (req, res) => {
+  try {
+    const result =
+      await pool`SELECT * FROM products WHERE image_url != 'https://i.ibb.co/p0nQhDT/image.png' ORDER BY subcategory_id ASC, price ASC, name ASC`;
+    res.json(result);
+  } catch (err) {
+    console.error("Error fetching products:", err);
+    res.status(500).json({ error: "Error fetching products" });
+  }
+});
+
 // Fetch all products
 router.get("/", async (req, res) => {
   try {

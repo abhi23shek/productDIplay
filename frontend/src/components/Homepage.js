@@ -53,7 +53,7 @@ const Homepage = () => {
 
           // Fetch data from the server
           const productResponse = await fetch(
-            `${process.env.REACT_APP_SERVER_URL}/api/products`
+            `${process.env.REACT_APP_SERVER_URL}/api/products/frontpage`
           );
           const productsData = await productResponse.json();
 
