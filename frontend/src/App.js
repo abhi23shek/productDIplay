@@ -22,6 +22,7 @@ import Cart from "./components/Cart";
 import HandlePrint from "./components/print/HandlePrint";
 import AdminUpdateCatalog from "./components/AdminUpdateCatalog";
 import CatalogDownload from "./components/CatalogDownload";
+import AdminAddDuplicate from "./components/AdminAddDuplicate";
 
 const ProtectedRoute = ({ children }) => {
   const { auth } = useAuth();
@@ -71,6 +72,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <AdminUpdateProduct />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/adddup/:id"
+            element={
+              <ProtectedRoute>
+                <AdminAddDuplicate />
               </ProtectedRoute>
             }
           />

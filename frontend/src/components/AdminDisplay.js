@@ -5,7 +5,7 @@ import "./AdminDisplay.css";
 import BarLoader from "react-spinners/BarLoader";
 import ResponsiveCategoryFilter from "./ResponsiveCategoryFilter";
 import ResponsiveSubcategoryFilter from "./ResponsiveSubcategoryFilter";
-import { Trash, Edit, Trash2 } from "lucide-react";
+import { Copy, Edit, Trash2 } from "lucide-react";
 // import {
 //   Dialog,
 //   DialogContent,
@@ -202,53 +202,6 @@ function AdminDisplay() {
       </div>
     );
   }
-  // const handleDelete = async (id) => {
-  //   try {
-  //     // Send a DELETE request to the backend
-  //     const response = await fetch(
-  //       `${process.env.REACT_APP_SERVER_URL}/api/products/${id}`,
-  //       {
-  //         method: "DELETE",
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       // Update the local state to remove the product from the list
-  //       setFilteredProducts(products.filter((product) => product.id !== id));
-  //     } else {
-  //       console.error("Error deleting product:", response.statusText);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error deleting product:", error);
-  //   }
-  // };
-
-  // const handleDelete = async (id) => {
-  //   try {
-  //     // Send a DELETE request to the backend
-  //     const response = await fetch(
-  //       `${process.env.REACT_APP_SERVER_URL}/api/products/${id}`,
-  //       {
-  //         method: "DELETE",
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       // Update both `products` and `filteredProducts` states
-  //       setProducts((prevProducts) =>
-  //         prevProducts.filter((product) => product.id !== id)
-  //       );
-  //       setFilteredProducts((prevFilteredProducts) =>
-  //         prevFilteredProducts.filter((product) => product.id !== id)
-  //       );
-  //     } else {
-  //       console.error("Error deleting product:", response.statusText);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error deleting product:", error);
-  //   }
-  // };
-
   const handleDelete = async () => {
     try {
       const response = await fetch(
@@ -340,6 +293,9 @@ function AdminDisplay() {
                                       setOpen(true);
                                     }}
                                   />
+                                  <a href={`/admin/adddup/${product.id}`}>
+                                    <Copy className="text-primary" size={20} />
+                                  </a>
                                   <a href={`/admin/update/${product.id}`}>
                                     <Edit className="text-primary" size={20} />
                                   </a>
@@ -357,59 +313,6 @@ function AdminDisplay() {
           </div>
         </div>
       </div>
-      {/* {open && (
-        <div
-          style={{
-            position: "fixed",
-            top: "0",
-            left: "0",
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "5px",
-              textAlign: "center",
-            }}
-          >
-            <p>Are you sure you want to delete this product?</p>
-            <div style={{ marginTop: "10px" }}>
-              <button
-                onClick={() => setOpen(false)}
-                style={{
-                  marginRight: "10px",
-                  padding: "5px 10px",
-                  backgroundColor: "gray",
-                  color: "white",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDelete}
-                style={{
-                  padding: "5px 10px",
-                  backgroundColor: "red",
-                  color: "white",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
 
       {open && (
         <div
