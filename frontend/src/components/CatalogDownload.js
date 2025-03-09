@@ -34,7 +34,10 @@ const CatalogDownload = () => {
 
   return (
     <>
-      <Navbar />
+      <div>
+        <Navbar />
+      </div>
+
       <div className="container mt-4">
         <h2>Download Catalogs</h2>
         <div className="row">
