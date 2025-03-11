@@ -23,6 +23,7 @@ import HandlePrint from "./components/print/HandlePrint";
 import AdminUpdateCatalog from "./components/AdminUpdateCatalog";
 import CatalogDownload from "./components/CatalogDownload";
 import AdminAddDuplicate from "./components/AdminAddDuplicate";
+import Trial from "./components/Trial";
 
 const ProtectedRoute = ({ children }) => {
   const { auth } = useAuth();
@@ -99,6 +100,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route path="/trial" element={<Trial />} />
 
           <Route
             path="/updatecatalog"

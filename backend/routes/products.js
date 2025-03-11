@@ -236,4 +236,34 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+router.put("/update-img/:id", async (req, res) => {
+  const { id } = req.params;
+  const { img_file_id } = req.body;
+
+  if (!img_file_id) {
+    return res.status(400).json({ error: "img_file_id is required" });
+  }
+
+  try {
+    const result = await pool`
+      UPDATE products 
+      SET img_file_id = ${img_file_id} 
+      WHERE id = ${id} 
+      RETURNING *;
+    `;
+
+    if (result.length === 0) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    res.status(200).json({
+      message: "img_file_id updated successfully",
+      product: result[0],
+    });
+  } catch (err) {
+    console.error("Error updating img_file_id:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 module.exports = router;

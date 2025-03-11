@@ -21,6 +21,7 @@ const printcatalog = require("./routes/printCatalog");
 // const publiccatalog = require("./routes/publiccatalog");
 const gdrive = require("./routes/gdrive");
 const categoriesforadmin = require("./routes/categoriesforadmin");
+const imageupload = require("./routes/imageupload");
 
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
@@ -31,6 +32,7 @@ app.use("/api/print-catalog", printcatalog);
 // app.use("/api/publiccatalog", publiccatalog);
 app.use("/api/gdrive", gdrive);
 app.use("/api/categoriesforadmin", categoriesforadmin);
+app.use("/api/imageupload", imageupload);
 
 // Server setup
 const port = 3001;
