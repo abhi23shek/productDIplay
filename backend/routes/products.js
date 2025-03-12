@@ -84,6 +84,17 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/name", async (req, res) => {
+  try {
+    const result =
+      await pool`SELECT name FROM products ORDER BY price ASC, name ASC`;
+    res.json(result);
+  } catch (err) {
+    console.error("Error fetching products:", err);
+    res.status(500).json({ error: "Error fetching products" });
+  }
+});
+
 // Fetch a single product by ID
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
