@@ -86,8 +86,7 @@ router.get("/", async (req, res) => {
 
 router.get("/name", async (req, res) => {
   try {
-    const result =
-      await pool`SELECT name FROM products ORDER BY price ASC, name ASC`;
+    const result = await pool`SELECT * FROM sticker`;
     res.json(result);
   } catch (err) {
     console.error("Error fetching products:", err);
@@ -132,6 +131,7 @@ router.post("/", async (req, res) => {
       VALUES (${name}, ${price}, ${details}, ${image_url}, ${category_id}, ${subcategory_id})
       RETURNING *;
     `;
+
     res.json(result[0]);
   } catch (error) {
     console.error("Error adding product:", error);
