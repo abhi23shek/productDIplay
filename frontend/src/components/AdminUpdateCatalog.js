@@ -54,9 +54,9 @@ const AdminUpdateCatalog = () => {
         // Generate PDF as a Blob
         const pdfBytes = await generatePDF(
           pages,
-          "SHIV ENTERPRISES",
+          "SHIV COLLECTION",
           "1st April 2024",
-          "9958660231, 7838146412, 9717437131",
+          "9958660231, 7838146412",
           "Trademark:-Vidhata",
           0,
           true
