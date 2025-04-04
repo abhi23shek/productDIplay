@@ -67,9 +67,17 @@ const ProductModal = ({
 
           <div className="product-details">
             <h2 className="product-title">{modalProduct.name}</h2>
+            {modalProduct.category !== "Simple" && (
+              <p className="master-packing-modal">
+                Master Pack- {modalProduct.master_pack}PCS
+              </p>
+            )}
             <div className="price-section">
               <span className="price-label">Price:</span>
-              <span className="price-value">₹{modalProduct.price}</span>
+              <span className="price-value">
+                ₹{modalProduct.price}
+                <span>/pc</span>
+              </span>
             </div>
             <p className="product-description">{modalProduct.details}</p>
 

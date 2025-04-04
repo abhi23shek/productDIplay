@@ -282,6 +282,7 @@ function AdminDisplay() {
                                   name={product.name}
                                   price={product.price}
                                   description={product.details}
+                                  master_pack={product.master_pack}
                                 />
                                 <div className="admin-product-card-btn">
                                   <Trash2

@@ -9,8 +9,17 @@ const ProductCards = ({
   name,
   price,
   description,
+  master_pack,
 }) => {
-  const product = { id, category, image_url, name, price, description };
+  const product = {
+    id,
+    category,
+    image_url,
+    name,
+    price,
+    description,
+    master_pack,
+  };
   const { cartItems, addToCart, removeFromCart, setQuantity } =
     useContext(CartContext);
 
@@ -26,8 +35,15 @@ const ProductCards = ({
       />
       <div className="product-details">
         <h5 className="product-name">{name}</h5>
-        <p className="product-price">₹{Number(price).toFixed(2)}</p>
-        <p className="product-description">{description}</p>
+        {category !== "Simple" && (
+          <p className="master-packing">Master Pack- {master_pack}PCS</p>
+        )}
+
+        <p className="product-price">
+          ₹{Number(price).toFixed(2)}
+          <span className="price-span">/pc</span>
+        </p>
+        <p className="product-description-normal">{description}</p>
       </div>
 
       {cartProduct ? (

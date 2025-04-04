@@ -133,8 +133,15 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, price, details, image_url, category_id, subcategory_id } =
-    req.body;
+  const {
+    name,
+    price,
+    details,
+    image_url,
+    category_id,
+    subcategory_id,
+    master_pack,
+  } = req.body;
 
   // Check if the ID is provided and valid
   if (!id) {
@@ -148,7 +155,8 @@ router.put("/:id", async (req, res) => {
     !details &&
     !image_url &&
     !category_id &&
-    !subcategory_id
+    !subcategory_id &&
+    !master_pack
   ) {
     return res
       .status(400)
@@ -185,6 +193,10 @@ router.put("/:id", async (req, res) => {
     if (subcategory_id) {
       updates.push(`subcategory_id = $${counter++}`);
       values.push(subcategory_id);
+    }
+    if (master_pack) {
+      updates.push(`master_pack = $${counter++}`);
+      values.push(master_pack);
     }
 
     // Join the update clauses into a comma-separated string

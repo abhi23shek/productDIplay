@@ -193,6 +193,7 @@
   .modal-content {
     flex-direction: row;
     padding: 30px 10px;
+    /* text-align: left; */
   }
 
   .Modal-product-image {
@@ -209,9 +210,13 @@
     border-radius: 8px;
   }
 
-
   .product-title {
     text-align: left;
+  }
+  .master-packing-modal {
+    text-align: left;
+    color: orange;
+    font-size: 20px;
   }
 
   .price-section {

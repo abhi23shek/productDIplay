@@ -14,6 +14,7 @@ const AdminUpdate = () => {
     image_url: "",
     category_id: "",
     subcategory_id: "",
+    master_pack: "",
   });
 
   const [categories, setCategories] = useState([]);
@@ -263,6 +264,18 @@ const AdminUpdate = () => {
                   onChange={handleChange}
                   className="form-control"
                   placeholder="Enter product name"
+                  required
+                />
+              </div>
+              <div className="col-md-6">
+                <label className="form-label">Master Pack</label>
+                <input
+                  type="text"
+                  name="master_pack"
+                  value={product.master_pack || ""}
+                  onChange={handleChange}
+                  className="form-control"
+                  placeholder="Enter master pack value (e.g., 99PCS)"
                   required
                 />
               </div>

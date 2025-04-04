@@ -408,6 +408,7 @@ function FrontPage() {
                                 name={product.name}
                                 price={product.price}
                                 description={product.details}
+                                master_pack={product.master_pack}
                               />
                             </div>
                           ))}
