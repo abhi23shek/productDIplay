@@ -287,10 +287,8 @@ const PrintCatalog = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]); // Array to store selected category IDs
-  const [companyName, setCompanyName] = useState("SHIV ENTERPRISES");
-  const [mobileNumber, setMobileNumber] = useState(
-    "9958660231, 7838146412, 9717437131"
-  );
+  const [companyName, setCompanyName] = useState("SHIV COLLECTION");
+  const [mobileNumber, setMobileNumber] = useState("9958660231, 7838146412");
   const [dateApplicaple, setDateApplicaple] = useState("1st April 2024");
   const [priceFlag, setPriceFlag] = useState(true); // Whether to show prices
   const [imgFlag, setImgFlag] = useState(true);
