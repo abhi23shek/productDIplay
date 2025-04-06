@@ -193,6 +193,7 @@ const HandlePrint = () => {
           if (!response.ok) throw new Error("Failed to fetch products");
 
           const products = await response.json();
+          console.log(products);
 
           const chunkSize = 9;
           for (let i = 0; i < products.length; i += chunkSize) {
