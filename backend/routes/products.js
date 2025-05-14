@@ -46,7 +46,7 @@ router.get("/productfilter", async (req, res) => {
       //   ORDER BY price ASC, name ASC`;
       // console.log("Passed");
       const result = await pool`
-    SELECT name, price, details, image_url
+    SELECT name, price, details, image_url, master_pack
     FROM products
     WHERE subcategory_id = ${subCategoryId}
     AND price BETWEEN ${minPrice} AND ${maxPrice}

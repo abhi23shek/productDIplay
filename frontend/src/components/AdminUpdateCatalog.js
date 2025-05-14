@@ -34,10 +34,13 @@ const AdminUpdateCatalog = () => {
         let pages = [];
 
         for (const subcat of subcategories) {
-          const productResponse = await axios.get(
+          const productResponse = await fetch(
             `${process.env.REACT_APP_SERVER_URL}/api/products/productfilter?subCategoryId=${subcat.id}&minPrice=0&maxPrice=999999&imgFlag=false`
           );
-          const products = productResponse.data;
+          const products = await productResponse.json();
+          console.log(products);
+          // const products = productResponse.data;
+          // console.log(products);
 
           const chunkSize = 9;
           for (let i = 0; i < products.length; i += chunkSize) {
