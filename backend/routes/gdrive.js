@@ -11,6 +11,18 @@ const upload = multer({ storage });
 const router = express.Router();
 // const apiKeys = require("../gdriveapikey.json");
 
+const formatMemory = (bytes) => `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+
+const logMemoryUsage = (label = "") => {
+  const used = process.memoryUsage();
+  console.log(`\n[Memory Usage ${label}]`);
+  console.log(`- RSS       : ${formatMemory(used.rss)}`);
+  console.log(`- Heap Total: ${formatMemory(used.heapTotal)}`);
+  console.log(`- Heap Used : ${formatMemory(used.heapUsed)}`);
+  console.log(`- External  : ${formatMemory(used.external)}`);
+  console.log(`- ArrayBuffers: ${formatMemory(used.arrayBuffers)}\n`);
+};
+
 const apiKeys = {
   client_email: process.env.CLIENT_EMAIL,
   private_key: process.env.PRIVATE_KEY,
@@ -31,6 +43,7 @@ async function authorize() {
 }
 
 router.post("/", upload.single("catalogs"), async (req, res) => {
+  logMemoryUsage("Before Upload Handling");
   try {
     if (!req.file || !req.file.buffer) {
       throw new Error("No file buffer available");
@@ -50,6 +63,7 @@ router.post("/", upload.single("catalogs"), async (req, res) => {
     );
 
     console.log("Uploaded File ID:", fileResponse.data.id);
+    logMemoryUsage("After Upload Handling");
     res.status(200).json({
       message: "File uploaded successfully",
       fileId: fileResponse.data.id,
@@ -105,6 +119,7 @@ router.delete("/:fileId", async (req, res) => {
   try {
     await deleteFile(authClient, fileId);
     console.log("Deleted file:", fileId);
+
     res.status(200).json({ message: "File deleted successfully" });
   } catch (error) {
     console.error("Error deleting file:", error.message);
