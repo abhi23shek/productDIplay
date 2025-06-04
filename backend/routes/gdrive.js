@@ -43,7 +43,8 @@ async function authorize() {
 }
 
 router.post("/", upload.single("catalogs"), async (req, res) => {
-  logMemoryUsage("Before Upload Handling");
+  let text = "Before Upload Handling of " + req.file.originalname;
+  logMemoryUsage(text);
   try {
     if (!req.file || !req.file.buffer) {
       throw new Error("No file buffer available");
@@ -63,7 +64,7 @@ router.post("/", upload.single("catalogs"), async (req, res) => {
     );
 
     console.log("Uploaded File ID:", fileResponse.data.id);
-    logMemoryUsage("After Upload Handling");
+    logMemoryUsage(text);
     res.status(200).json({
       message: "File uploaded successfully",
       fileId: fileResponse.data.id,
