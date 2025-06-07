@@ -39,14 +39,14 @@ const AdminNavbar = () => {
               >
                 Print Catalog
               </button>
-              <button
+              {/* <button
                 className={`nav-link ${
                   isActive("/admin/uploadcatalog") ? "active" : ""
                 }`}
                 onClick={() => navigate("/uploadcatalog")}
               >
                 Upload Catalog
-              </button>
+              </button> */}
 
               <button
                 className={`nav-link ${
