@@ -170,8 +170,10 @@ function AdminDisplay() {
       const categoryName =
         categories.find((cat) => cat.id === product.category_id)?.name ||
         "Uncategorized";
+      const categorySubcategories = subcategories[product.category_id];
       const subcategoryName =
-        subcategories[product.category_id]?.find(
+        Array.isArray(categorySubcategories) &&
+        categorySubcategories.find(
           (sub) => sub.id === product.subcategory_id
         )?.name || "Uncategorized";
 

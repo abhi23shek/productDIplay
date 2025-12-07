@@ -156,6 +156,7 @@ const HandlePrint = () => {
   const [subcategories, setSubcategories] = useState([]);
   const [pages, setPages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     const fetchSubcategories = async () => {
@@ -217,23 +218,31 @@ const HandlePrint = () => {
   }, [subcategories, minPrice, maxPrice]);
 
   const handleDownloadPDF = async () => {
-    const pdfBytes = await generatePDF(
-      pages,
-      companyName,
-      dateApplicable,
-      phoneNumbers,
-      hintText,
-      priceAdjustment,
-      priceFlag
-    );
-    const blob = new Blob([pdfBytes], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "ProductCatalog.pdf";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    setIsDownloading(true);
+    try {
+      const pdfBytes = await generatePDF(
+        pages,
+        companyName,
+        dateApplicable,
+        phoneNumbers,
+        hintText,
+        priceAdjustment,
+        priceFlag
+      );
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ProductCatalog.pdf";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   if (isLoading) {
@@ -242,8 +251,12 @@ const HandlePrint = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <button className="printButton" onClick={handleDownloadPDF}>
-        Download PDF
+      <button 
+        className="printButton" 
+        onClick={handleDownloadPDF}
+        disabled={isDownloading}
+      >
+        {isDownloading ? "Downloading..." : "Download PDF"}
       </button>
       <div className="parent-container">
         {pages.map((page, index) => (
